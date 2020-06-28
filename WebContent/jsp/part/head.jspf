@@ -1,0 +1,78 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Document</title>
+<!-- 유용한 링크 -->
+<!-- cdnsj : https://cdnjs.com/ -->
+<!-- 폰트어썸 아이콘 리스트 : https://fontawesome.com/icons?d=gallery&m=free -->
+
+<!-- 구글 폰트 불러오기 -->
+<!-- rotobo(400/900), notosanskr(400/900) -->
+<link
+	href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;900&family=Roboto:wght@400;900&display=swap"
+	rel="stylesheet">
+
+<!-- 폰트어썸 불러오기 -->
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.1/css/all.min.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resource/css/common.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resource/css/home/main.css">
+
+<!-- 제이쿼리 불러오기 -->
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="${pageContext.request.contextPath}/resource/js/common.js"></script>
+<script src="${pageContext.request.contextPath}/resource/js/home/index.js"></script>
+
+</head>
+<body>
+	<div class="top-bar visible-on-md-up">
+		<div class="con height-100p flex flex-jc-sb">
+			<a href="${pageContext.request.contextPath}/s/home/main" class="logo flex flex-ai-c"> <i
+				class="fas fa-baby-carriage"></i>
+			</a>
+			<nav class="menu-box-1 flex">
+				<ul class="flex">
+					<li><a href="${pageContext.request.contextPath}/s/home/main" class="flex height-100p flex-ai-c">Home</a></li>
+					<li><a href="${pageContext.request.contextPath}/s/article/list" class="flex height-100p flex-ai-c">Articles</a></li>
+					<li><a href="${pageContext.request.contextPath}/s/home/aboutMe" class="flex height-100p flex-ai-c">About
+							Me</a></li>
+					<li><a href="#" class="flex height-100p flex-ai-c">SNS</a>
+						<ul>
+							<li><a href="https://github.com/hyeryeonkim" target="_black" class="block">GITHUB</a></li>
+							<li><a href="https://harrydony.tistory.com/"  target="_black" class="block">TISTORY</a></li>
+							<li><a href="https://www.youtube.com/channel/UCBEioSP02dSVuFDpyBexl8w?view_as=subscriber"  target="_black"  class="block">YOUTUBE</a></li>
+						</ul></li>
+				</ul>
+			</nav>
+		</div>
+	</div>
+	<div class="mobile-top-bar visible-on-sm-down flex flex-ai-c">
+		<a href="${pageContext.request.contextPath}/s/home/main"
+			class="logo flex flex-ai-c absolute-center absolute-middle"> <i
+			class="fas fa-baby-carriage"></i>
+		</a> <a href="#" class="btn-toggle-mobile-top-bar">
+			<div></div>
+			<div></div>
+			<div></div>
+		</a>
+	</div>
+	<div class="mobile-side-bar visible-on-sm-down flex flex-ai-c">
+		<nav class="menu-box-1 flex-grow-1">
+			<ul>
+				<li><a href="${pageContext.request.contextPath}/s/home/main" class="block">Home</a></li>
+				<li><a href="${pageContext.request.contextPath}/s/article/list" class="block">Articles</a></li>
+				<li><a href="${pageContext.request.contextPath}/s/home/aboutMe" class="block">About Me</a></li>
+				<li><a href="#" class="block">SNS</a>
+					<ul>
+						<li><a href="https://github.com/hyeryeonkim"  target="_black"  class="block">GITHUB</a></li>
+						<li><a href="https://harrydony.tistory.com/"   target="_black" class="block">TISTORY</a></li>
+						<li><a href="https://www.youtube.com/channel/UCBEioSP02dSVuFDpyBexl8w?view_as=subscriber"  target="_black"  class="block">YOUTUBE</a></li>
+					</ul></li>
+			</ul>
+		</nav>
+	</div>
