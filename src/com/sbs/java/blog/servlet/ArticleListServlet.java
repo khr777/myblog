@@ -80,6 +80,7 @@ public class ArticleListServlet extends HttpServlet {
 		request.getRequestDispatcher("/jsp/home/articles.jsp").forward(request, response);
 		
 		
+		
 	}
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		doGet(request, response);

@@ -71,4 +71,64 @@ public class DBUtil {
 
 		return rows;
 	}
+	
+	
+	public static Map<String, Object> selectRow(Connection connection, String sql) {
+		Map<String, Object> row = new HashMap<>();
+		
+		
+		Statement stmt = null;
+		ResultSet rs = null;
+		
+		
+		
+		try {
+			stmt = connection.createStatement();
+			rs = stmt.executeQuery(sql);
+			ResultSetMetaData metaData = rs.getMetaData();
+			int columnSize = metaData.getColumnCount();
+
+			while (rs.next()) {
+				
+				for (int columnIndex = 0; columnIndex < columnSize; columnIndex++) {
+					String columnName = metaData.getColumnName(columnIndex + 1);
+					Object value = rs.getObject(columnName);
+
+					if (value instanceof Long) {
+						int numValue = (int) (long) value;
+						row.put(columnName, numValue);
+					} else if (value instanceof Timestamp) {
+						String dateValue = value.toString();
+						dateValue = dateValue.substring(0, dateValue.length() - 2);
+						row.put(columnName, dateValue);
+					} else {
+						row.put(columnName, value);
+					}
+				}
+			}
+		} catch (SQLException e) {
+			System.err.printf("[SQL 예외, SQL : %s] : %s\n", sql, e.getMessage());
+			e.printStackTrace();
+		}
+		finally {
+			if ( stmt != null ) {
+				try {
+					stmt.close();
+				} catch (SQLException e) {
+					System.err.printf("[SQL 예외, SQL : %s] : %s\n", sql, e.getMessage());
+				}
+			}
+			if ( rs != null ) {
+				try {
+					rs.close();
+				} catch (SQLException e) {
+					System.err.printf("[SQL 예외, SQL : %s] : %s\n", sql, e.getMessage());
+				}
+			}
+		}
+		
+		
+		return row;
+	}
+	
 }
