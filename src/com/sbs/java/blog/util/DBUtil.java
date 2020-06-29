@@ -12,6 +12,16 @@ import java.util.List;
 import java.util.Map;
 
 public class DBUtil {
+	public static Map<String, Object> selectRow (Connection connection, String sql) {
+		
+		List<Map<String, Object>> rows = selectRows(connection, sql);
+		if ( rows.size() == 0 ) {
+			return new HashMap<>(); //만약 비어있다면 빈 깡통이라도 리턴하겠다.
+		}
+		
+		return rows.get(0);
+	}
+	
 	public static List<Map<String, Object>> selectRows(Connection connection, String sql) {
 		List<Map<String, Object>> rows = new ArrayList<>();
 		
@@ -73,62 +83,5 @@ public class DBUtil {
 	}
 	
 	
-	public static Map<String, Object> selectRow(Connection connection, String sql) {
-		Map<String, Object> row = new HashMap<>();
-		
-		
-		Statement stmt = null;
-		ResultSet rs = null;
-		
-		
-		
-		try {
-			stmt = connection.createStatement();
-			rs = stmt.executeQuery(sql);
-			ResultSetMetaData metaData = rs.getMetaData();
-			int columnSize = metaData.getColumnCount();
-
-			while (rs.next()) {
-				
-				for (int columnIndex = 0; columnIndex < columnSize; columnIndex++) {
-					String columnName = metaData.getColumnName(columnIndex + 1);
-					Object value = rs.getObject(columnName);
-
-					if (value instanceof Long) {
-						int numValue = (int) (long) value;
-						row.put(columnName, numValue);
-					} else if (value instanceof Timestamp) {
-						String dateValue = value.toString();
-						dateValue = dateValue.substring(0, dateValue.length() - 2);
-						row.put(columnName, dateValue);
-					} else {
-						row.put(columnName, value);
-					}
-				}
-			}
-		} catch (SQLException e) {
-			System.err.printf("[SQL 예외, SQL : %s] : %s\n", sql, e.getMessage());
-			e.printStackTrace();
-		}
-		finally {
-			if ( stmt != null ) {
-				try {
-					stmt.close();
-				} catch (SQLException e) {
-					System.err.printf("[SQL 예외, SQL : %s] : %s\n", sql, e.getMessage());
-				}
-			}
-			if ( rs != null ) {
-				try {
-					rs.close();
-				} catch (SQLException e) {
-					System.err.printf("[SQL 예외, SQL : %s] : %s\n", sql, e.getMessage());
-				}
-			}
-		}
-		
-		
-		return row;
-	}
 	
 }

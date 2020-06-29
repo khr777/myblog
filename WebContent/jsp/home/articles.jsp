@@ -9,12 +9,39 @@ List<Article> articles = (List<Article>) request.getAttribute("articles");
 %>
 
 
+
+
+<style>
+.table-box > table {
+	width:100%;
+	border-collapse:collapse;
+}
+.table-box > table th, .table-box > table td {
+	border:1px solid black;	
+}
+
+.article-list-box-1 td {
+	text-align:center;
+	padding:10px;
+}
+.article-name {
+	margin-top:100px;
+}
+
+</style>
+
+
 <div class="con">
-	<h1>Articles</h1>
+	<h1 class="article-name">Articles</h1>
 </div>
 
 <div class="con table-box article-list-box-1">
 	<table>
+		<colgroup>
+			<col width="50"/>
+			<col width="150"/>
+			<col width="150"/>
+		</colgroup>
 		<thead>
 			<tr>
 				<th>ID</th>

@@ -367,6 +367,7 @@ html {
       background-color:white;
       color:black;
       font-weight:bold;
+      text-decoration:underline;
   }
   .top-bar .menu-box-1 > ul > li:hover > ul {
       display:block;
@@ -375,12 +376,14 @@ html {
       background-color:black;
       color:white;
       display:block;
+      text-decoration:underline;
   }
   .top-bar .menu-box-1> ul ul > li > a {
       font-size:1rem;
       color:black;
       padding:30px 0;
       text-align:center;
+      
   }
   .top-bar .menu-box-1 > ul ul {
       position:absolute;
@@ -390,6 +393,8 @@ html {
       display:none;
       border:2px solid black;
       border-top-width:0;
+      background-color:white;
+      z-index:10;
   }
   /* 탑바 끝 */
 
@@ -399,6 +404,7 @@ html {
       height:100px;
       color:white;
       position:fixed;
+      z-index:5;
       top:0;
       left:0;
       width:100%;
@@ -458,9 +464,11 @@ html {
     visibility:hidden;
 }
 
+/* 모바일 사이드 바 시작 */
 .mobile-side-bar {
     background-color:black;
     position:fixed;
+    z-index:5;
     color:white;
     top:100px;
     left:0;
@@ -503,23 +511,91 @@ html {
     display:block;
     
 }
+/* 모바일 사이드바 끝 */
 
 
-/* articles list */
-.table-box > table {
+/* 슬라이더 시작 */
+html, body {
+    height: 100%;
+}
+body, ul, li {
+    margin:0;
+    padding:0;
+    list-style:none;
+}
+
+html, body {
+    height:100%;
+}
+
+.sbs-slider {
+    height:80%;
+    position:relative;
+    user-select:none;
+}
+
+.sbs-slider .side-bars > div {
+    position:absolute;
+    top:0;
+    left:0;
+    /* ie 9 이상에서만 사용 가능 */
+    width:calc(50% - 100px);
+    height:100%;
+    cursor:pointer;
+}
+
+.sbs-slider .side-bars > div:last-child {
+    left:auto;
+    right:0;
+}
+
+.sbs-slider .side-bars > div > span {
+    position:absolute;
+    top:50%;
+    transform:translateY(-50%);
+    left:inherit;
+    right:inherit;
+    font-size:5rem;
+    transition: transform 0.2s;
+    margin:0 10px;
+}
+
+.sbs-slider .side-bars > div:active > span {
+    transform:translateY(-40%);
+}
+
+.sbs-slider > .slides > div {
+    position:absolute;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    /* 완전투명하게 만든다. */
+    opacity:0;
+    transition:opacity 0.5s;
+    background-repeat:no-repeat;
+    background-size:cover;
+    background-position:center;
+}
+
+.sbs-slider > .slides > div.active {
+    opacity:1;
+}
+.main-bottom {
+	background-color:black;
+	position:absolute;
+	left:0;
+	bottom:0;
+	height:10%;
 	width:100%;
-	border-collapse:collapse;
-}
-.table-box > table th, .table-box > table td {
-	border:1px solid black;	
 }
 
-.article-list-box-1 td {
-	text-align:center;
-	padding:10px;
+@media (max-width:800px) {
+	.main-bottom {
+		height:20%;
+	}
 }
 
-
-
+/* 슬라이더 끝 */
 
 
