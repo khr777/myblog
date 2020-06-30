@@ -5,34 +5,16 @@
 	pageEncoding="UTF-8"%>
 
 <%
-List<Article> articles = (List<Article>) request.getAttribute("articles");
+	List<Article> articles = (List<Article>) request.getAttribute("articles");
 %>
 
 
 
 
 <style>
-.table-box {
-	margin-top: 2%;
-}
-
-.table-box>table {
-	width: 100%;
-	border-collapse: collapse;
-}
-
-.table-box>table th, .table-box>table td {
-	border: 1px solid black;
-}
-
-.article-list-box-1 td {
-	text-align: center;
-	padding: 10px;
-}
-
 .article-name-box {
-	width:13%;
-	margin-top:4%;
+	width: 13%;
+	margin-top: 4%;
 }
 
 .article-icon {
@@ -41,51 +23,46 @@ List<Article> articles = (List<Article>) request.getAttribute("articles");
 }
 </style>
 
-
-<div class="con">
+<!--<div class="con">
 	<img class="article-icon" alt=""
 		src="../../resourse/img/article-icon.jpg">
 	<div class="article-name-box flex flex-jc-sb">
 		<i class="fas fa-list-ol" style="font-size: 2.5rem;"></i>
 		<h1 class="article-name">Articles</h1>
 	</div>
-</div>
+</div>  -->
 
-<div class="con table-box article-list-box-1">
-	<table>
-		<colgroup>
-			<col width="50" />
-			<col width="150" />
-			<col width="150" />
-			
-		</colgroup>
-		<thead>
-			<tr>
-				<th>ID</th>
-				<th>등록날짜</th>
-				<th>갱신날짜</th>
-				<th>제목</th>
-			</tr>
-		</thead>
-		<tbody>
-			<%
-				for (Article article : articles) {
-			%>
 
-			<tr>
-				<td><%=article.getId()%></td>
-				<td><%=article.getRegDate()%></td>
-				<td><%=article.getUpdateDate()%></td>
-				<!--  article.getId()가 없어도 일단 실행이 된다????? -->
-				<!-- <td><a href="./detail?id=<%=article.getId()%>"><%=article.getTitle()%></a></td>  -->
-				<td><a href="./detail?id=<%=article.getId()%>"><%=article.getTitle()%></a></td>
-			</tr>
-			<%
-				}
-			%>
+<div class="con article-list-box-1 ">
+	<%
+		for (Article article : articles) {
+	%>
 
-		</tbody>
-	</table>
+	<div class="list-content">
+		<a href="./detail?id=<%=article.getId()%> " class="">
+			<div class="list-title"><%=article.getTitle()%></div>
+			<div class="list-body-box">
+				<div class="list-body"><%=article.getBody()%></div>
+			</div> <br>
+			<div class="list-id-regDate-box flex">
+				<div class="list-id">
+					<img src="../../resource/img/no.PNG" alt="" style="width: 30px;"
+						style="block" />
+					<%=article.getId()%>
+				</div>
+				<div class="list-regDate">
+					<img src="../../resource/img/date.PNG" alt="" style="width: 50px;"
+						style="block" />
+					<%=article.getRegDate()%></div>
+			</div>
+			<div class="list-updateDate" style="display: none;"><%=article.getUpdateDate()%></div>
+		</a> <br>
+	</div>
+
+	<%
+		}
+	%>
+
 </div>
 
 

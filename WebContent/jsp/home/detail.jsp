@@ -19,6 +19,8 @@
 <script
 	src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/languages/javascript.min.js"></script>
 <script
+	src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/languages/java.min.js"></script>	
+<script
 	src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/languages/xml.min.js"></script>
 <script
 	src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/languages/php.min.js"></script>
@@ -53,24 +55,25 @@
 
 
 <div class="con">
-	<div class="detail-box-1 absolute-center absolute-middle">
-		<h1 style="font-size: 2.6rem;"><%=article.getTitle()%></h1>
+	<div class="detail-box-1 absolute-center absolute-middle" >
+		<div class="detail-title" ><%=article.getTitle()%></div>
 		<br>
 		<div class="data-box-1 flex flex-jc-sb flex-ai-c">
 			<div class="writeData flex">
-				<div class="id">
+				<div class="id visible-on-md-up">
 					번호 :
 					<%=article.getId()%></div>
 				<div class="date">
 					등록일 :
 					<%=article.getRegDate()%></div>
-				<div class="updateDate">
+				<div class="updateDate visible-on-md-up">
 					수정일 :
 					<%=article.getUpdateDate()%></div>
 				<div class="writer">작성자 : 김혜련</div>
 			</div>
-			<a href="${pageContext.request.contextPath}/s/article/list" class="back-icon block"><i class="fas fa-arrow-left">
-					<span>목록</span>
+			<a href="${pageContext.request.contextPath}/s/article/list"
+				class="back-icon block"><i class="fas fa-arrow-left"> 
+				<span>목록</span>
 			</i></a>
 		</div>
 		<div class="editor-box">

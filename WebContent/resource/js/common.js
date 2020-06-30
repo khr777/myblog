@@ -10,6 +10,7 @@ function MobileSideBar__init() {
     }
     e.stopPropagation();
   });
+ 
 }
 
 
@@ -47,8 +48,15 @@ $ (function () {
     
     $currnet.removeClass('active');
     $post.addClass('active');
+    
   });
+ 
 });
+
+ 
+
+
+
 
 
 

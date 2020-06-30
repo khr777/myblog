@@ -44,13 +44,38 @@
 .football {
 	font-size:1.6rem;
 }
+
 @media ( max-width:799px) {
 	.profile-box-1 {
 		 flex-flow:column wrap;
+		 margin-top:70px;
 	}
 	.profile-img-box {
-		margin-left:23%;
+		margin-left:15%;
+		
 	}
+	
+	.profile {
+		width: 60%;
+		height: 100%;
+		object-fit: cover;
+	
+	}
+
+	.profile-box-1>.profile-name {
+		font-size: 1.2rem;
+		text-align: center;
+		font-weight: bold;
+		color: black;
+	}
+	.profile-text {
+		padding-left: 80px;
+		padding-top: 15px;
+		padding-right: 60px;
+		font-weight: bold;
+		font-size:0.8rem;
+	}
+	
 }
 
 
@@ -58,10 +83,12 @@
 
 
 <div class="con ">
+	
 	<div class="profile-box-1 flex flex-jc-c absolute-center absolute-middle ">
 		<div class="profile-name">
-			<div class="profile-img-box ">
+			<div class="profile-img-box">
 				<img class="profile" src="../../resource/img/profile.jpg" alt="">
+				
 			</div>
 			예비 아기개발자
 		</div>
