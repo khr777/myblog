@@ -12,35 +12,52 @@ List<Article> articles = (List<Article>) request.getAttribute("articles");
 
 
 <style>
-.table-box > table {
-	width:100%;
-	border-collapse:collapse;
+.table-box {
+	margin-top: 2%;
 }
-.table-box > table th, .table-box > table td {
-	border:1px solid black;	
+
+.table-box>table {
+	width: 100%;
+	border-collapse: collapse;
+}
+
+.table-box>table th, .table-box>table td {
+	border: 1px solid black;
 }
 
 .article-list-box-1 td {
-	text-align:center;
-	padding:10px;
-}
-.article-name {
-	margin-top:100px;
+	text-align: center;
+	padding: 10px;
 }
 
+.article-name-box {
+	width:13%;
+	margin-top:4%;
+}
+
+.article-icon {
+	position: absolute;
+	top: 100px;
+}
 </style>
 
 
 <div class="con">
-	<h1 class="article-name">Articles</h1>
+	<img class="article-icon" alt=""
+		src="../../resourse/img/article-icon.jpg">
+	<div class="article-name-box flex flex-jc-sb">
+		<i class="fas fa-list-ol" style="font-size: 2.5rem;"></i>
+		<h1 class="article-name">Articles</h1>
+	</div>
 </div>
 
 <div class="con table-box article-list-box-1">
 	<table>
 		<colgroup>
-			<col width="50"/>
-			<col width="150"/>
-			<col width="150"/>
+			<col width="50" />
+			<col width="150" />
+			<col width="150" />
+			
 		</colgroup>
 		<thead>
 			<tr>

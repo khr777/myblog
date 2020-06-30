@@ -18,9 +18,9 @@ import sun.security.provider.certpath.ResponderId;
 public class ArticleDoWriteServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		response.setContentType("text/html; charset=UTF-8");
-		String url = "jdbc:mysql://localhost:3306/blog?serverTimezone=Asia/Seoul&useOldAliasMetadataBehavior=true";
-		String user = "root";
-		String password = "";
+		String url = "jdbc:mysql://site24.iu.gy:3306/site24?serverTimezone=Asia/Seoul&useOldAliasMetadataBehavior=true";
+		String user = "site24";
+		String password = "sbs123414";
 		String driverName = "com.mysql.cj.jdbc.Driver";
 		
 		String title = request.getParameter("title");

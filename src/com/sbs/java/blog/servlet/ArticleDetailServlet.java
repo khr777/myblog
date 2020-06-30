@@ -34,9 +34,9 @@ public class ArticleDetailServlet extends HttpServlet {
 		// DB 커넥터 로딩 성공
 		
 		//DB 접속 시작 
-		String url = "jdbc:mysql://localhost:3306/blog?serverTimezone=Asia/Seoul&useOldAliasMetadataBehavior=true";
-		String user = "root";
-		String password = "";
+		String url = "jdbc:mysql://site24.iu.gy:3306/site24?serverTimezone=Asia/Seoul&useOldAliasMetadataBehavior=true";
+		String user = "site24";
+		String password = "sbs123414";
 		
 		// 자바문법 7부터 생긴 것으로 괄호안에 써주면 따로 닫기를 안해줘도 된다.
 		//자원이 사라진다고 객체가 사라지지 않아 프로그램 실행할수록 자원 소모되면서 느려졌던 것.

@@ -599,3 +599,45 @@ html, body {
 /* 슬라이더 끝 */
 
 
+/* 상세보기 출력 시작 */
+.detail-box-1 {
+	position:absolute;
+	width:60%;
+	height:60%;
+	
+}
+.detail-box-1 .writeData > .date, .updateDate, .writer, .id {
+	margin:0 20px 0 0;
+	
+}
+
+.detail-box-1 .editor-box {
+	margin-top:30px;
+	border:1px solid black;
+	padding:30px;
+	height:400px;
+}
+.detail-box-1 .writeData {
+	width:64%;
+	
+}
+.detail-box-1 .back-icon {
+	width:10%;
+	border:1px solid black;
+	padding:4px;
+	border-radius:5px;
+	text-align:center;	
+}
+.detail-box-1 .data-box-1 > i {
+	
+}
+ 
+
+/* 상세보기 출력 끝 */
+
+/* 모바일 상세보기 */
+@media (min-width:800px) {
+	.detail-box-1 > h1 {
+		
+	}
+}
