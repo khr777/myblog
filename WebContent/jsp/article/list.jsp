@@ -3,34 +3,17 @@
 <%@ page import="java.util.List"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-
+<!-- 카테고리별 게시물들 -->
 <%
-	List<Article> articles = (List<Article>)request.getAttribute("cateItemArticles");
+	List<Article> articles = (List<Article>)request.getAttribute("articles");
+%>
+<!-- 페이지 개수 -->
+<%
+int totalPage = (int)request.getAttribute("totalPage");
 %>
 
 
 
-
-<style>
-.article-name-box {
-	width: 13%;
-	margin-top: 4%;
-}
-
-.article-icon {
-	position: absolute;
-	top: 100px;
-}
-</style>
-<!-- 삭제 예정 -->
-<!--<div class="con">
-	<img class="article-icon" alt=""
-		src="../../resourse/img/article-icon.jpg">
-	<div class="article-name-box flex flex-jc-sb">
-		<i class="fas fa-list-ol" style="font-size: 2.5rem;"></i>
-		<h1 class="article-name">Articles</h1>
-	</div>
-</div>  -->
 <!--  /s/article/list?cateItemId=1&page=1  -->
 <nav class="cateItem-menu-box-1">
 	<ul class="cateItem-menu">
@@ -77,6 +60,15 @@
 </div>
 
 
+<div class="paging-box">
+	<% for ( int i = 1; i <= totalPage; i++ ) { %>
+	<div class="paging-num-box">
+		<a href="${pageContext.request.contextPath}/s/article/list?cateItemId=${param.cateItemId}&page=<%=i%>">[ <%=i%> ]</a>
+	</div>
+	<% 
+		} 
+	%>
+</div>
 
 
 

@@ -81,6 +81,19 @@ public class DBUtil {
 
 		return rows;
 	}
+
+	public static void insert(Connection dbConn, String sql) {
+		Statement stmt = null;
+		ResultSet rs = null;
+		
+		try {
+			stmt = dbConn.createStatement();
+			int no = stmt.executeUpdate(sql); // 추가, 수정된 게시물 개수를 리턴한다.
+			
+		} catch (SQLException e) {
+			System.err.printf("[SQL 예외, SQL : %s] : %s\n", sql, e.getMessage());
+		}
+	}
 	
 	
 	

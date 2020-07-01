@@ -478,7 +478,7 @@ html {
 .mobile-side-bar {
     background-color:black;
     position:fixed;
-    z-index:5;
+    z-index:10;
     color:white;
     top:100px;
     left:0;
@@ -696,7 +696,7 @@ html, body {
 .article-list-box-1 {
 	text-align:center;
 	margin-top:60px;
-	border:3px solid gold;
+	
 }
 
 .article-list-box-1 .list-content .list-body-box {
@@ -722,7 +722,7 @@ html, body {
 
 .article-list-box-1 .list-content .list-id {
 	position:relative;
-	width:10%;
+	width:100px;
 }
 
 .article-list-box-1 .list-content .list-id-regDate-box .list-id > img {
@@ -732,7 +732,7 @@ html, body {
 
 .article-list-box-1 .list-content  .list-id-regDate-box .list-regDate {
 	position:relative;
-	width:30%;
+	width:260px;
 }
 
 .article-list-box-1 .list-content .list-id-regDate-box .list-regDate > img {
@@ -796,7 +796,7 @@ html, body {
 	
 	.article-list-box-1 .list-content .list-id {
 		position: relative;
-		width: 38%;
+		width: 150px;
 		margin-left:40px;
 	}
 	.article-list-box-1 .list-content .list-id-regDate-box .list-id>img {
@@ -809,9 +809,8 @@ html, body {
 	.article-list-box-1 .list-content  .list-id-regDate-box .list-regDate {
 		margin-top:10px;
 		position: relative;
-		width: 65%;
+		width: 240px;
 		margin-left:60px;
-		
 	}
 	.article-list-box-1 .list-content .list-id-regDate-box .list-regDate>img
 		{
@@ -825,18 +824,17 @@ html, body {
 	}
 }
 
-/* article 리스트 카테고리 나누기 */	
+/* article 리스트 카테고리 나누기 시작 */	
 .cateItem-menu-box-1 {
 	
-	border:3px solid red;
 	text-align:center;			
 	
 }
 .cateItem-menu-box-1 .cateItem-menu {
 	position:fixed;
 	width:150px;
-	top:200px;
-	right:16%;
+	top:160px;
+	left:80%;
 	border:1px solid orange;
 }
 
@@ -852,3 +850,60 @@ html, body {
 	background-color:orange;
 	color:white;
 }
+
+
+
+
+/* article 리스트 카테고리 나누기 끝 ( 아직 진행중 )*/
+
+/* article 리스트 카테고리 반응형 시작 */
+@media (max-width:799px) {
+	.cateItem-menu-box-1 .cateItem-menu  {
+		right:0;
+		left:auto;
+		bottom:80px;
+		top:auto;
+		background-color:orange;
+		z-index:5;
+		color:white;
+		
+	}
+	.cateItem-menu-box-1 .cateItem-menu > li > a {
+		padding:7px;
+	}
+	.paging-box {
+		
+	}
+	.paging-box .paging-num-box  a {
+	font-size:1.2rem;
+	margin-bottom:10px;
+	}
+	@media (.mobile-side-bar.active) {
+		opacity:0;
+	}
+		
+}
+
+
+/* article 리스트 카테고리 반응형 끝 */
+
+
+
+
+/* aticle 리스트 카테고리별 페이징 시작 */
+
+.paging-box {
+	display:flex;
+	font-size:2rem;
+	justify-content:center;
+}
+.paging-box .paging-num-box {
+		
+}
+
+.paging-box .paging-num-box  > a {
+	padding:10px;
+	display:block;
+	
+}
+/* aticle 리스트 카테고리별 페이징 끝 */

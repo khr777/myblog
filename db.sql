@@ -69,7 +69,7 @@ TRUNCATE article;
 
 
 INSERT INTO article
-SET regDate = NOW(),
+SET regDate =NOW(),
 updateDate = NOW(),
 cateItemId = 1,
 displayStatus = 1,
@@ -93,36 +93,6 @@ displayStatus = 1,
 ## 남은 교육기간 동안 초심을 잃지 않고 열심히 공부해서 후회없는 나날들을 지내보도록 하겠습니다.🤠
 
 # 나는 할 수 있다 !! 아자아자 !!! 💪";
-
-INSERT INTO article
-SET regDate = NOW(),
-updateDate = NOW(),
-cateItemId = 1,
-displayStatus = 1,
-`title` = "이 블로그는 제가 직접 개발한 블로그입니다.",
-`body` = "# 무료 이미지 정보 사이트 
-- 픽사베이
-###### https://pixabay.com/ko/ 
-
-# 무료 이모티콘 정보 사이트
-- 이모지키보드
-###### https://www.emojiengine.com/ko/
-- 폰트어썸 
-###### https://fontawesome.com/
-
-# 페이스북, 트위터, 게시판 및 블로그에 게시할 수 있는 이미지 영구적인 링크만드는 사이트
-- 포스트이미지
-###### https://postimages.org/
-
-# 개발자 블로그 마케팅 참고 사이트
-- 벨로그
-###### https://velog.io/
-
-# 제이쿼리 라이브러리 제공해주는 사이트
-###### https://cdnjs.com/
-
-";
-
 
 INSERT INTO article
 SET regDate = NOW(),
@@ -154,8 +124,9 @@ displayStatus = 1,
 ";
 
 
+
 INSERT INTO article
-SET regDate = NOW(),
+SET regDate =NOW(),
 updateDate = NOW(),
 cateItemId = 1,
 displayStatus = 1,
@@ -234,7 +205,48 @@ FROM article;
 
 ";
 
+
+
+INSERT INTO article
+SET regDate =NOW(),
+updateDate = NOW(),
+cateItemId = 2,
+displayStatus = 1,
+`title` = "Servlet 기초",
+`body` = "# @WebServlet("/s/별 ")
+servlet경로 중에 없는 경로로 진입하면 
+이 DispatcherServlet이 받아온다.
+
+###### 모든 경로를 빨아들이는 블랙홀 같은 녀석이다. 
+
+입력한 servlet의 주소가 존재한다면 해당 주소로 진입이 되겠지.
+
+#### 예시 
+- /s/article/list  -> request 라고 한다.
+(request 중에 하나이다.)
+(동일한 경로의 servlet이 없는 경우)
+
+### 구현 방법
+- String requestURI = req(uest).getRequestURI();
+
+## 참고 사항
+- alt + shift + r : servlet의 request, response를 짧게 변경할 수 있다.  그리고 같은 공간에 있는 같은 변수명을 동시에 변경할 수 있다.
+- ";
+
+
+
 SELECT *
 FROM article;
 
+SELECT COUNT(*) 
+FROM article
+WHERE cateItemid = 2;
 
+
+INSERT INTO article
+SET regDate = NOW(),
+updateDate = NOW(),
+cateItemId = 3,
+displayStatus = 1,
+`title` = "카테 3",
+`body` = "카테 3";
