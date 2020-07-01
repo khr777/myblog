@@ -696,6 +696,7 @@ html, body {
 .article-list-box-1 {
 	text-align:center;
 	margin-top:60px;
+	border:3px solid gold;
 }
 
 .article-list-box-1 .list-content .list-body-box {
@@ -822,4 +823,32 @@ html, body {
 		display:block;
 		
 	}
+}
+
+/* article 리스트 카테고리 나누기 */	
+.cateItem-menu-box-1 {
+	
+	border:3px solid red;
+	text-align:center;			
+	
+}
+.cateItem-menu-box-1 .cateItem-menu {
+	position:fixed;
+	width:150px;
+	top:200px;
+	right:16%;
+	border:1px solid orange;
+}
+
+.cateItem-menu-box-1 .cateItem-menu > li {
+}
+
+.cateItem-menu-box-1 .cateItem-menu > li > a {
+	display:block;
+	padding:10px 20px 10px 20px;
+}
+
+.cateItem-menu-box-1 .cateItem-menu > li:hover > a {
+	background-color:orange;
+	color:white;
 }

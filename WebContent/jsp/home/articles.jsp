@@ -5,7 +5,7 @@
 	pageEncoding="UTF-8"%>
 
 <%
-	List<Article> articles = (List<Article>) request.getAttribute("articles");
+	List<Article> articles = (List<Article>)request.getAttribute("cateItemArticles");
 %>
 
 
@@ -22,7 +22,7 @@
 	top: 100px;
 }
 </style>
-
+<!-- 삭제 예정 -->
 <!--<div class="con">
 	<img class="article-icon" alt=""
 		src="../../resourse/img/article-icon.jpg">
@@ -31,6 +31,17 @@
 		<h1 class="article-name">Articles</h1>
 	</div>
 </div>  -->
+<!--  /s/article/list?cateItemId=1&page=1  -->
+<nav class="cateItem-menu-box-1">
+	<ul class="cateItem-menu">
+		<li><a href="${pageContext.request.contextPath}/s/article/list?cateItemId=1&page=1">일상</a></li>
+		<li><a href="${pageContext.request.contextPath}/s/article/list?cateItemId=2&page=1">IT : java</a></li>
+		<li><a href="${pageContext.request.contextPath}/s/article/list?cateItemId=3&page=1">IT : html/css/js</a></li>
+		<li><a href="${pageContext.request.contextPath}/s/article/list?cateItemId=4&page=1">IT : sql</a></li>
+		<li><a href="${pageContext.request.contextPath}/s/article/list?cateItemId=5&page=1">IT : 기타</a></li>
+		<li><a href="${pageContext.request.contextPath}/s/article/list?cateItemId=6&page=1">이거저거</a></li>
+	</ul>
+</nav>
 
 
 <div class="con article-list-box-1 ">
@@ -64,6 +75,13 @@
 	%>
 
 </div>
+
+
+
+
+
+
+
 
 
 <%@ include file="/jsp/part/foot.jspf"%>
