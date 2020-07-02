@@ -347,37 +347,40 @@ html {
 
   /* 탑바 시작 */
   .top-bar {
-    background-color:black; 
-    color:white;
-    height:100px;    
+    color:black;
+    height:70px;    
     padding:0 30px;
+    position:absolute;
+    z-index:20;
+    width:90%;
+    top:0;
   }
  
   .top-bar .logo {
-      font-size:3rem;
-      transition:margin-left 2s;
-      padding:0 130px;
+      font-size:4rem;
+      height:100px;
+      margin-top:-10px;
+      margin-left:-28px;
   }
-  .top-bar .logo:hover {
-  	margin-left:100px;
-  }
-    	
   
   
   .top-bar .menu-box-1 ul > li {
     position:relative;
     
   }
+  
   .top-bar .menu-box-1 > ul > li > a {
     padding:0 30px;
     font-weight:bold;
 	font-size:1.6rem;
+	transition:font-size 0.7s;
   }
   .top-bar .menu-box-1 > ul > li:hover > a {
       background-color:white;
       color:black;
       font-weight:bold;
       text-decoration:underline;
+      font-size:2rem;
   }
   .top-bar .menu-box-1 > ul > li:hover > ul {
       display:block;
@@ -398,10 +401,10 @@ html {
   .top-bar .menu-box-1 > ul ul {
       position:absolute;
       top:100%;
-      left:-2px;
+      /*left:-2px;*/
       width:100%;
       display:none;
-      border:2px solid black;
+      /*border:2px solid black;*/
       border-top-width:0;
       background-color:white;
       z-index:10;
@@ -539,11 +542,15 @@ html, body {
 }
 
 .sbs-slider {
-	
-    height:88.5%;
+	top:0;
+    height:100%;   /**/
     position:relative;
     user-select:none;
+    /*-------------*/
+    
 }
+
+
 
 .sbs-slider .side-bars > div {
     position:absolute;
@@ -553,7 +560,19 @@ html, body {
     width:calc(50% - 100px);
     height:100%;
     cursor:pointer;
+    
 }
+
+.sbs-slider .side-bars > div   {
+	top:0;
+	left:0;
+	right:0;
+	bottom:0;
+}
+
+
+
+
 
 .sbs-slider .side-bars > div:last-child {
     left:auto;
@@ -592,15 +611,7 @@ html, body {
 .sbs-slider > .slides > div.active {
     opacity:1;
 }
-/*
-.main-bottom {
-	background-color:black;
-	position:absolute;
-	left:0;
-	bottom:0;
-	height:10%;
-	width:100%;
-}*/
+
 
 @media (max-width:800px) {
 	.sbs-slider {
@@ -693,10 +704,19 @@ html, body {
 /* 모바일 상세보기 반응형 끝 */
 
 /* articles 리스트 시작 */
+
 .article-list-box-1 {
 	text-align:center;
-	margin-top:60px;
-	
+	margin-top:130px;
+		
+}
+
+
+
+.article-list-box-1 .new-article {
+	font-size:1.4rem;
+	font-weight:bold;
+	color:red;
 }
 
 .article-list-box-1 .list-content .list-body-box {
@@ -833,8 +853,8 @@ html, body {
 .cateItem-menu-box-1 .cateItem-menu {
 	position:fixed;
 	width:150px;
-	top:160px;
-	left:80%;
+	top:130px;
+	right:80%;
 	border:1px solid orange;
 }
 
@@ -907,16 +927,72 @@ html, body {
 .paging-box .paging-num-box  > a {
 	padding:20px 10px;
 	display:block;
+	text-decoration:underline;
+	color:#787878;
+}
+
+
+.paging-box .paging-num-box:hover  > a {
+	padding:20px 10px;
+	display:block;
+	text-decoration:underline;
+	color:black;
 	
 }
+
+.paging-box .paging-num-box.current  > a {
+	color:red;
+	
+} 
+
+
+
 /* aticle 리스트 카테고리별 페이징 끝 */
 
 
 
-/* editor */
+/* editor 시작 */
+
+.editor > h1 {
+	margin:100px 0 50px 100px;
+}
+
 
 @media (max-width:799px) {
 	.editor {
 		margin-top:140px;
 	}
 }
+
+/* editor 끝 */
+
+
+/* aboutMe 시작 */
+.usefule {
+	
+}
+
+
+.usefule-weather {
+	width:250px;
+	position:absolute;
+	bottom:100px;
+	left:200px;
+	
+}
+
+.usefule-weather .box a img {
+	width:250px;
+	
+}
+.usefule-weather .box a  {
+	text-align:center;
+	
+}
+
+.usefule-weather .box a .text {
+	font-size:1.4rem;
+	font-weight:bold;
+}
+
+

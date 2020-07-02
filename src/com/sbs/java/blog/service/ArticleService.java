@@ -13,12 +13,12 @@ public class ArticleService {
 		articleDao = new ArticleDao(dbConn);
 	}
 
-	public List<Article> getForPrintListArticles(int page, int cateItemId) {
-		return articleDao.getForPrintListArticles(page, cateItemId);
+	public List<Article> getForPrintListArticles(int page, int cateItemId, int itemsInAPage) {
+		return articleDao.getForPrintListArticles(page, cateItemId, itemsInAPage);
 	}
 
-	public Article getForPrintDetailArticle(int id) {
-		return articleDao.getForPrintDetailArticle(id);
+	public Article getForPrintArticle(int id) {
+		return articleDao.getForPrintArticle(id);
 	}
 
 	public void doWriteArticle(String title, String body) {
@@ -31,6 +31,14 @@ public class ArticleService {
 
 	public List<Article> getForPrintListNewArticles() {
 		return articleDao.getForPrintListNewArticles();
+	}
+
+	public int getForPrintListArticlesCount(int cateItemId) {
+		return articleDao.getForPrintListArticlesCount(cateItemId);
+	}
+
+	public List<Article> getSearchContents(String contents) {
+		return articleDao.getSearchContents(contents);
 	}
 
 }

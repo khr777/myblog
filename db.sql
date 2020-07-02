@@ -213,7 +213,7 @@ updateDate = NOW(),
 cateItemId = 2,
 displayStatus = 1,
 `title` = "Servlet 기초",
-`body` = "# @WebServlet("/s/별 ")
+`body` = "# @WebServlet(/s/별 )
 servlet경로 중에 없는 경로로 진입하면 
 이 DispatcherServlet이 받아온다.
 
@@ -235,6 +235,16 @@ servlet경로 중에 없는 경로로 진입하면
 
 
 
+INSERT INTO article
+SET regDate = NOW(),
+updateDate = NOW(),
+cateItemId = 2,
+displayStatus = 1,
+`title` = "블로그 관리 이번주 수정 계획",
+`body` = "카테 3";
+
+
+
 SELECT *
 FROM article;
 
@@ -250,3 +260,128 @@ cateItemId = 3,
 displayStatus = 1,
 `title` = "카테 3",
 `body` = "카테 3";
+
+
+INSERT INTO article
+SET regDate = NOW(),
+updateDate = NOW(),
+cateItemId = 2,
+displayStatus = 1,
+`title` = "블로그 관리 이번주 수정 계획",
+`body` = "# 블로그 관리 수정하고 싶은 기능
+
+###### 1. 게시물 상세보기에 목록 버튼을 누르면 카테고리로 이동하기 전 리스트(예시: IT:java 리스트)로 이동하게 하기.
+
+-  현재 문제(이유) : 게시물 상세보기에 게시물 리스트를 볼 수 있는 '목록'이라는 버튼이 있지만 이 버튼을 사용할 경우 카테고리를 타고 들어가기 전 리스트가 아닌 최신글을 보여주는 리스트로 이동함.
+
+- 계획 : 카테고리를 통해서 카테고리 리스트로 이동했을 경우, 카테고리의 번호를 남겨주고 파라미터로 받아서 목록을 누르면 그 주소로 이동하도록 해야 할지 생각 중.
+
+###### 2. 게시물 리스트 왼쪽 여백 채워보기
+
+###### 3. aboutMe 여백과 조금 더 예쁘게 할 수 있을지 구상하기.
+
+###### 4. 게시물 상세보기  editor 너비 줄이기.
+
+###### 5. 게시물 상세보기의 번호, 등록일, 작성자 등 살짝 바꿔보기... 너무 밋밋함.
+
+###### 6. 게시물 상세보기의 여백 구상(깔끔하지 못할 것 같으면 여백 남겨 두기)";
+
+SELECT * 
+FROM article;
+
+
+INSERT INTO article
+SET regDate = NOW(),
+updateDate = NOW(),
+cateItemId = 3,
+displayStatus = 1,
+`title` = "sql에 저장된 값을 불러올 때(확인할 때) 참고할 사항",
+`body` = "# java에서 db 정보를 SELECT 해올 때는
+## executeQuery(sql) 을 사용한다. 
+`예시`
+```java
+List<Map<String, Object>> rows = new ArrayList<>();
+
+
+Statement stmt = null;
+ResultSet rs = null;
+
+
+
+try {
+    stmt = connection.createStatement();
+    rs = stmt.executeQuery(sql);
+    ResultSetMetaData metaData = rs.getMetaData();
+    int columnSize = metaData.getColumnCount();
+
+    while (rs.next()) {
+        Map<String, Object> row = new HashMap<>();
+
+        for (int columnIndex = 0; columnIndex < columnSize; columnIndex++) {
+            String columnName = metaData.getColumnName(columnIndex + 1);
+            Object value = rs.getObject(columnName);
+
+            if (value instanceof Long) {
+                int numValue = (int) (long) value;
+                row.put(columnName, numValue);
+            } else if (value instanceof Timestamp) {
+                String dateValue = value.toString();
+                dateValue = dateValue.substring(0, dateValue.length() - 2);
+                row.put(columnName, dateValue);
+            } else {
+                row.put(columnName, value);
+            }
+    }
+
+        rows.add(row);
+}
+```
+";
+
+SELECT *
+FROM article;
+
+
+
+
+INSERT INTO article
+SET regDate = NOW(),
+updateDate = NOW(),
+cateItemId = 4,
+displayStatus = 1,
+`title` = "sql % 기호 사용법",
+`body` = "# SQL에서 %을 그냥 사용하면 문법 오류가 발생한다.
+#### %을 쿼리에 적용하기 위해서는 %을 1개 더 붙여서 작성해야 한다😵;"
+
+
+
+
+
+SELECT *
+FROM article;
+
+
+INSERT INTO article
+SET regDate = NOW(),
+updateDate = NOW(),
+cateItemId = 5,
+displayStatus = 1,
+`title` = "2020-07-03 금요일 블로그 구현 발표 준비",
+`body` = "# 가능한 기능 
+1. 로고 클릭하면 홈으로 이동
+2. home, articles, aboute me, editor, sns(github, tistory, youtube) 클릭하면 모두 페이지 이동 가능
+3. 최근에 알게된 toast ui editor를 블로그 구현, 보완, 게시물 작성을하며 자주 사용하게 되어 따로 메뉴를 만들어서 언제든 사용할 수 있도록 만들어 놓음.
+4. 일단 게시물 메뉴로 이동하면 최신 게시물 10개를 리스팅
+5. 게시물 메뉴로 이동하면 카테고리 메뉴가 별도로 존재
+6.  해당 카테고리를 클릭하면 카테고리별로 게시물 10개씩 리스팅
+8. 카테고리별로 페이지 번호 출력 가능 
+9. `문제` : 아직 페이지 번호를 숨기는 기능을 구현하지 못해서 리스팅되는 페이지가 모두 출력된다..(2-30개 이상까지도)
+10. 게시물 메뉴에서 주소창에 search 라는 이름을 통해서  카테고리 구분 없이 검색하려는 제목 또는 내용을 입력하면 검색어를 포함한 게시물이 게시 개수 제한없이 모두 출력된다.
+11. `문제` : 나중에는 페이지에 담아 관리하고 싶다.
+12.  게시물 상세보기 가능 , 목록버튼을 누르면 상세보기했던 카테고리의 게시물 목록으로 이동한다.
+13.  aboutme에는 아주 간략한 자기 소개
+14.  이 블로그는 반응형으로 모두 작동하여 pc에서 사용하는 모든 기능을 미흡하게나마 현재까지 구현한 기능을 동일하게 사용할 수 있음.
+
+# 일단 제일 추가하고 싶은 기능
+1. 게시물, 댓글 등 글을 블로그에서 직접 입력하고 저장하고 싶음. "
+

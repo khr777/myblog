@@ -23,11 +23,12 @@ public class Article extends dto {
 	}
 	
 	
-	
+
 	@Override
 	public String toString() {
 		return "Article [updateDate=" + updateDate + ", cateItemId=" + cateItemId + ", title=" + title + ", body="
-				+ body + ", getId()=" + getId() + ", getRegDate()=" + getRegDate() + "]";
+				+ body + ", getId()=" + getId() + ", getRegDate()=" + getRegDate() + ", dto=" + super.toString()
+				+ "]";
 	}
 
 	public String getUpdateDate() {

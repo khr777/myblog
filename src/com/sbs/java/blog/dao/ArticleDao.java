@@ -17,7 +17,7 @@ public class ArticleDao {
 		this.dbConn = dbConn;
 	}
 
-	public List<Article> getForPrintListArticles(int page, int cateItemId) {
+	public List<Article> getForPrintListArticles(int page, int cateItemId, int itemsInAPage) {
 		
 		String sql = "";
 		
@@ -44,15 +44,15 @@ public class ArticleDao {
 		return articles;
 	}
 
-	public Article getForPrintDetailArticle(int id) {
+	public Article getForPrintArticle(int id) {
 		String sql = "";
-		sql += String.format("SELECT * ");
-		sql += String.format("FROM article ");
-		sql += String.format("WHERE id = %d ", id);
+		sql += String.format("SELECT *, '김혜련' AS extra__writer "); // 만들어놓은 쿼리에는 작성자명을 담을 수가 없다. 그래서 'extra__' 를 적은 것.
+		sql += String.format("FROM article ");				
+		sql += String.format("WHERE 1 ");                       // 이유는 id 가 RPIMARY KEY라서 중복되는 값이 없기 때문이다. 그리고 순서를 바꿀 수 있는 이유는 WHERE 1을 걸어놨기 때문에 가능한 것이다.  
+		sql += String.format("AND id = %d ", id);   // tip : displayStatus가 이 줄에 와도 상관없지만 검색 속도를 빠르게 하고 싶다면 id를 먼저 써주는 것이 좋다. 
+		sql += String.format("AND displayStatus = 1 ");
 		
-		Map<String, Object> row = DBUtil.selectRow(dbConn, sql);
-		
-		return new Article(row);
+		return new Article(DBUtil.selectRow(dbConn, sql));
 	}
 
 	public int doWriteArticle(String title, String body) {
@@ -101,5 +101,43 @@ public class ArticleDao {
 		}
 		
 		return articles;
+	}
+
+	public int getForPrintListArticlesCount(int cateItemId) {
+
+		String sql = "";
+		
+		sql += String.format("SELECT COUNT(*) AS cnt ");
+		sql += String.format("FROM article ");
+		sql += String.format("WHERE displayStatus = 1 ");
+		if ( cateItemId != 0 ) {
+			sql += String.format("AND cateItemId = %d ", cateItemId);
+		}
+		
+		
+		int count = DBUtil.selectRowIntValue(dbConn, sql);
+		
+		return count;
+		
+	}
+
+	public List<Article> getSearchContents(String contents) {
+		String sql = "";
+		
+		sql += String.format("SELECT * ");
+		sql += String.format("FROM article ");
+		sql += String.format("WHERE 1 ");
+		sql += String.format("AND title LIKE '%%%s%%' ", contents);
+		sql += String.format("OR `body` LIKE '%%%s%%' ", contents);
+		sql += String.format("ORDER BY id DESC ");
+		List<Map<String, Object>> rows = DBUtil.selectRows(dbConn, sql);
+		List<Article> articles = new ArrayList<>();
+		
+		for ( Map<String, Object> row : rows ) {
+			articles.add(new Article(row));
+		}
+		
+		return articles;
+		
 	}
 }

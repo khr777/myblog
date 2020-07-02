@@ -6,7 +6,7 @@
 <link rel="stylesheet"
 	href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/default.min.css">
 
-<title>CodePen - A Pen by jhs</title>
+<title>CodePen</title>
 </head>
 <body translate="no">
 
@@ -15,6 +15,8 @@
 		src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/languages/css.min.js"></script>
 	<script
 		src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/languages/javascript.min.js"></script>
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/languages/java.min.js"></script>
 	<script
 		src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/languages/xml.min.js"></script>
 	<script
@@ -54,10 +56,6 @@
 	</div>
 
 
-<form>
-  사용자명 : <input type="text" name="username"><br/>
-  비밀번호 : <input type="password" name="password">
-</form>
 
 
 </body>

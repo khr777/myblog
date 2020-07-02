@@ -125,5 +125,37 @@ public class DBUtil {
 
 		return id;
 	}
+
+	public static int selectRowIntValue(Connection dbConn, String sql) {
+		Map<String, Object> row = selectRow(dbConn, sql);
+		
+		for ( String key : row.keySet() ) {
+			return (int)row.get(key);
+			
+		}
+		
+		return -1;
+	}
+	// String은 return 값을 null로 하면 안된다. 
+	public static String selectRowStringValue(Connection dbConn, String sql) {
+		Map<String, Object> row = selectRow(dbConn, sql);
+		
+		for ( String key : row.keySet() ) {
+			return (String)row.get(key);
+			
+		}
+		
+		return "";
+	}
 	
+	public static Boolean selectRowBooleanValue(Connection dbConn, String sql) {
+		Map<String, Object> row = selectRow(dbConn, sql);
+		
+		for ( String key : row.keySet() ) {
+			return ((int)row.get(key)) == 1;
+			
+		}
+		
+		return false ;
+	}
 }

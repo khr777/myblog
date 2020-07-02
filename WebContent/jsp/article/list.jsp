@@ -6,10 +6,9 @@
 <!-- 카테고리별 게시물들 -->
 <%
 	List<Article> articles = (List<Article>)request.getAttribute("articles");
-%>
-<!-- 페이지 개수 -->
-<%
-int totalPage = (int)request.getAttribute("totalPage");
+	int totalPage = (int)request.getAttribute("totalPage"); //getAttribute는 Object 타입을 return 한다.
+	int paramPage = (int)request.getAttribute("page");
+	int cateItemId = (int)request.getAttribute("cateItemId");			
 %>
 
 
@@ -28,11 +27,17 @@ int totalPage = (int)request.getAttribute("totalPage");
 
 
 <div class="con article-list-box-1 ">
-	<%
-		for (Article article : articles) {
-	%>
+	
+			<%if ( cateItemId == 0 ) { %> 
+				 <div class="new-article">NEW 게시물</div>
+			<% } %>
+			
+		<% for (Article article : articles) { %>
+			
+
 
 	<div class="list-content">
+		
 		<a href="./detail?id=<%=article.getId()%> " class="">
 			<div class="list-title"><%=article.getTitle()%></div>
 			<div class="list-body-box">
@@ -51,6 +56,7 @@ int totalPage = (int)request.getAttribute("totalPage");
 			</div>
 			<div class="list-updateDate" style="display: none;"><%=article.getUpdateDate()%></div>
 		</a> <br>
+		
 	</div>
 
 	<%
@@ -60,14 +66,17 @@ int totalPage = (int)request.getAttribute("totalPage");
 </div>
 
 
-<div class="paging-box">
-	<% for ( int i = 1; i <= totalPage; i++ ) { %>
-	<div class="paging-num-box">
-		<a href="${pageContext.request.contextPath}/s/article/list?cateItemId=${param.cateItemId}&page=<%=i%>">[ <%=i%> ]</a>
-	</div>
+  <div class="paging-box">
+	<% for ( int i = 1; i <= totalPage; i++ ) { %> <!-- 현재 페이지current 이면 빨강. 삼항연산자?? -->
+	<div class="paging-num-box <%=i == paramPage ? "current" : ""%>">
+		<%if ( cateItemId != 0 ) { %>
+		<a href="${pageContext.request.contextPath}/s/article/list?cateItemId=${param.cateItemId}&page=<%=i%>"><%=i%></a>
+	</div>    <!-- ${pageContext.request.contextPath}/s/article/list 여기까지 생략해도 작동된다. -->
+		<%} %>
 	<% 
 		} 
 	%>
+	
 </div>
 
 
