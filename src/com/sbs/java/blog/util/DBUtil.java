@@ -82,8 +82,8 @@ public class DBUtil {
 		return rows;
 	}
 
-	public static void insert(Connection dbConn, String sql) {
-		Statement stmt = null;
+	public static int insert(Connection dbConn, String sql) {
+		/*Statement stmt = null;
 		ResultSet rs = null;
 		
 		try {
@@ -92,9 +92,38 @@ public class DBUtil {
 			
 		} catch (SQLException e) {
 			System.err.printf("[SQL 예외, SQL : %s] : %s\n", sql, e.getMessage());
+		} */
+		int id = -1;
+
+		// SQL을 적는 문서파일
+		Statement statement = null;
+		// SQL의 실행결과 보고서
+		ResultSet rs = null;
+		try {
+			statement = dbConn.createStatement();
+			statement.executeUpdate(sql, Statement.RETURN_GENERATED_KEYS);
+			rs = statement.getGeneratedKeys();
+			if (rs.next()) {
+				id = rs.getInt(1);
+				System.out.println(id);
+			}
+		} catch (SQLException e) {
+			System.err.printf("[INSERT 쿼리 오류, %s]\n" + e.getStackTrace() + "\n", sql);
 		}
+
+		try {
+			if (statement != null) {
+				statement.close();
+			}
+
+			if (rs != null) {
+				rs.close();
+			}
+		} catch (SQLException e) {
+			System.err.println("[INSERT 종료 오류]\n" + e.getStackTrace());
+		}
+
+		return id;
 	}
-	
-	
 	
 }

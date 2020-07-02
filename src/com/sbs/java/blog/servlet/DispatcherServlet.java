@@ -5,6 +5,8 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+import javax.security.auth.message.callback.PrivateKeyCallback.Request;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -13,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.sbs.java.blog.controller.ArticleController;
 import com.sbs.java.blog.controller.Controller;
+import com.sbs.java.blog.controller.HomeController;
 import com.sbs.java.blog.controller.MemberController;
 import com.sbs.java.blog.dto.Article;
 
@@ -20,7 +23,7 @@ import com.sbs.java.blog.dto.Article;
 public class DispatcherServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		resp.setContentType("text/html; charset=UTF-8");
-
+		
 		// DB 커넥터 로딩 시작
 		String driverName = "com.mysql.cj.jdbc.Driver";
 
@@ -41,16 +44,13 @@ public class DispatcherServlet extends HttpServlet {
 		try  {
 			// DB 접속 성공
 			dbConn = DriverManager.getConnection(url, user, password);
-			
-
 			String contextPath = req.getContextPath();
 			String requestURI = req.getRequestURI();
 			String actionStr = requestURI.replace(contextPath + "/s/", "");
 			String[] actionStrBits = actionStr.split("/");
 			String controllerName = actionStrBits[0];
 			String actionMethodName = actionStrBits[1];
-
-			Controller controller = null; // 변수를 그냥 만들지 말고 무조건 null 을 만들자!
+			Controller controller = null; // 변수를 	그냥 만들지 말고 무조건 null 을 만들자!
 
 			switch (controllerName) {
 			case "article":
@@ -60,11 +60,14 @@ public class DispatcherServlet extends HttpServlet {
 				controller = new MemberController();
 				break;
 			case "home":
-				controller = new ArticleController(dbConn);
+				controller = new HomeController(dbConn);
+				break;
+				
 			}
 			if (controller != null) {
 				String viewPath = controller.doAction(actionMethodName, req, resp);
 				viewPath = "/jsp/" + viewPath + ".jsp";
+				
 				if ( viewPath.equals("")) {
 					resp.getWriter().append("ERROR, CODE 1");
 				}

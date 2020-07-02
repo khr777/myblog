@@ -43,12 +43,14 @@
 					<li><a href="${pageContext.request.contextPath}/s/article/list" class="flex height-100p flex-ai-c">Articles</a></li>
 					<li><a href="${pageContext.request.contextPath}/s/article/aboutMe" class="flex height-100p flex-ai-c">About
 							Me</a></li>
+					<li><a href="${pageContext.request.contextPath}/s/article/doWrite" class="flex height-100p flex-ai-c">Editor</a>
 					<li><a href="#" class="flex height-100p flex-ai-c">SNS</a>
 						<ul>
 							<li><a href="https://github.com/hyeryeonkim" target="_black" class="block">GITHUB</a></li>
 							<li><a href="https://harrydony.tistory.com/"  target="_black" class="block">TISTORY</a></li>
 							<li><a href="https://www.youtube.com/channel/UCBEioSP02dSVuFDpyBexl8w?view_as=subscriber"  target="_black"  class="block">YOUTUBE</a></li>
 						</ul></li>
+					
 				</ul>
 			</nav>
 		</div>
@@ -69,6 +71,7 @@
 				<li><a href="${pageContext.request.contextPath}/s/home/main" class="block">Home</a></li>
 				<li><a href="${pageContext.request.contextPath}/s/article/list" class="block">Articles</a></li>
 				<li><a href="${pageContext.request.contextPath}/s/article/aboutMe" class="block">About Me</a></li>
+				<li><a href="${pageContext.request.contextPath}/s/article/doWrite" class="block">Editor</a>
 				<li><a href="#" class="block">SNS</a>
 					<ul>
 						<li><a href="https://github.com/hyeryeonkim"  target="_black"  class="block">GITHUB</a></li>

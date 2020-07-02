@@ -55,15 +55,17 @@ public class ArticleDao {
 		return new Article(row);
 	}
 
-	public void doWriteArticle(String title, String body) {
+	public int doWriteArticle(String title, String body) {
 		String sql = "";
 		sql += String.format("INSERT INTO article ");
 		sql += String.format("SET regDate = NOW() ");
 		sql += String.format(", updateDate = NOW() ");
+		sql += String.format(", cateItemId = 1 ");
+		sql += String.format(", displayStatus = 1 ");
 		sql += String.format(", title = '%s' ", title);
 		sql += String.format(", body = '%s' ", body);
 		
-		DBUtil.insert(dbConn, sql);
+		return DBUtil.insert(dbConn, sql);
 	}
 
 	public int doPaging(int cateItemId) {

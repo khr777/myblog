@@ -827,7 +827,7 @@ html, body {
 /* article 리스트 카테고리 나누기 시작 */	
 .cateItem-menu-box-1 {
 	
-	text-align:center;			
+	text-align:left;			
 	
 }
 .cateItem-menu-box-1 .cateItem-menu {
@@ -844,6 +844,7 @@ html, body {
 .cateItem-menu-box-1 .cateItem-menu > li > a {
 	display:block;
 	padding:10px 20px 10px 20px;
+	font-weight:bold;
 }
 
 .cateItem-menu-box-1 .cateItem-menu > li:hover > a {
@@ -874,6 +875,7 @@ html, body {
 	.paging-box {
 		
 	}
+	/* 페이징 번호 크기 설정 */
 	.paging-box .paging-num-box  a {
 	font-size:1.2rem;
 	margin-bottom:10px;
@@ -894,16 +896,27 @@ html, body {
 
 .paging-box {
 	display:flex;
-	font-size:2rem;
+	font-size:1.5rem;
 	justify-content:center;
+	
 }
 .paging-box .paging-num-box {
 		
 }
 
 .paging-box .paging-num-box  > a {
-	padding:10px;
+	padding:20px 10px;
 	display:block;
 	
 }
 /* aticle 리스트 카테고리별 페이징 끝 */
+
+
+
+/* editor */
+
+@media (max-width:799px) {
+	.editor {
+		margin-top:140px;
+	}
+}

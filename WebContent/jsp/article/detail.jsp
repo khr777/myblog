@@ -70,8 +70,8 @@
 					수정일 :
 					<%=article.getUpdateDate()%></div>
 				<div class="writer">작성자 : 김혜련</div>
-			</div>
-			<a href="${pageContext.request.contextPath}/s/article/list"
+			</div>     <!-- 카테고리 게시물 접속했을 때, 목록 클릭하면 최신 게시물을 불러왔음. 카테고리 게시물로 이동하게 수정한 코드 -->
+			<a href="${pageContext.request.contextPath}/s/article/list?cateItemId=<%=article.getCateItemId()%>"
 				class="back-icon block"><i class="fas fa-arrow-left"> 
 				<span>목록</span>
 			</i></a>

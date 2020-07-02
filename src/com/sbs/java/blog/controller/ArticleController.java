@@ -28,16 +28,9 @@ public class ArticleController extends Controller {
 			return doActionDoWrite(req, resp);
 		case "aboutMe":
 			return doActionAboutMe(req, resp);
-		case "home":
-			return doHome(req, resp);
 		}
 		
 		return "";
-	}
-
-	private String doHome(HttpServletRequest req, HttpServletResponse resp) {
-		// 경로 패스하는거 밖에 하는게 없었음.
-		return "home/main";
 	}
 
 	private String doActionAboutMe(HttpServletRequest req, HttpServletResponse resp) {
@@ -49,9 +42,15 @@ public class ArticleController extends Controller {
 		String title = req.getParameter("title");
 		String body = req.getParameter("body");
 		
+		
 		articleService.doWriteArticle(title, body);
+		
+
+		req.setAttribute("title", title);
+		req.setAttribute("body", body);
+		
 				
-		return "";
+		return "article/doWrite";
 	}
 
 	private String doActionDetail(HttpServletRequest req, HttpServletResponse resp) {
