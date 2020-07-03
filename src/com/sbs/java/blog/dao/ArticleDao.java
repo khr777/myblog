@@ -58,7 +58,7 @@ public class ArticleDao {
 	public int doWriteArticle(String title, String body) {
 		String sql = "";
 		sql += String.format("INSERT INTO article ");
-		sql += String.format("SET regDate = NOW() ");
+		sql += String.format("SET regDate = NOW() "); 
 		sql += String.format(", updateDate = NOW() ");
 		sql += String.format(", cateItemId = 1 ");
 		sql += String.format(", displayStatus = 1 ");

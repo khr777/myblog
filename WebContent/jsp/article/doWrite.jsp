@@ -8,7 +8,7 @@
 
 <title>CodePen</title>
 </head>
-<body translate="no">
+<body translate="no" style="height:800px;">
 
 
 	<script
@@ -40,7 +40,12 @@
 
 	
 	<div class="editor">
-		<h1>TOAST UI Editor</h1>	
+		<h1>TOAST UI Editor</h1>
+		<div class="emoji">
+			<a href="https://www.emojiengine.com/ko/" target="_blank">
+				😵 emoji 이동
+			</a>
+		</div>	
 		<div id="editor1"></div>
 		<script id="rendered-js">
 			console.clear();

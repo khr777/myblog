@@ -338,10 +338,6 @@ try {
 ```
 ";
 
-SELECT *
-FROM article;
-
-
 
 
 INSERT INTO article
@@ -351,7 +347,7 @@ cateItemId = 4,
 displayStatus = 1,
 `title` = "sql % 기호 사용법",
 `body` = "# SQL에서 %을 그냥 사용하면 문법 오류가 발생한다.
-#### %을 쿼리에 적용하기 위해서는 %을 1개 더 붙여서 작성해야 한다😵;"
+#### %을 쿼리에 적용하기 위해서는 %을 1개 더 붙여서 작성해야 한다😵";
 
 
 
@@ -385,3 +381,14 @@ displayStatus = 1,
 # 일단 제일 추가하고 싶은 기능
 1. 게시물, 댓글 등 글을 블로그에서 직접 입력하고 저장하고 싶음. "
 
+# 발표를 위한 쿼리
+
+
+
+INSERT INTO article
+SET regDate = NOW(),
+updateDate = NOW(),
+cateItemId = 6,
+displayStatus = 1,
+`title` = "이거저거",
+`body` = "이거저거"

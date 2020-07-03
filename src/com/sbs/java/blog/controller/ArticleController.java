@@ -42,13 +42,15 @@ public class ArticleController extends Controller {
 	private String doActionDoWrite(HttpServletRequest req, HttpServletResponse resp) {
 		String title = req.getParameter("title");
 		String body = req.getParameter("body");
+		//★★★★★INTSERT 쿼리에 맞춰서 카테고리 번호 등 값을 넘겨주고 해당 카테고리에 글을 저장할 수 있도록 추가 구현해보기!
+		/*String regDate = "NOW()";
+		String updateDate = "NOW()";
+		int cateItemId = Integer.parseInt(req.getParameter("cateItemId")); */
 		
 		
 		articleService.doWriteArticle(title, body);
-		
-
 		req.setAttribute("title", title);
-		req.setAttribute("body", body);
+		req.setAttribute("body", body); 
 		
 				
 		return "article/doWrite.jsp";
@@ -112,6 +114,7 @@ public class ArticleController extends Controller {
 			req.setAttribute("articles", articles);
 		}
 		
+		req.setAttribute("search", search );
 		
 		
 		//최신 10개 게시물 리스트

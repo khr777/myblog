@@ -8,7 +8,8 @@
 	List<Article> articles = (List<Article>)request.getAttribute("articles");
 	int totalPage = (int)request.getAttribute("totalPage"); //getAttribute는 Object 타입을 return 한다.
 	int paramPage = (int)request.getAttribute("page");
-	int cateItemId = (int)request.getAttribute("cateItemId");			
+	int cateItemId = (int)request.getAttribute("cateItemId");	
+	String search = (String)request.getAttribute("search");
 %>
 
 
@@ -28,8 +29,11 @@
 
 <div class="con article-list-box-1 ">
 	
-			<%if ( cateItemId == 0 ) { %> 
+			<%if ( cateItemId == 0 && search == null) { %> 
 				 <div class="new-article">NEW 게시물</div>
+			<% } %>
+			<%if ( search != null ) { %> 
+				 <div class="new-article">검색 결과</div>
 			<% } %>
 			
 		<% for (Article article : articles) { %>

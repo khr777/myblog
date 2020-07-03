@@ -491,6 +491,7 @@ html {
     visibility:hidden;
     opacity:0;
     transition: visibility .5s, opacity .5s;
+    overflow-x:auto;
 }
 .mobile-side-bar.active {
     visibility:visible;
@@ -501,14 +502,22 @@ html {
         margin-top:100px;
     }
 }
+.mobile-side-bar .menu-box-1 {
+	margin-top:-50px;
+	
+	
+
+}
 .mobile-side-bar  .menu-box-1  ul > li > a {
     padding:20px;
-    font-size:2rem;
+    font-size:1.6rem;
     font-weight:bold;
+    
 }
 .mobile-side-bar .menu-box-1 ul li:hover > a {
     background-color:white;
     color:black;
+    
 }
 .mobile-side-bar .menu-box-1 ul li > a:not(:only-child)::after {
     content:"[+]";
@@ -517,6 +526,12 @@ html {
 .mobile-side-bar .menu-box-1 ul li:hover > a:not(:only-child)::after {
     content:"[-]";
 }
+
+.mobile-side-bar .menu-box-1 ul ul li > a {
+    font-size:1.1rem;
+    
+}
+
 .mobile-side-bar .menu-box-1 ul ul {
     display:none;
 }
@@ -564,10 +579,12 @@ html, body {
 }
 
 .sbs-slider .side-bars > div   {
-	top:0;
+	/*top:0;
 	left:0;
 	right:0;
-	bottom:0;
+	bottom:0;*/
+	background-size:cover;
+	background-position:center;
 }
 
 
@@ -955,6 +972,13 @@ html, body {
 
 .editor > h1 {
 	margin:100px 0 50px 100px;
+}
+
+.editor .emoji > a {
+	display:block;
+	margin-left:30px;
+	padding-bottom:30px;
+	width:200px;
 }
 
 
