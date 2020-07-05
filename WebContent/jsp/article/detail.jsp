@@ -19,7 +19,7 @@
 <script
 	src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/languages/javascript.min.js"></script>
 <script
-	src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/languages/java.min.js"></script>	
+	src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/languages/java.min.js"></script>
 <script
 	src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/languages/xml.min.js"></script>
 <script
@@ -53,10 +53,9 @@
 	Article article = (Article) request.getAttribute("article");
 %>
 
-
 <div class="con">
-	<div class="detail-box-1 absolute-center absolute-middle" >
-		<div class="detail-title" ><%=article.getTitle()%></div>
+	<div class="detail-box-1 absolute-center absolute-middle">
+		<div class="detail-title"><%=article.getTitle()%></div>
 		<br>
 		<div class="data-box-1 flex flex-jc-sb flex-ai-c">
 			<div class="writeData flex">
@@ -69,12 +68,18 @@
 				<div class="updateDate visible-on-md-up">
 					수정일 :
 					<%=article.getUpdateDate()%></div>
-				<div class="writer">작성자 : 김혜련</div>
-			</div>     <!-- 카테고리 게시물 접속했을 때, 목록 클릭하면 최신 게시물을 불러왔음. 카테고리 게시물로 이동하게 수정한 코드 -->
-			<a href="${pageContext.request.contextPath}/s/article/list?cateItemId=<%=article.getCateItemId()%>"
-				class="back-icon block"><i class="fas fa-arrow-left"> 
-				<span>목록</span>
+				<div class="writer">
+					작성자 :<%=article.getExtra().get("writer")%></div>
+			</div>
+			<!-- 카테고리 게시물 접속했을 때, 목록 클릭하면 최신 게시물을 불러왔음. 카테고리 게시물로 이동하게 수정한 코드 -->
+			<a
+				href="${pageContext.request.contextPath}/s/article/list?cateItemId=<%=article.getCateItemId()%>"
+				class="back-icon block"><i class="fas fa-arrow-left"> <span>목록</span>
+			</i></a> <a
+				href="${pageContext.request.contextPath}/s/article/modify?id=<%=article.getId()%>&cateItemId=<%=article.getCateItemId()%>&title=<%=article.getTitle()%>&body=<%=article.getBody()%>"
+				class="back-icon block"><i class="fas fa-edit"> <span>수정</span>
 			</i></a>
+
 		</div>
 		<div class="editor-box">
 			<div id="origin1" style="display: none;"><%=article.getBody()%></div>
@@ -89,8 +94,27 @@
 					plugins : [ toastui.Editor.plugin.codeSyntaxHighlight ]
 				});
 			</script>
+			<br />
+			<div class="move-button">
+				<button type="button"
+					onclick="location.href='detail?id=${param.id-1}'">이전</button>
+				<button type="button"
+					onclick="location.href='detail?id=${param.id+1}'">다음</button>
+			</div>
 		</div>
 	</div>
 </div>
+<button type="submit" onclick="location.href='delete?id=${param.id}'" style="position:absolute; left:80%; top:30%;">삭제</button>
+
+
+
+
+<style>
+.move-button {
+	position:absolute;
+	top:170px;
+	left:0;
+}
+</style>
 
 <%@ include file="/jsp/part/foot.jspf"%>

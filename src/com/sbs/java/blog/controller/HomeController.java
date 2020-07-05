@@ -7,11 +7,11 @@ import javax.servlet.http.HttpServletResponse;
 
 public class HomeController extends Controller {
 
-
-	public HomeController(Connection dbConn) {
+	public HomeController(Connection dbConn, String actionMethodName, HttpServletRequest req, HttpServletResponse resp) {
+		super(dbConn, actionMethodName, req, resp);
 	}
-
-	public String doAction(String actionMethodName, HttpServletRequest req, HttpServletResponse resp) {
+	@Override //는 붙여주는게 좋다. 
+	public String doAction() {
 		switch ( actionMethodName ) {
 		case "main":
 			return doActionMain(req, resp);
@@ -29,6 +29,7 @@ public class HomeController extends Controller {
 	private String doActionMain(HttpServletRequest req, HttpServletResponse resp) {
 		return "home/main.jsp";
 	}
+
 
 	
 }

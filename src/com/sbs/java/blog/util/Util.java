@@ -59,4 +59,8 @@ public class Util {
 			e1.printStackTrace();  // 얘는 에러가 날일이 없다. 신경쓰지 않아도 된다. 
 		}
 	}
+	public static String getString(HttpServletRequest req, String paramName) {
+		
+		return req.getParameter(paramName);
+	}
 }

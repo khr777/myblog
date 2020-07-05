@@ -6,7 +6,7 @@
 /* aboutMe 시작 */
 .profile-box-1 {
 	position: absolute;
-	top: 170px;
+	top: 150px;
 	background-color:white;
 }
 
@@ -100,7 +100,7 @@
 .photo-box img {
 	width:20%;
 	
-	margin-bottom:100px;
+	margin-bottom:50px;
 }
 
 

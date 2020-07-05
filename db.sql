@@ -97,7 +97,7 @@ displayStatus = 1,
 INSERT INTO article
 SET regDate = NOW(),
 updateDate = NOW(),
-cateItemId = 1,
+cateItemId = 5,
 displayStatus = 1,
 `title` = "웹 개발에 참고하기 좋은 사이트 정보 모음집.",
 `body` = "# 무료 이미지 정보 사이트 
@@ -128,7 +128,7 @@ displayStatus = 1,
 INSERT INTO article
 SET regDate =NOW(),
 updateDate = NOW(),
-cateItemId = 1,
+cateItemId = 4,
 displayStatus = 1,
 `title` = "SQL 기초 문법",
 `body` = "## 명령어 실행 
@@ -338,6 +338,10 @@ try {
 ```
 ";
 
+SELECT *
+FROM article;
+
+
 
 
 INSERT INTO article
@@ -379,16 +383,53 @@ displayStatus = 1,
 14.  이 블로그는 반응형으로 모두 작동하여 pc에서 사용하는 모든 기능을 미흡하게나마 현재까지 구현한 기능을 동일하게 사용할 수 있음.
 
 # 일단 제일 추가하고 싶은 기능
-1. 게시물, 댓글 등 글을 블로그에서 직접 입력하고 저장하고 싶음. "
-
-# 발표를 위한 쿼리
+1. 게시물, 댓글 등 글을 블로그에서 직접 입력하고 저장하고 싶음. ";
 
 
+
+SELECT *
+FROM article;
 
 INSERT INTO article
 SET regDate = NOW(),
 updateDate = NOW(),
-cateItemId = 6,
+cateItemId = 5,
 displayStatus = 1,
-`title` = "이거저거",
-`body` = "이거저거"
+`title` = "블로그에 적용하고 싶은 기능(계획)",
+`body` = "# 구현하고 싶은 기능 🙈🙉
+1. 도메인 주소창에 검색어를 입력하는게 아닌 검색창을 만들어서 검색창에 직접 글을 입력하고 검색어에 대한 게시물을 찾아오게 하는 기능
+2. 상세보기에서 이전, 다음 버튼을 만들어 이전 상세게시물, 다음 상세게시물로 이동할 수 있는 기능.
+3. 블로그에 직접 글을 입력하고 저장하고, 리스트로 불러오게 하는 기능.
+4. 현재 홈 화면 이미지가 웹페이지 크기(비율)에 맞춰 자유롭게 커지고 작아지지 않음. 이 문제를 해결하고 싶음.
+5. 게시물에 이미지도 함께 등록해보고 싶음.
+6. 게시물 수정 기능(페이지 화면에서)
+7. 게시물 삭제 기능 (페이지 화면에서)
+8. 총 게시물 수 출력
+9. ` 다른 기능 생각나면 마저 정리하기.`  
+10. 카테고리에 공부계획 추가하기.
+11. 현재 editor 메뉴를 들어가면 doWrite를 통해서 null 값의 게시물이 신규로 추가 되고 있음. 
+그 문제 해결해야 함.
+할 수 .. 있겠지...??!! 👻";
+
+
+SELECT *
+FROM article;
+
+INSERT INTO article
+SET regDate = NOW(),
+updateDate = NOW(),
+cateItemId = 5,
+displayStatus = 1,
+`title` = "이번주 주말 공부 계획(2020-07-04/05)",
+`body` = "# 이번 주 공부 계획 🤺
+1. 금요일 : 일단 오늘 영상 참고해서 내 블로그 구조에 도입하기.
+2. 토요일 : 최근 블로그 관련 강의 영상 모두 처음부터 돌려보며 코드 이해하기.
+3. 일요일 : 토요일에 공부해서 이해한 코드들을 활용하여 추가로 구현하고 싶은 기능 계획, 구현, 정보 찾아보기.
+* 참고 : editor에 또 참고하면 좋을 사이트 링크 추가해서 활용하기.";
+
+
+
+
+SELECT *
+FROM article;
+

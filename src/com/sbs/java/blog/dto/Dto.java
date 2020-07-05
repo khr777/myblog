@@ -3,17 +3,17 @@ package com.sbs.java.blog.dto;
 import java.util.HashMap;
 import java.util.Map;
 
-public class dto {
+public class Dto {
 	private int id;
 	private String regDate;
 	private Map<String, Object> extra;  // db에 담지 못하는 자잘한 것들을 담기 위한 변수. (예시: 작성자 '김혜련')
 	
-	public dto() {
+	public Dto() {
 		
 	}
 	
 	
-	public dto(Map<String, Object> row) {
+	public Dto(Map<String, Object> row) {
 		this.id = (int)row.get("id");
 		this.regDate = (String)row.get("regDate");
 		this.extra = new HashMap<>();

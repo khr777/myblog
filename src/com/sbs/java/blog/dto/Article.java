@@ -2,7 +2,7 @@ package com.sbs.java.blog.dto;
 
 import java.util.Map;
 
-public class Article extends dto {
+public class Article extends Dto {
 	private String updateDate;
 	private int cateItemId;
 	private String title;

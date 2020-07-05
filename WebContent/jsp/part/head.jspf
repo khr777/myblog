@@ -1,5 +1,10 @@
+<%@page import="java.util.List"%>
+<%@page import="com.sbs.java.blog.dto.CateItem"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+
+
+<% List<CateItem> cateItems = (List)request.getAttribute("cateItems"); %>	
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -46,15 +51,19 @@
 				<ul class="flex">
 					<li><a href="${pageContext.request.contextPath}/s/home/main"
 						class="flex height-100p flex-ai-c">Home</a></li>
-					<li><a
-						href="${pageContext.request.contextPath}/s/article/list"
-						class="flex height-100p flex-ai-c">Articles</a></li>
+					<li><a href="${pageContext.request.contextPath}/s/article/doWrite" class="flex height-100p flex-ai-c">Editor</a></li>
+					
 					<li><a
 						href="${pageContext.request.contextPath}/s/home/aboutMe"
 						class="flex height-100p flex-ai-c">About Me</a></li>
-					<li><a
-						href="${pageContext.request.contextPath}/s/article/doWrite"
-						class="flex height-100p flex-ai-c">Editor</a>
+					<li><a href="${pageContext.request.contextPath}/s/article/list"	class="flex height-100p flex-ai-c">Articles</a>
+						<ul>
+							<%for ( CateItem cateItem : cateItems ) { %>
+							<li><a href="${pageContext.request.contextPath}/s/article/list?cateItemId=<%=cateItem.getId() %>"  class="block"><%=cateItem.getName()%></a></li>
+							<%} %>
+						</ul>
+					</li>
+					
 					<li><a href="#" class="flex height-100p flex-ai-c">SNS</a>
 						<ul>
 							<li><a href="https://github.com/hyeryeonkim" target="_black"
@@ -85,13 +94,18 @@
 			<ul>
 				<li><a href="${pageContext.request.contextPath}/s/home/main"
 					class="block">Home</a></li>
-				<li><a href="${pageContext.request.contextPath}/s/article/list"
-					class="block">Articles</a></li>
+				<li><a href="${pageContext.request.contextPath}/s/article/doWrite"	class="block">Editor</a></li>
+				
 				<li><a href="${pageContext.request.contextPath}/s/home/aboutMe"
 					class="block">About Me</a></li>
-				<li><a
-					href="${pageContext.request.contextPath}/s/article/doWrite"
-					class="block">Editor</a>
+				<li><a href="${pageContext.request.contextPath}/s/article/list"
+					class="block">Articles</a>
+					<ul>
+							<%for ( CateItem cateItem : cateItems ) { %>
+							<li><a href="${pageContext.request.contextPath}/s/article/list?cateItemId=<%=cateItem.getId() %>"  class="block"><%=cateItem.getName()%></a></li>
+							<%} %>
+						</ul>
+					</li>
 				<li><a href="#" class="block">SNS</a>
 					<ul>
 						<li><a href="https://github.com/hyeryeonkim" target="_black"
