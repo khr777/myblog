@@ -101,20 +101,39 @@
 				<button type="button"
 					onclick="location.href='detail?id=${param.id+1}'">다음</button>
 			</div>
+			<div class="delete-button">	
+				<button type="submit" onclick="location.href='delete?id=${param.id}'" style="position:absolute; left:80%; top:30%;">삭제</button>
+			</div>
 		</div>
 	</div>
 </div>
-<button type="submit" onclick="location.href='delete?id=${param.id}'" style="position:absolute; left:80%; top:30%;">삭제</button>
+
+
+
+
+
+
 
 
 
 
 <style>
+
+.editor-box {
+}
+
 .move-button {
 	position:absolute;
-	top:170px;
-	left:0;
+	buttom:0;
 }
+
+.delete-button {
+	position:absolute;
+	buttom:0;
+	left:87%;
+	width:100px;
+}
+
 </style>
 
 <%@ include file="/jsp/part/foot.jspf"%>

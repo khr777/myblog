@@ -49,7 +49,7 @@
         <caption> 게시물 수정</caption>
     </thead>
     <tbody>                     <!--   form에  -    method="post"  -  를 뺐더니 한글깨짐 해결되었음   -->
-        <form action="${pageContext.request.contextPath}/s/article/modify"  encType="multiplart/form-data">
+        <form  name="form1" action="${pageContext.request.contextPath}/s/article/modify"  encType="multiplart/form-data">
         	
         	<tr>
                 <th>카테고리 번호: </th>
@@ -69,6 +69,7 @@
                 <td colspan="2">
 <!--                 	<input type="button" value="등록" onclick="sendData()" class="pull-right"/> -->
                     	<button type="submit">저장</button>
+                    	<input type="button" value="입력완료" onClick="form1.action='list';form1.submit();">
                     	<button type="button" onclick="location.href='detail?id=${param.id}'" >뒤로가기</button>	
                 </td>
             </tr>

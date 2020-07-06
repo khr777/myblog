@@ -97,7 +97,7 @@ displayStatus = 1,
 INSERT INTO article
 SET regDate = NOW(),
 updateDate = NOW(),
-cateItemId = 5,
+cateItemId = 1,
 displayStatus = 1,
 `title` = "웹 개발에 참고하기 좋은 사이트 정보 모음집.",
 `body` = "# 무료 이미지 정보 사이트 
@@ -128,7 +128,7 @@ displayStatus = 1,
 INSERT INTO article
 SET regDate =NOW(),
 updateDate = NOW(),
-cateItemId = 4,
+cateItemId = 1,
 displayStatus = 1,
 `title` = "SQL 기초 문법",
 `body` = "## 명령어 실행 
@@ -234,32 +234,9 @@ servlet경로 중에 없는 경로로 진입하면
 - ";
 
 
-
-INSERT INTO article
-SET regDate = NOW(),
-updateDate = NOW(),
-cateItemId = 2,
-displayStatus = 1,
-`title` = "블로그 관리 이번주 수정 계획",
-`body` = "카테 3";
-
-
-
 SELECT *
 FROM article;
 
-SELECT COUNT(*) 
-FROM article
-WHERE cateItemid = 2;
-
-
-INSERT INTO article
-SET regDate = NOW(),
-updateDate = NOW(),
-cateItemId = 3,
-displayStatus = 1,
-`title` = "카테 3",
-`body` = "카테 3";
 
 
 INSERT INTO article
@@ -338,10 +315,6 @@ try {
 ```
 ";
 
-SELECT *
-FROM article;
-
-
 
 
 INSERT INTO article
@@ -386,50 +359,42 @@ displayStatus = 1,
 1. 게시물, 댓글 등 글을 블로그에서 직접 입력하고 저장하고 싶음. ";
 
 
+select *
+from article;
 
-SELECT *
-FROM article;
+
+
+
+INSERT INTO article
+SET regDate = NOW(),
+updateDate = NOW(),
+cateItemId = 4,
+displayStatus = 1,
+`title` = "SQL 문법의 종류 🙄",
+`body` = "# SQL 문법은 크게는 3가지의 종류로 나누어지며, 종류마다 정의는 아래와 같다.
+#### DDL(Data Definition Language, 데이터 정의 언어)
+* 각 릴레이션을 정의하기 위해 사용하는 언어이다.(CREATE, ALTER, DROP......)
+
+#### DML(Data Manipulation Lanuage, 데이터 조작 언어)
+* 데이터를 추가/수정/삭제하기 위한, 즉 데이터 관리를 위한 언어이다.(SELECT, INSERT, UPDATE....)
+
+#### DCL(Data Control Language, 데이터 제어 언어)
+* 사용자 관리 및 사용자별로 릴레이션 또는 데이터를 관리하고 접근하는 권한을 다루기 위한 언어이다.
+(GRANT, REVOKE....)";
+
 
 INSERT INTO article
 SET regDate = NOW(),
 updateDate = NOW(),
 cateItemId = 5,
 displayStatus = 1,
-`title` = "블로그에 적용하고 싶은 기능(계획)",
-`body` = "# 구현하고 싶은 기능 🙈🙉
-1. 도메인 주소창에 검색어를 입력하는게 아닌 검색창을 만들어서 검색창에 직접 글을 입력하고 검색어에 대한 게시물을 찾아오게 하는 기능
-2. 상세보기에서 이전, 다음 버튼을 만들어 이전 상세게시물, 다음 상세게시물로 이동할 수 있는 기능.
-3. 블로그에 직접 글을 입력하고 저장하고, 리스트로 불러오게 하는 기능.
-4. 현재 홈 화면 이미지가 웹페이지 크기(비율)에 맞춰 자유롭게 커지고 작아지지 않음. 이 문제를 해결하고 싶음.
-5. 게시물에 이미지도 함께 등록해보고 싶음.
-6. 게시물 수정 기능(페이지 화면에서)
-7. 게시물 삭제 기능 (페이지 화면에서)
-8. 총 게시물 수 출력
-9. ` 다른 기능 생각나면 마저 정리하기.`  
-10. 카테고리에 공부계획 추가하기.
-11. 현재 editor 메뉴를 들어가면 doWrite를 통해서 null 값의 게시물이 신규로 추가 되고 있음. 
-그 문제 해결해야 함.
-할 수 .. 있겠지...??!! 👻";
-
-
-SELECT *
-FROM article;
-
-INSERT INTO article
-SET regDate = NOW(),
-updateDate = NOW(),
-cateItemId = 5,
-displayStatus = 1,
-`title` = "이번주 주말 공부 계획(2020-07-04/05)",
-`body` = "# 이번 주 공부 계획 🤺
-1. 금요일 : 일단 오늘 영상 참고해서 내 블로그 구조에 도입하기.
-2. 토요일 : 최근 블로그 관련 강의 영상 모두 처음부터 돌려보며 코드 이해하기.
-3. 일요일 : 토요일에 공부해서 이해한 코드들을 활용하여 추가로 구현하고 싶은 기능 계획, 구현, 정보 찾아보기.
-* 참고 : editor에 또 참고하면 좋을 사이트 링크 추가해서 활용하기.";
+`title` = "# 라이브러리란? - What is Library? 🤔",
+`body` = "# 간략 설명: 프로그램 제작 시 필요한 기능
+# 비교 설명: 자동차 바퀴, 자동차 헤드라이트, 자동차 에어백
+* 재사용이 필요한 기능으로 반복적인 코드 작성을 없애기 위해 언제든지 필요한 곳에서 호출하여 사용할 수 있도록 Class나 Function으로 만들어진 것입니다.
+사용 여부는 코드 작성자 선택 사항이며 새로운 라이브러리 제작 시에도 엄격한 규칙이 존재하지 않습니다. 제작 의도에 맞게 작성하면 됩니다.";
 
 
 
 
-SELECT *
-FROM article;
 

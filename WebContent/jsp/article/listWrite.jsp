@@ -50,7 +50,7 @@
         <caption> 게시물 작성하기</caption>
     </thead>
     <tbody>                     <!--   form에  -    method="post"  -  를 뺐더니 한글깨짐 해결되었음   -->
-        <form action="${pageContext.request.contextPath}/s/article/listWrite"  encType="multiplart/form-data">
+        <form name =form1 action="${pageContext.request.contextPath}/s/article/listWrite"  encType="multipart/form-data">
         	<tr>
                 <th>공개 여부: </th>
                 <td><input type="text" placeholder="공개여부 번호를 입력하세요. " name="displayStatus" value = "${param.displayStatus}"class="form-control"/></td>
@@ -71,17 +71,34 @@
             <tr>
                 <td colspan="2">
 <!-- 		                <input type="button" value="등록" onclick="sendData()" class="pull-right"/> -->
-                    	<button type="submit" >저장</button>
-                    	<button type="button" onclick="location.href='list?cateItemId=${param.cateItemId}&page=${param.page}'" >뒤로가기</button>
-                
+                    	<button type="submit"  id="save-button">저장</button>
+                		<input type="button" value="입력완료" onClick="form1.action='list';form1.submit();">
+						<button type="button" onclick="location.href='list?cateItemId=${param.cateItemId}&page=${param.page}'" >뒤로가기</button> 
                 </td>
 
-                
+                	
             </tr>
         </form>
     </tbody>
 </table>
 </div>
+
+
+<script>
+	var save-button = el.document.Selector('save-button');
+
+	
+
+</script>
+
+
+
+
+
+
+
+
+
 
 <style>
 .container {

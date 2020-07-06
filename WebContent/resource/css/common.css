@@ -731,24 +731,16 @@ html, body {
 .article-list-box-1 {
 	text-align:center;
 	margin-top:130px;
-		
 }
 
 
 
-
-.article-list-box-1 .new-article {
-	font-size:1.4rem;
-	font-weight:bold;
-	color:red;
-}
 
 .article-list-box-1 .list-content .list-body-box {
 	width:92%;
 	height:30px;
 	margin-left:auto;
 	margin-right:auto;
-	
 }
 
 .article-list-box-1 .list-content .list-body {
@@ -808,21 +800,22 @@ html, body {
 .cateItem-content .cateItemName {
 	position:fixed;
 	top:80px;
-	left:11%;
+	left:12%;
 	font-size:1.3rem;
 	font-weight:bold;
+	right:83%;
 }
 
 .cateItem-content .total-count {
 	position:fixed;
-	top:418px;
-	margin-left:11%;
+	top:470px;
+	left:13%;
 	margin-right:auto;
 }
 .cateItem-content .doWrite {
 	position:absolute;
 	top:80px;
-	right:26%;
+	right:28.5%;
 	font-weight:bold;
 	font-size:1.2rem;
 }	
@@ -842,7 +835,7 @@ html, body {
 	.cateItem-content .total-count {
 		position:absolute;
 		top:130px;
-		left:0;
+		left:9%;
 	}
 	.cateItem-content .doWrite {
 		position:absolute;
@@ -924,7 +917,7 @@ html, body {
 
 .search-box {
 	position:fixed;
-	top:390px;
+	top:440px;
 	left:11%;
 }
 

@@ -20,6 +20,9 @@ String cateItemName = (String) request.getAttribute("cateItemName");
 
 <nav class="cateItem-menu-box-1">
 	<ul class="cateItem-menu">
+		<li>
+			<a href="${pageContext.request.contextPath}/s/article/list">전체</a>
+		</li>
 		<li><a
 			href="${pageContext.request.contextPath}/s/article/list?cateItemId=1&page=1">일상</a></li>
 		<li><a
