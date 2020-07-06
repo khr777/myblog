@@ -1,6 +1,5 @@
 <%@ include file="/jsp/part/head.jspf"%>
-<%@ page language="java" contentType="text/html; charset=UTF-8"	pageEncoding="UTF-8"%>
-
+<%@ page language="java" contentType="text/html; charset=UTF-8"	pageEncoding="UTF-8" %>
 <script
 	src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js"></script>
 <link rel="stylesheet"
@@ -42,15 +41,19 @@
 	<link rel="stylesheet"
 		href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css" />
 
-
 <title>Write something else you want</title>
 <div class="container">
 <table class="table table-bordered">
     <thead>
         <caption> 게시물 작성하기</caption>
+<!--         <div class="emoji"> -->
+<!-- 			<a href="https://www.emojiengine.com/ko/" target="_blank"> -->
+<!-- 				😵 emoji 이동 -->
+<!-- 			</a> -->
+<!-- 		</div> -->
     </thead>
-    <tbody>                     <!--   form에  -    method="post"  -  를 뺐더니 한글깨짐 해결되었음   -->
-        <form name =form1 action="${pageContext.request.contextPath}/s/article/listWrite"  encType="multipart/form-data">
+    <tbody>                     <!--   form에  -    method="post"  -  를 뺐더니 한글깨짐 해결되었음 // encType="applica~이 기본값. text 전송용  -->
+        <form  method="post" name =form1 action="listWriteOk"  encType="application/x-www-form-urlencoded"> 
         	<tr>
                 <th>공개 여부: </th>
                 <td><input type="text" placeholder="공개여부 번호를 입력하세요. " name="displayStatus" value = "${param.displayStatus}"class="form-control"/></td>
@@ -65,14 +68,13 @@
             </tr>
             <tr>
                 <th>내용: </th>
-                <td><textarea cols="10" placeholder="내용을 입력하세요. " name="body" value = "${param.body}" class="form-control" style="height:600px;"></textarea></td>
+                <td><textarea cols="10" placeholder="내용을 입력하세요. " name="body" value = "${param.body}" class="form-control" style="height:800px;"></textarea></td>
             </tr>
                      
             <tr>
                 <td colspan="2">
-<!-- 		                <input type="button" value="등록" onclick="sendData()" class="pull-right"/> -->
-                    	<button type="submit"  id="save-button">저장</button>
-                		<input type="button" value="입력완료" onClick="form1.action='list';form1.submit();">
+<!-- 						<input type="button" value="등록" onclick="sendData()" class="pull-right"/> -->
+                    	<button type="submit" value="저장" id="save-button">저장</button>
 						<button type="button" onclick="location.href='list?cateItemId=${param.cateItemId}&page=${param.page}'" >뒤로가기</button> 
                 </td>
 

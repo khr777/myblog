@@ -25,7 +25,7 @@ public class ArticleDao extends Dao {
 	}
 
 	public List<Article> getForPrintListArticles(int page, int cateItemId, int itemsInAPage, String searchKeywordType,
-			String searchKeyword) {
+			String searchKeywordTypeBody, String searchKeyword) {
 
 		String sql = "";
 
@@ -38,8 +38,9 @@ public class ArticleDao extends Dao {
 		if (cateItemId != 0) {
 			sql += String.format("AND cateItemId = %d ", cateItemId);
 		}
-		if (searchKeywordType.equals("title") && searchKeyword.length() > 0) {
+		if (searchKeywordType.equals("title") && searchKeywordTypeBody.equals("body") && searchKeyword.length() > 0) {
 			sql += String.format("AND title LIKE CONCAT('%%', '%s', '%%')", searchKeyword);
+			sql += String.format("OR body LIKE CONCAT('%%', '%s', '%%')", searchKeyword);
 		}
 		sql += String.format("ORDER BY id DESC ");
 		sql += String.format("LIMIT %d, %d ", limitFrom, itemInAPage);
@@ -114,7 +115,7 @@ public class ArticleDao extends Dao {
 	 * return articles; }
 	 */
 
-	public int getForPrintListArticlesCount(int cateItemId, String searchKeywordType, String searchKeyword) {
+	public int getForPrintListArticlesCount(int cateItemId, String searchKeywordType, String searchKeywordTypeBody, String searchKeyword) {
 
 		String sql = "";
 
@@ -125,9 +126,13 @@ public class ArticleDao extends Dao {
 			sql += String.format("AND cateItemId = %d ", cateItemId);
 		}
 
-		if (searchKeywordType.equals("title") && searchKeyword.length() > 0) {
+		if (searchKeywordType.equals("title") && searchKeywordTypeBody.equals("body") && searchKeyword.length() > 0) {
 			sql += String.format("AND title LIKE CONCAT('%%', '%s', '%%')", searchKeyword);
+			sql += String.format("OR body LIKE CONCAT('%%', '%s', '%%')", searchKeyword);
 		}
+		
+		
+		
 
 		int count = dbUtil.selectRowIntValue(dbConn, sql);
 
@@ -217,5 +222,15 @@ public class ArticleDao extends Dao {
 			sql += String.format("DELETE FROM article ");
 			sql += String.format("WHERE id = %d ", id);
 			dbUtil.insert(dbConn, sql);
+		}
+
+		public Article articleDetailForModify(int id) {
+			String sql = "";
+			sql += String.format("SELECT * ");
+			sql += String.format("FROM article ");
+			sql += String.format("WHERE 1 ");
+			sql += String.format("AND id = %d ", id);
+
+			return new Article(dbUtil.selectRow(dbConn, sql));
 		}
 }

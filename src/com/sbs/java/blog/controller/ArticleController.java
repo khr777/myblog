@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.xml.ws.RequestWrapper;
 
 import com.sbs.java.blog.dto.Article;
 import com.sbs.java.blog.dto.CateItem;
@@ -43,12 +44,16 @@ public class ArticleController extends Controller {
 			return doActionModify(req, resp);
 		case "delete":
 			return doActionDelete(req, resp);
+		case "listWriteOk":
+			return doActionListWriteOk(req,resp);
+		case "modifyOk":
+			return doActionModifyOk(req, resp);
 		}
 
 		return "";
 	}
 
-	private String doActionDelete(HttpServletRequest req, HttpServletResponse resp) {
+	private String doActionModifyOk(HttpServletRequest req, HttpServletResponse resp) {
 		
 		int id = 0;
 
@@ -57,72 +62,6 @@ public class ArticleController extends Controller {
 			id = Util.getInt(req, "id");
 
 		}
-
-		articleService.articleDelete(id);
-				
-		
-		
-		
-		
-		return "article/delete.jsp";
-	}
-
-	private String doActionModify(HttpServletRequest req, HttpServletResponse resp) {
-		
-		int id = 0;
-
-		if (!Util.empty(req, "id") && Util.isNum(req, "id")) { // cateItemId가 없지 않고 숫자가 맞으면
-
-			id = Util.getInt(req, "id");
-
-		}
-
-		
-		
-		
-		int cateItemId = 0;
-
-		if (!Util.empty(req, "cateItemId") && Util.isNum(req, "cateItemId")) { // cateItemId가 없지 않고 숫자가 맞으면
-
-			cateItemId = Util.getInt(req, "cateItemId");
-
-		}
-		
-		
-		String title = ""; // keywordType이 더 중요하니까 searchkeyword보다 위에 써주는게 낫다.
-
-		if (!Util.empty(req, "title")) { // cateItemId가 없지 않고 숫자가 맞으면
-
-			title = Util.getString(req, "title");
-
-		}
-
-		String body = "";
-
-		if (!Util.empty(req, "body")) { 
-
-			body = Util.getString(req, "body");
-
-		}
-		
-		if ( body != null ) {
-			articleService.ArticleModify(id, cateItemId, title, body);
-			req.setAttribute("id", id);
-			req.setAttribute("cateItemId", cateItemId);
-			req.setAttribute("title", title);
-			req.setAttribute("body", body);
-		}
-		
-		
-		
-		
-
-		return "article/modify.jsp";
-	}
-
-	private String doActionListWrite(HttpServletRequest req, HttpServletResponse resp) {
-
-		// 샘이 만들어주신 검색 기능
 
 		int displayStatus = 0;
 
@@ -155,12 +94,153 @@ public class ArticleController extends Controller {
 			body = Util.getString(req, "body");
 
 		}
-		req.setAttribute("displayStatus", displayStatus);
+		
+		if ( title == null || body == null ) {
+			Article article = articleService.articleDetailForModify(id);
+			articleService.ArticleModify(article.getId(), article.getCateItemId(), article.getTitle(), article.getBody());
+			return "article/modifyOk.jsp";
+		}
+		// method="post"로 바꾸고 테스트 해보지 않음.  수정하지 않고 페이지 이동했을 때, 게시물 title, body 영향 받는지 테스트하기.
+		
+		
+		articleService.ArticleModify(id, cateItemId, title, body);
+		
+		
+		
+		return "article/modifyOk.jsp";
+	}
+
+	private String doActionListWriteOk(HttpServletRequest req, HttpServletResponse resp) {
+		// 샘이 만들어주신 검색 기능
+
+				int displayStatus = 0;
+
+				if (!Util.empty(req, "displayStatus") && Util.isNum(req, "displayStatus")) { // cateItemId가 없지 않고 숫자가 맞으면
+
+					displayStatus = Util.getInt(req, "displayStatus");
+
+				}
+
+				int cateItemId = 0;
+
+				if (!Util.empty(req, "cateItemId") && Util.isNum(req, "cateItemId")) { // cateItemId가 없지 않고 숫자가 맞으면
+
+					cateItemId = Util.getInt(req, "cateItemId");
+
+				}
+
+				String title = ""; // keywordType이 더 중요하니까 searchkeyword보다 위에 써주는게 낫다.
+
+				if (!Util.empty(req, "title")) { // cateItemId가 없지 않고 숫자가 맞으면
+
+					title = Util.getString(req, "title");
+
+				}
+
+				String body = "";
+
+				if (!Util.empty(req, "body")) { // cateItemId가 없지 않고 숫자가 맞으면
+
+					body = Util.getString(req, "body");
+
+				}
+			
+
+				articleService.doArticleWrite(displayStatus, cateItemId, title, body);
+				
+		return "article/listWriteOk.jsp";
+	}
+
+	private String doActionDelete(HttpServletRequest req, HttpServletResponse resp) {
+		
+		int id = 0;
+
+		if (!Util.empty(req, "id") && Util.isNum(req, "id")) { // cateItemId가 없지 않고 숫자가 맞으면
+
+			id = Util.getInt(req, "id");
+
+		}
+
+		articleService.articleDelete(id);
+				
+		
+		
+		
+		
+		return "article/delete.jsp";
+	}
+
+	private String doActionModify(HttpServletRequest req, HttpServletResponse resp) {
+		
+		int id = 0;
+
+		if (!Util.empty(req, "id") && Util.isNum(req, "id")) { // cateItemId가 없지 않고 숫자가 맞으면
+
+			id = Util.getInt(req, "id");
+
+		}
+	
+		
+		
+		
+		int cateItemId = 0;
+
+		if (!Util.empty(req, "cateItemId") && Util.isNum(req, "cateItemId")) { // cateItemId가 없지 않고 숫자가 맞으면
+
+			cateItemId = Util.getInt(req, "cateItemId");
+
+		}
+		
+		
+		String title = ""; // keywordType이 더 중요하니까 searchkeyword보다 위에 써주는게 낫다.
+
+		if (!Util.empty(req, "title")) { // cateItemId가 없지 않고 숫자가 맞으면
+
+			title = Util.getString(req, "title");
+
+		}
+
+		String body = "";
+
+		if (!Util.empty(req, "body")) { 
+
+			body = Util.getString(req, "body");
+
+		}
+		
+		Article article = articleService.articleDetailForModify(id);
+		req.setAttribute("article", article);
+		
+		//title, body가 null 도 아니고 길이가 0인 문자였음........ 
+		if ( title.length() == 0 || body.length() == 0 ) {
+			articleService.ArticleModify(article.getId(), article.getCateItemId(), article.getTitle(), article.getBody());
+			return "article/modify.jsp";
+		}
+		else if ( title.length() == 0 && body.length() == 0 ) {
+			articleService.ArticleModify(article.getId(), article.getCateItemId(), article.getTitle(), article.getBody());
+			return "article/modify.jsp";
+		}
+		
+		
+		
+		articleService.ArticleModify(id, cateItemId, title, body);
+		req.setAttribute("id", id);
 		req.setAttribute("cateItemId", cateItemId);
 		req.setAttribute("title", title);
 		req.setAttribute("body", body);
+			
+	
+		
+		
+		
+		
 
-		articleService.doArticleWrite(displayStatus, cateItemId, title, body);
+		return "article/modify.jsp";
+	}
+	
+	private String doActionListWrite(HttpServletRequest req, HttpServletResponse resp) {
+
+		
 
 		return "article/listWrite.jsp";
 	}
@@ -170,20 +250,7 @@ public class ArticleController extends Controller {
 	}
 
 	private String doActionDoWrite(HttpServletRequest req, HttpServletResponse resp) {
-		/*
-		 * String title = req.getParameter("title"); String body =
-		 * req.getParameter("body"); //★★★★★INTSERT 쿼리에 맞춰서 카테고리 번호 등 값을 넘겨주고 해당 카테고리에
-		 * 글을 저장할 수 있도록 추가 구현해보기! /*String regDate = "NOW()"; String updateDate =
-		 * "NOW()"; int cateItemId = Integer.parseInt(req.getParameter("cateItemId"));
-		 */
-
-		/*
-		 * articleService.doWriteArticle(title, body); req.setAttribute("title", title);
-		 * req.setAttribute("body", body);
-		 * 
-		 * 
-		 * return "article/doWrite.jsp";
-		 */
+		
 		return "article/doWrite.jsp";
 	}
 
@@ -194,17 +261,33 @@ public class ArticleController extends Controller {
 		if (Util.isNum(req, "id") == false) {
 			return "html:id를 정수로 입력해주세요.";
 		}
+		
 		int id = Util.getInt(req, "id");
 		
 		if (Util.empty(req, "id")) {
 			return "html:id를 입력해주세요.";
 		}
 		
+		int cateItemId = 0;
+
+		if (!Util.empty(req, "cateItemId") && Util.isNum(req, "cateItemId")) { // cateItemId가 없지 않고 숫자가 맞으면
+
+			cateItemId = Util.getInt(req, "cateItemId");
+
+		}
+		
+		CateItem cateItem = articleService.getCateItem(cateItemId);
+		
+		
+		
+		
+		
 
 		// 이 article은 그냥(평범한) article이 아니다.
 		Article article = articleService.getForPrintArticle(id); // sql 쿼리에 작성해놓은 정보들만이 아닌 부가적으로 추가한 자잘한 (항목 추가한)작성자 등
 																	// 항목 모두 불러오는 메서드 네임
 		req.setAttribute("article", article);
+		req.setAttribute("cateItem", cateItem);
 		// return "article/detail.jsp";
 
 		// 작성자명이 게시물 상세보기에서 잠깐 필요한데 필드에까지 추가할 필요가 없다. 그래서 extra__를 이용해서 사용한다. sql에는 영향을
@@ -247,6 +330,18 @@ public class ArticleController extends Controller {
 			searchKeywordType = Util.getString(req, "searchKeywordType");
 
 		}
+		
+		String searchKeywordTypeBody = "";
+		
+		if (!Util.empty(req, "searchKeywordTypeBody")) { // cateItemId가 없지 않고 숫자가 맞으면
+
+			searchKeywordTypeBody = Util.getString(req, "searchKeywordTypeBody");
+
+		}
+		
+		
+		
+		
 
 		String searchKeyword = "";
 
@@ -256,17 +351,10 @@ public class ArticleController extends Controller {
 
 		}
 
-		// 나중에 코드 지워버리기 / 카테고리별 게시물 리스트 //2020-07-03 영상에서 검색어 기능 추가하면서 없애셨음.
-		/*
-		 * int cateItemId = 0; int page = 1; if ( req.getParameter("cateItemId") != null
-		 * ) { cateItemId = Integer.parseInt(req.getParameter("cateItemId"));
-		 * 
-		 * } if ( req.getParameter("page") != null ) { page =
-		 * Integer.parseInt(req.getParameter("page")); }
-		 */
+		
 
 		int itemsInAPage = 10; // 게시물 리스트에 보여줄 게시물 개수
-		int totalCount = articleService.getForPrintListArticlesCount(cateItemId, searchKeywordType, searchKeyword);
+		int totalCount = articleService.getForPrintListArticlesCount(cateItemId, searchKeywordType, searchKeywordTypeBody, searchKeyword);
 		int totalPage = (int) Math.ceil(totalCount / (double) itemsInAPage);
 		
 
@@ -275,28 +363,10 @@ public class ArticleController extends Controller {
 		req.setAttribute("page", page);
 
 		List<Article> articles = articleService.getForPrintListArticles(page, cateItemId, itemsInAPage,
-				searchKeywordType, searchKeyword);
+				searchKeywordType, searchKeywordTypeBody, searchKeyword);
 		req.setAttribute("articles", articles);
 
-		// 혜련 검색 기능 (나중에 보완하거나 없애거나하기)
-		/*
-		 * String search = req.getParameter("search"); if ( search != null ) { articles
-		 * = articleService.getSearchContents(search); req.setAttribute("articles",
-		 * articles); }
-		 * 
-		 * req.setAttribute("search", search );
-		 */
-
-		// 최신 10개 게시물 리스트
-		/*
-		 * if ( search == null ) { if ( cateItemId == 0 ) { articles =
-		 * articleService.getForPrintListNewArticles(); req.setAttribute("articles",
-		 * articles);
-		 * 
-		 * } }
-		 * 
-		 * req.setAttribute("cateItemId", cateItemId);
-		 */
+	
 
 		return "article/list.jsp";
 	}

@@ -96,6 +96,7 @@ public class App { //loadDriver()를 접고 다음 메서드를 보면 편하다
 	}																			// 선임 믿고 가는 것. 처리해달라고 넘기는 것.
 	private void route(Connection dbConn, HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
 		resp.setContentType("text/html; charset=UTF-8");
+		req.setCharacterEncoding("UTF-8"); // 클라이언트 요청 받을 때에는 이 코드를 꼭 써줘야행 흐어ㅠㅠㅠㅠㅠ
 		
 		String contextPath = req.getContextPath();
 		String requestURI = req.getRequestURI();

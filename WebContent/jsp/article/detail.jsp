@@ -51,6 +51,7 @@
 
 <%
 	Article article = (Article) request.getAttribute("article");
+	CateItem cateItem = (CateItem)request.getAttribute("cateItem");
 %>
 
 <div class="con">
@@ -69,15 +70,16 @@
 					수정일 :
 					<%=article.getUpdateDate()%></div>
 				<div class="writer">
-					작성자 :<%=article.getExtra().get("writer")%></div>
+					작성자 : <%=article.getExtra().get("writer")%></div>
+				<div class="cateItemName">
+					카테고리 : <%=cateItem.getName()%></div>
 			</div>
 			<!-- 카테고리 게시물 접속했을 때, 목록 클릭하면 최신 게시물을 불러왔음. 카테고리 게시물로 이동하게 수정한 코드 -->
 			<a
 				href="${pageContext.request.contextPath}/s/article/list?cateItemId=<%=article.getCateItemId()%>"
 				class="back-icon block"><i class="fas fa-arrow-left"> <span>목록</span>
-			</i></a> <a
-				href="${pageContext.request.contextPath}/s/article/modify?id=<%=article.getId()%>&cateItemId=<%=article.getCateItemId()%>&title=<%=article.getTitle()%>&body=<%=article.getBody()%>"
-				class="back-icon block"><i class="fas fa-edit"> <span>수정</span>
+			</i></a>
+			<a	href="${pageContext.request.contextPath}/s/article/modify?id=<%=article.getId()%>"	class="back-icon block"><i class="fas fa-edit"> <span>수정</span>
 			</i></a>
 
 		</div>
@@ -102,7 +104,7 @@
 					onclick="location.href='detail?id=${param.id+1}'">다음</button>
 			</div>
 			<div class="delete-button">	
-				<button type="submit" onclick="location.href='delete?id=${param.id}'" style="position:absolute; left:80%; top:30%;">삭제</button>
+				<button type="submit" onclick="location.href='delete?id=${param.id}&cateItemId=${param.cateItemId}'" style="position:absolute; left:80%; top:30%;">삭제</button>
 			</div>
 		</div>
 	</div>

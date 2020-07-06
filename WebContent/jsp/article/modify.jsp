@@ -1,7 +1,12 @@
 <%@ include file="/jsp/part/head.jspf"%>
+<%@ page import="com.sbs.java.blog.dto.Article"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%int id = (int)request.getAttribute("id"); %>
+<%
+
+Article article = (Article)request.getAttribute("article");
+%>
+
 <script
 	src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js"></script>
 <link rel="stylesheet"
@@ -47,30 +52,35 @@
 <table class="table table-bordered">
     <thead>
         <caption> 게시물 수정</caption>
+        <div class="emoji">
+			<a href="https://www.emojiengine.com/ko/" target="_blank">
+				😵 emoji 이동
+			</a>
+		</div>
     </thead>
     <tbody>                     <!--   form에  -    method="post"  -  를 뺐더니 한글깨짐 해결되었음   -->
-        <form  name="form1" action="${pageContext.request.contextPath}/s/article/modify"  encType="multiplart/form-data">
+        <form method="post" name="form1" action="${pageContext.request.contextPath}/s/article/modifyOk"  encType="application/x-www-form-urlencoded">
         	
         	<tr>
                 <th>카테고리 번호: </th>
-				 <input type="hidden" name="id" value = "${param.id}"/> 
-                <td><input type="text" placeholder="카테고리 번호를 입력하세요. " name="cateItemId" value = "${param.cateItemId}"class="form-control"/></td>
+					<input type="hidden" name="id" value="<%=article.getId()%>" />
+					<td><input type="text" placeholder="카테고리 번호를 입력하세요. " name="cateItemId" value = "<%=article.getCateItemId()%>" class="form-control"/></td>
             </tr>
             <tr>
                 <th>제목: </th>
-                <td><input type="text" placeholder="제목을 입력하세요. " name="title" value ="${param.title}" class="form-control"/></td>
+                <td><input type="text" placeholder="제목을 입력하세요. " name="title" value ="<%=article.getTitle()%>" class="form-control"/></td>
             </tr>
             <tr>
                 <th>내용: </th>
-                <td><textarea cols="10" placeholder="내용을 입력하세요. " name="body"  class="form-control" style="height:600px;">${param.body}</textarea></td>
+                <td><textarea cols="10" placeholder="내용을 입력하세요. " name="body"  class="form-control" style="height:600px;"><%=article.getBody()%></textarea></td>
             </tr>
                      
             <tr>
                 <td colspan="2">
 <!--                 	<input type="button" value="등록" onclick="sendData()" class="pull-right"/> -->
                     	<button type="submit">저장</button>
-                    	<input type="button" value="입력완료" onClick="form1.action='list';form1.submit();">
-                    	<button type="button" onclick="location.href='detail?id=${param.id}'" >뒤로가기</button>	
+<!--                     	<button type="button" value="입력완료" onClick="form1.action='detail?id={}';form1.submit();">입력완료</button> -->
+                    	<button type="submit" onclick="location.href='detail?id=${param.id}'" >뒤로가기</button>	
                 </td>
             </tr>
         </form>

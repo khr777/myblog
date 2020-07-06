@@ -12,6 +12,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.xml.ws.RequestWrapper;
 
 import com.sbs.java.blog.app.App;
 import com.sbs.java.blog.controller.ArticleController;
@@ -27,9 +28,10 @@ public class DispatcherServlet extends HttpServlet {
 		new App(req, resp).start();
 
 	}
-
+	
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		doGet(req, resp);
+		
 	}
 
 }

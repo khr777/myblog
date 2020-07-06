@@ -27,7 +27,7 @@ String cateItemName = (String) request.getAttribute("cateItemName");
 			href="${pageContext.request.contextPath}/s/article/list?cateItemId=1&page=1">일상</a></li>
 		<li><a
 			href="${pageContext.request.contextPath}/s/article/list?cateItemId=2&page=1">IT
-				: java</a></li>
+				: java, jsp</a></li>
 		<li><a
 			href="${pageContext.request.contextPath}/s/article/list?cateItemId=3&page=1">IT
 				: html/css/js</a></li>
@@ -53,6 +53,7 @@ String cateItemName = (String) request.getAttribute("cateItemName");
 		<!--param~ el?이라고 한다. 오른쪽 예시의 줄인 표현이다.  <%//request.getParame~로 바로 할 수 있지만 %> %> -->
 		<input type="hidden" name="searchKeywordType" value="title" />
 		<!-- title, body 할 수 있지만 지금은 title만 -->
+		<input type="hidden" name="searchKeywordTypeBody" value="body" />
 		<input type="text" name="searchKeyword" value="${param.searchKeyword}" class="box" />
 		<button type="submit">검색</button>
 	</form>
@@ -94,7 +95,7 @@ String cateItemName = (String) request.getAttribute("cateItemName");
 
 	<div class="list-content">
 
-		<a href="./detail?id=<%=article.getId()%>&cateItemId=<%=article.getCateItemId()%> " class="">
+		<a href="./detail?id=<%=article.getId()%>&cateItemId=<%=article.getCateItemId()%>" class="">
 			<div class="list-title"><%=article.getTitle()%></div>
 			<div class="list-body-box">
 				<div class="list-body"><%=article.getBody()%></div>
@@ -132,7 +133,7 @@ String cateItemName = (String) request.getAttribute("cateItemName");
 			//if ( cateItemId != 0 ) {
 		%>
 		<a
-			href="?cateItemId=${param.cateItemId}&searchKeywordType=${param.searchKeywordType}&searchKeyword=${param.searchKeyword}&page=<%=i%>"><%=i%></a>
+			href="?cateItemId=${param.cateItemId}&searchKeywordType=${param.searchKeywordType}&searchKeywordTypeBody=${param.searchKeywordTypeBody}&searchKeyword=${param.searchKeyword}&page=<%=i%>"><%=i%></a>
 	</div>
 	<!-- ${pageContext.request.contextPath}/s/article/list 여기까지 생략해도 작동된다. -->
 	<%

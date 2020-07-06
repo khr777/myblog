@@ -45,7 +45,17 @@
 			<a href="https://www.emojiengine.com/ko/" target="_blank">
 				😵 emoji 이동
 			</a>
-		</div>	
+		</div>
+		<div class="naver">
+			<a href="https://search.naver.com/search.naver?sm=top_hty&fbm=0&ie=utf8&query=%EB%A7%9E%EC%B6%A4%EB%B2%95+%EA%B2%80%EC%82%AC%EA%B8%B0" target="_blank">
+				✅ naver 맞춤법 검사기 이동
+			</a>
+		</div>
+		<div class="google">
+			<a href="https://google.com" target="_blank">
+				🌐 google
+			</a>
+		</div>
 		<div id="editor1"></div>
 		<script id="rendered-js">
 			console.clear();

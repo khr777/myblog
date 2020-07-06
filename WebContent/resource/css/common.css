@@ -722,6 +722,12 @@ html, body {
 		height:50px;
 		flex-flow:column;		
 	} 
+	.detail-box-1 .data-box-1 .cateItemName {
+		position:absolute;
+		right:39%;
+		top:12.2%;
+				
+	} 
 	
 }
 /* 모바일 상세보기 반응형 끝 */
@@ -1060,7 +1066,20 @@ html, body {
 .editor .emoji > a {
 	display:block;
 	margin-left:30px;
-	padding-bottom:30px;
+	padding-bottom:10px;
+	width:200px;
+}
+
+.editor .naver > a {
+	display:block;
+	margin-left:30px;
+	padding-bottom:10px;
+	width:300px;
+}
+.editor .google > a {
+	display:block;
+	margin-left:30px;
+	padding-bottom:10px;
 	width:200px;
 }
 
@@ -1068,6 +1087,9 @@ html, body {
 @media (max-width:799px) {
 	.editor {
 		margin-top:140px;
+	}
+	.editor h1 {
+		margin-left:70px;
 	}
 }
 

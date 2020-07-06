@@ -19,8 +19,8 @@ public class ArticleService extends Service  {
 		articleDao = new ArticleDao(dbConn, req, resp);
 	}
 
-	public List<Article> getForPrintListArticles(int page, int cateItemId, int itemsInAPage, String searchKeywordType, String searchKeyword) {
-		return articleDao.getForPrintListArticles(page, cateItemId, itemsInAPage, searchKeywordType, searchKeyword );
+	public List<Article> getForPrintListArticles(int page, int cateItemId, int itemsInAPage, String searchKeywordType, String searchKeywordTypeBody,  String searchKeyword) {
+		return articleDao.getForPrintListArticles(page, cateItemId, itemsInAPage, searchKeywordType, searchKeywordTypeBody, searchKeyword );
 	}
 
 	public Article getForPrintArticle(int id) {
@@ -39,8 +39,8 @@ public class ArticleService extends Service  {
 		return articleDao.getForPrintListNewArticles();
 	}*/
 
-	public int getForPrintListArticlesCount(int cateItemId, String searchKeywordType, String searchKeyword) {
-		return articleDao.getForPrintListArticlesCount(cateItemId, searchKeywordType, searchKeyword);
+	public int getForPrintListArticlesCount(int cateItemId, String searchKeywordType, String searchKeywordTypeBody,  String searchKeyword) {
+		return articleDao.getForPrintListArticlesCount(cateItemId, searchKeywordType, searchKeywordTypeBody, searchKeyword);
 	}
 
 	/*public List<Article> getSearchContents(String contents) {
@@ -67,6 +67,10 @@ public class ArticleService extends Service  {
 
 	public void articleDelete(int id) {
 		articleDao.articleDelete(id);
+	}
+
+	public Article articleDetailForModify(int id) {
+		return articleDao.articleDetailForModify(id);
 	}
 
 }
