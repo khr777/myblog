@@ -25,7 +25,7 @@ regDate = NOW(),
 INSERT INTO cateItem
 SET id = 2,
 regDate = NOW(),
-`name` = 'IT : java';
+`name` = 'IT : java, jsp';
 
 INSERT INTO cateItem
 SET id = 3,
@@ -489,5 +489,147 @@ get과 post 2가지 타입을 모두 테스트해보았다.
 
 
 
+INSERT INTO article
+SET regDate = NOW(),
+updateDate = NOW(),
+cateItemId = 5,
+displayStatus = 1,
+`title` = "# SQL 기초 강좌 리스트",
+`body` = "# SQL 기초 강좌 리스트 🕵‍
+- [SQL 기초 강좌, 1강] SQL이란 무엇인가?
+- [SQL 기초 강좌, 2강] DB 관리를 위한 툴 사용법
+- [SQL 기초 강좌, 3강] 테이블 생성, 수정, 삭제
+- [SQL 기초 강좌, 4강] 데이터 조회
+- [SQL 기초 강좌, 5강] 데이터 생성, 수정, 삭제
 
+
+* 이미지는 git으로 첨부? 이용해야 한다.
+이미지 첨부, 사용하는법 알아보기(오늘(2020-07-07)나만의 숙제))";
+
+
+
+SELECT *
+FROM article;
+
+
+
+INSERT INTO article
+SET regDate = NOW(),
+updateDate = NOW(),
+cateItemId = 1,
+displayStatus = 1,
+`title` = "# [SQL 기초 강좌, 1강] SQL이란 무엇인가?  🙄",
+`body` = "# [SQL 기초 강좌, 1강] SQL이란 무엇인가?  🙄
+
+## SQL
+은 Structured Query Language(구조적 질의 언어)의 줄임말로, 관계형 데이터베이스 시스템에서(RDBMS)에서 자료를 관리 및 처리하기 위해 설계된 언어입니다. SQL은 1970년대에 IBM에서 최초 개발되었으며 관계형 모델이라는 이론에서 파생된 특징을 가지고 있는데, 현재 SQL의 표준으로 ANSI SQL이 정립되었습니다. 각 `DBMS` 프로그램에서 ANSI SQL을 기반으로 개발된 개별 SQL을 사용하며 서로 근소한 차이를 보입니다.
+
+## DBMS
+DBMS란 DataBase Management System의 줄임말로, 컴퓨터에 저장된 데이터베이스를 관리해주는 소프트웨어를 지징합니다.
+만약 데이터를 파일 단위로 직접 관리한다면 수십여 건 정도는 각자의 노하우를 기반으로 무리 없이 사용할 수 있습니다.
+하지만, 데이터 수가 증가하여 관리해야 할 파일 또한 늘어나게 된다면 분명히 언젠가 한계에 부딪힐 것은 자명한 사실입니다.
+때문에 DBMS를 활용하여 데이터를 데이터베이스로 정리하여 좀 더 효율적으로 데이터를 통제하고 관리하게 되었습니다.
+
+DBMS는 1960년대의 계층형 DB를 사용하는 HDBMS인 IMS가 최초로 출시된 이래, 네트워크형, 관계형, 객체형 등으로 진화를 거듭해오고 있습니다.
+현재 출시된 DBMS의 종류는 매우 다양하며, 현재에는 관계형 DBMS(RDBMS)를 주로 사용중에 있습니다. 대표적인 RDBMS에는 Oracle, MySQL(MariaDB), PostgreSQL, Server, IBM DB/2 등이 있으며, 각각의 RDBMS는 서로 다른 특징과 장단점을 가지고 있습니다.
+본 강좌에서는 MySQl(MariaDB)을 사용할 예정입니다. MariaDB를 사용하기 위한 준비 과정은 다음 강좌에서 소개해드리도록 하겠습니다.
+
+
+
+
+### SQL 문
+* SQL문은 대소문자 구분을 하지 않습니다. select는 SELECT와 같은 명령입니다.
+* 각각의 SQL문 끝에 `;`를 붙여서 서로를 구분합니다. 
+
+# 가장 중요한 기본적인 SQL 명령어
+1. SELECT : 데이터베이스에서 데이터 추출
+2. INSERT INTO : 데이터베이스에 새로운 데이터 삽입
+3. UPDATE : 데이터베이스의 데이터 갱신
+4. DELETE : 데이터 삭제
+5. CREATE DATABASE : 새로운 데이터베이스 생성
+6. ALTER DATABASE : 데이터베이스 변경
+7. CREATE TABLE : 테이블 생성
+8. ALTER TABLE : 테이블 변경
+9. DROP TABLE : 테이블 삭제
+10. CREATE INDEX : 인덱스 생성
+11. DROP INDEX : 인덱스 삭제
+
+
+# 쿼리문 둘러보기
+##### 테이블 구조 참조하기(DESC)
+```sql
+DESC 테이블명;
+```
+
+##### 검색 조건 지정하기(WHERE)
+```sql
+SELECT 열1, 열2 FROM 테이블명 WHERE no = 2;
+```
+* no열의 값이 2인 경우만 조회
+```sql
+SELECT * FROM 테이블명 WHERE no <> 2; 
+```
+* no열의 값이 2이 아닌 경우만 조회
+```sql
+SELECT * FROM 테이블명 WHERE name='홍길동';
+```
+* name열이 홍길동인 경우만 조회, 숫자가 아닌 문자열이나 날짜에 경우 '' 싱글 쿼트롤 둘러싼다.
+```sql
+SELECT * FROM 테이블명 WHERE name IS NULL;
+```
+* name 열이 NULL인 경우만 조회
+
+##### WHERE 절 조건 조합하기
+```sql
+SELECT * FROM 테이블명 WHERE 조건1 AND 조건2;
+SELECT * FROM 테이블명 WHERE 조건1 OR 조건2;
+SELECT * FROM 테이블명 WHERE NOT 조건;
+```
+* AND는 OR에 비해 우선순위가 높다. 그러므로 괄호를 통해서 우선수위를 바꿀 수 있다.
+```sql
+SELECT * FROM 테이블명 WHERE (a=1 OR a=2) AND (b=1 OR b=2);
+```
+
+
+##### 패턴매칭에 의한 검색
+```sql
+SELECT * FROM 테이블명 WHERE text LIKE 'SQL%';
+```
+* text라는 열에서 SQL로 시작하는 내용이 있다면 검색한다. (전방매치)
+```sql
+SELECT * FROM 테이블명 WHERE text LIKE '%SQL%';
+```
+* text라는 열에서 SQL을 포함하는 내용이 있다면 검색한다. (중간매치)
+* 예를들어 'SQL은 RDBMS를 조작하는 언어이다'
+* 'LIKE는 SQL에서 사용할 수있는 술어중 하나이다'
+
+```sql
+SELECT * FROM 테이블명 WHERE text LIKE '%\%%';
+```
+* 이스케이프를 통해서 % 검색하기
+* _를 검색할떄도 이스케이프 (\_) 시켜야한다. 
+
+
+# 상기 외 공부하면 좋은 내용들
+1. COUNT로 행 갯수 구하기
+2. DISTINCT로 중복 제거하기
+3. SUM으로 합계 구하기
+4. AVG로 평균내기
+5. MIN, MAX로 최솟값, 최댓값 구하기
+6. GROUP BY로 그룹화하기
+7. HAVING 구로 '집계함수'의 조건걸기
+8. 서브쿼리
+9. 클라이언트 변수
+10. 스칼라 값
+11. EXISTS (데이터 존재 유무 확인)
+12. 상관 서브쿼리
+13. IN (집합간의 비교하기)
+14. 제약 조건 선언, 추가, 삭제
+
+
+
+
+
+
+";
 

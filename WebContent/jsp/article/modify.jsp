@@ -59,7 +59,7 @@ Article article = (Article)request.getAttribute("article");
 		</div>
     </thead>
     <tbody>                     <!--   form에  -    method="post"  -  를 뺐더니 한글깨짐 해결되었음   -->
-        <form method="post" name="form1" action="${pageContext.request.contextPath}/s/article/modifyOk"  encType="application/x-www-form-urlencoded">
+        <form method="post" name="form1" action="${pageContext.request.contextPath}/s/article/modifyOk?id=${param.id}"  encType="application/x-www-form-urlencoded">
         	
         	<tr>
                 <th>카테고리 번호: </th>
@@ -78,7 +78,7 @@ Article article = (Article)request.getAttribute("article");
             <tr>
                 <td colspan="2">
 <!--                 	<input type="button" value="등록" onclick="sendData()" class="pull-right"/> -->
-                    	<button type="submit">저장</button>
+                    	<button type="submit" >저장</button>
 <!--                     	<button type="button" value="입력완료" onClick="form1.action='detail?id={}';form1.submit();">입력완료</button> -->
                     	<button type="submit" onclick="location.href='detail?id=${param.id}'" >뒤로가기</button>	
                 </td>

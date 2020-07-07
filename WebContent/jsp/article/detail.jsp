@@ -51,7 +51,7 @@
 
 <%
 	Article article = (Article) request.getAttribute("article");
-	CateItem cateItem = (CateItem)request.getAttribute("cateItem");
+	CateItem cateItem = (CateItem) request.getAttribute("cateItem");
 %>
 
 <div class="con">
@@ -70,30 +70,35 @@
 					수정일 :
 					<%=article.getUpdateDate()%></div>
 				<div class="writer">
-					작성자 : <%=article.getExtra().get("writer")%></div>
+					작성자 :
+					<%=article.getExtra().get("writer")%></div>
 				<div class="cateItemName">
-					카테고리 : <%=cateItem.getName()%></div>
+					카테고리 :
+					<%=cateItem.getName()%></div>
 			</div>
 			<!-- 카테고리 게시물 접속했을 때, 목록 클릭하면 최신 게시물을 불러왔음. 카테고리 게시물로 이동하게 수정한 코드 -->
 			<a
 				href="${pageContext.request.contextPath}/s/article/list?cateItemId=<%=article.getCateItemId()%>"
 				class="back-icon block"><i class="fas fa-arrow-left"> <span>목록</span>
-			</i></a>
-			<a	href="${pageContext.request.contextPath}/s/article/modify?id=<%=article.getId()%>"	class="back-icon block"><i class="fas fa-edit"> <span>수정</span>
-			</i></a>
+			</i></a> <a
+				href="${pageContext.request.contextPath}/s/article/modify?id=<%=article.getId()%>&cateItemId=<%=article.getCateItemId()%>"
+				class="back-icon block"><i class="fas fa-edit"> <span>수정</span>
+			</i></a>	
 
 		</div>
 		<div class="editor-box">
-			<div id="origin1" style="display: none;"><%=article.getBody()%></div>
+			<script type="text/x-template" id="origin1" style="display: none;"><%=article.getBody()%>
+
+			</script>
 			<div id="viewer1"></div>
 			<script>
-				var editor1__initialValue = $('#origin1').html();
+				var editor1__initialValue = $('#origin1').html().trim(); // trim() 추가했음. 
 				var editor1 = new toastui.Editor({
-					el : document.querySelector('#viewer1'),
-					height : '600px',
-					initialValue : editor1__initialValue,
+					el : document.querySelector("#viewer1"),
 					viewer : true,
-					plugins : [ toastui.Editor.plugin.codeSyntaxHighlight ]
+					initialValue : editor1__initialValue,
+					plugins : [ toastui.Editor.plugin.codeSyntaxHighlight,
+							youtubePlugin, replPlugin, codepenPlugin ]
 				});
 			</script>
 			<br />
@@ -103,8 +108,10 @@
 				<button type="button"
 					onclick="location.href='detail?id=${param.id+1}'">다음</button>
 			</div>
-			<div class="delete-button">	
-				<button type="submit" onclick="location.href='delete?id=${param.id}&cateItemId=${param.cateItemId}'" style="position:absolute; left:80%; top:30%;">삭제</button>
+			<div class="delete-button">
+				<button type="submit"
+					onclick="location.href='delete?id=${param.id}&cateItemId=${param.cateItemId}'"
+					style="position: absolute; left: 80%; top: 30%;">삭제</button>
 			</div>
 		</div>
 	</div>
@@ -120,22 +127,50 @@
 
 
 <style>
-
 .editor-box {
+	
 }
 
 .move-button {
-	position:absolute;
-	buttom:0;
+	position: absolute;
+	buttom: 0;
 }
 
 .delete-button {
-	position:absolute;
-	buttom:0;
-	left:87%;
-	width:100px;
+	position: absolute;
+	buttom: 0;
+	left: 87%;
+	width: 100px;
 }
 
+
+.toast-youtube-embed {
+  background-color:red;
+}
+
+.toast-youtube-embed {
+  position:relative;
+}
+
+.ratio-16-9::after {
+  content:"";
+  display:block;
+  padding-top:56.25%;
+}
+
+.ratio-1-1::after {
+  content:"";
+  display:block;
+  padding-top:100%;
+}
+
+.abs-full {
+  position:absolute;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+}
 </style>
 
 <%@ include file="/jsp/part/foot.jspf"%>

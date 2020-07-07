@@ -6,7 +6,7 @@
 <title>modify-ok</title>
 
 <div class="WriteOk">게시물 수정 성공!</div>
-<button type="button" onclick="location.href='detail?id=${param.id}'" class="modify-button" >뒤로가기</button>
+<button type="button" onclick="location.href='detail?id=${param.id}&cateItemId=${param.cateItemId}'" class="modify-button" >뒤로가기</button>
 <style>
 .WriteOk {
 	font-size:4rem;
