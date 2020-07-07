@@ -128,7 +128,7 @@ displayStatus = 1,
 INSERT INTO article
 SET regDate =NOW(),
 updateDate = NOW(),
-cateItemId = 1,
+cateItemId = 4,
 displayStatus = 1,
 `title` = "SQL 기초 문법",
 `body` = "## 명령어 실행 
@@ -492,7 +492,7 @@ get과 post 2가지 타입을 모두 테스트해보았다.
 INSERT INTO article
 SET regDate = NOW(),
 updateDate = NOW(),
-cateItemId = 5,
+cateItemId = 4,
 displayStatus = 1,
 `title` = "# SQL 기초 강좌 리스트",
 `body` = "# SQL 기초 강좌 리스트 🕵‍
@@ -516,7 +516,7 @@ FROM article;
 INSERT INTO article
 SET regDate = NOW(),
 updateDate = NOW(),
-cateItemId = 1,
+cateItemId = 4,
 displayStatus = 1,
 `title` = "# [SQL 기초 강좌, 1강] SQL이란 무엇인가?  🙄",
 `body` = "# [SQL 기초 강좌, 1강] SQL이란 무엇인가?  🙄
@@ -626,10 +626,35 @@ SELECT * FROM 테이블명 WHERE text LIKE '%\%%';
 13. IN (집합간의 비교하기)
 14. 제약 조건 선언, 추가, 삭제
 
-
-
-
-
-
 ";
+
+
+SELECT * 
+FROM article;
+
+
+INSERT INTO article
+SET regDate = NOW(),
+updateDate = NOW(),
+cateItemId = 1,
+displayStatus = 1,
+`title` = "# 드디어 첫 이미지 게시! 👨‍🚀",
+`body` = "![image](https://user-images.githubusercontent.com/63379459/86793677-a8f5b300-c0a6-11ea-9aa6-6bbf5123972a.png)
+
+### 이미지 게시를 할 수 있어서 몹시 기분이 좋다 🤠";
+
+
+INSERT INTO article
+SET regDate = NOW(),
+updateDate = NOW(),
+cateItemId = 3,
+displayStatus = 1,
+`title` = "# [ HTML ] form method=""post"" TEST 결과",
+`body` = "![image](https://user-images.githubusercontent.com/63379459/86795422-8369a900-c0a8-11ea-95e0-c130a1572519.png)
+
+# get 방식처럼 URL에 값을 넘겨주고 parameter로 받아야 하는 줄 알았다.
+
+### 그러나 실험 결과, 각 name의 결과 값을 URL에 넘기지 않고 submit을 통해서 아직....  구체적으로 이해되지 않는...   흐름으로 자바에 넘겨지는 듯 하다.
+
+### 일단 게시물 작성 jsp에서 value에 ${param.title},  ${param.body}를 빼주었다. 문제없이 게시물이 저장되었다.  😯";
 

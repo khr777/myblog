@@ -23,6 +23,16 @@
 	left:50%;
 	transform:translateX(-50%) translateY(-40%);
 }
+
+@media (max-width:799px) {
+	.WriteOk {
+		font-size:1.5rem;
+	}
+	
+}
+
+
+
 </style>
 
 

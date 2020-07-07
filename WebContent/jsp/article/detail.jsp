@@ -58,9 +58,9 @@
 	<div class="detail-box-1 absolute-center absolute-middle">
 		<div class="detail-title"><%=article.getTitle()%></div>
 		<br>
-		<div class="data-box-1 flex flex-jc-sb flex-ai-c">
-			<div class="writeData flex">
-				<div class="id visible-on-md-up">
+		<div class="data-box-1 ">
+			<div class="writeData">
+				<div class="id ">
 					번호 :
 					<%=article.getId()%></div>
 				<div class="date">
@@ -77,19 +77,16 @@
 					<%=cateItem.getName()%></div>
 			</div>
 			<!-- 카테고리 게시물 접속했을 때, 목록 클릭하면 최신 게시물을 불러왔음. 카테고리 게시물로 이동하게 수정한 코드 -->
-			<a
-				href="${pageContext.request.contextPath}/s/article/list?cateItemId=<%=article.getCateItemId()%>"
-				class="back-icon block"><i class="fas fa-arrow-left"> <span>목록</span>
+			<a	href="${pageContext.request.contextPath}/s/article/list?cateItemId=<%=article.getCateItemId()%>"
+				class="back-icon list-icon"><i class="fas fa-arrow-left">목록
 			</i></a> <a
 				href="${pageContext.request.contextPath}/s/article/modify?id=<%=article.getId()%>&cateItemId=<%=article.getCateItemId()%>"
-				class="back-icon block"><i class="fas fa-edit"> <span>수정</span>
+				class="back-icon  modify-icon"><i class="fas fa-edit">수정
 			</i></a>	
 
 		</div>
 		<div class="editor-box">
-			<script type="text/x-template" id="origin1" style="display: none;"><%=article.getBody()%>
-
-			</script>
+			<script type="text/x-template" id="origin1" style="display: none;"><%=article.getBody()%></script>
 			<div id="viewer1"></div>
 			<script>
 				var editor1__initialValue = $('#origin1').html().trim(); // trim() 추가했음. 
@@ -134,12 +131,13 @@
 .move-button {
 	position: absolute;
 	buttom: 0;
+	
 }
 
 .delete-button {
 	position: absolute;
 	buttom: 0;
-	left: 87%;
+	right:2%;
 	width: 100px;
 }
 
@@ -163,6 +161,7 @@
   display:block;
   padding-top:100%;
 }
+
 
 .abs-full {
   position:absolute;

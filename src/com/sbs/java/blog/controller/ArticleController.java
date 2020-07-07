@@ -134,18 +134,22 @@ public class ArticleController extends Controller {
 				if (!Util.empty(req, "title")) { // cateItemId가 없지 않고 숫자가 맞으면
 
 					title = Util.getString(req, "title");
+					
 
 				}
+				
+				
 
 				String body = "";
 
 				if (!Util.empty(req, "body")) { // cateItemId가 없지 않고 숫자가 맞으면
 
 					body = Util.getString(req, "body");
-
+					
 				}
-			
-
+				
+				
+				
 				articleService.doArticleWrite(displayStatus, cateItemId, title, body);
 				
 		return "article/listWriteOk.jsp";
@@ -207,6 +211,16 @@ public class ArticleController extends Controller {
 			body = Util.getString(req, "body");
 
 		}
+		
+		
+		String cateItemName = "전체";
+
+		if (cateItemId != 0) {
+			CateItem cateItem = articleService.getCateItem(cateItemId);
+			cateItemName = cateItem.getName();
+		}
+
+		req.setAttribute("cateItemName", cateItemName);
 		
 		Article article = articleService.articleDetailForModify(id);
 		req.setAttribute("article", article);

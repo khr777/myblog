@@ -13,6 +13,7 @@ import com.sbs.java.blog.controller.ArticleController;
 import com.sbs.java.blog.controller.Controller;
 import com.sbs.java.blog.controller.HomeController;
 import com.sbs.java.blog.controller.MemberController;
+import com.sbs.java.blog.exception.SQLErrorException;
 import com.sbs.java.blog.util.Util;
 
 public class App { //loadDriver()를 접고 다음 메서드를 보면 편하다.
@@ -76,8 +77,9 @@ public class App { //loadDriver()를 접고 다음 메서드를 보면 편하다
 			
 		} catch (SQLException e) {
 			Util.printEx("SQL 예외(커넥션 열기)", resp, e);
-			
 			//return;      catch 문에도 해당 메서드 마지막에 위치하고 있어서 더 실행될 것이 없으므로 쓰지 않아도 된다. 
+		} catch (SQLErrorException e) {   // ← 이 catch를 추가해줌 (200707 15:32)  
+			Util.printEx(e.getMessage(), resp, e);
 		} catch (Exception e) {
 			Util.printEx("기타 예외", resp, e);
 			//return;
@@ -130,7 +132,7 @@ public class App { //loadDriver()를 접고 다음 메서드를 보면 편하다
 				req.getRequestDispatcher(viewPath).forward(req, resp);
 			}
 			else if ( actionResult.startsWith("html:")) { // html에서 지정한 방법?으로 입력하지 않으면 문제 해결을 위해 화면에 출력하기 위한 용도
-				resp.getWriter().append(actionResult.substring(6));
+				resp.getWriter().append(actionResult.substring(5));
 			}
 			else {
 				resp.getWriter().append("처리할 수 없는 액션 결과입니다.");

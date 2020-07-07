@@ -20,8 +20,7 @@ String cateItemName = (String) request.getAttribute("cateItemName");
 
 <nav class="cateItem-menu-box-1">
 	<ul class="cateItem-menu">
-		<li>
-			<a href="${pageContext.request.contextPath}/s/article/list">전체</a>
+		<li><a href="${pageContext.request.contextPath}/s/article/list">전체</a>
 		</li>
 		<li><a
 			href="${pageContext.request.contextPath}/s/article/list?cateItemId=1&page=1">일상</a></li>
@@ -40,33 +39,14 @@ String cateItemName = (String) request.getAttribute("cateItemName");
 		<li><a
 			href="${pageContext.request.contextPath}/s/article/list?cateItemId=6&page=1">이거저거</a></li>
 	</ul>
+
 </nav>
 
 
 
-<div class="search-box ">
-	<!-- method="get"은 생략 가능하다. 무엇인지 찾아보기. method="get"-->
-	<form action=" ${pageContext.request.contextPath}/s/article/list">
-		<input type="hidden" name="page" value="1" />
-		<!-- 검색하면 page를 모두 0으로 초기화해야 하니까..? -->
-		<input type="hidden" name="cateItemId" value="${param.cateItemId}" />
-		<!--param~ el?이라고 한다. 오른쪽 예시의 줄인 표현이다.  <%//request.getParame~로 바로 할 수 있지만 %> %> -->
-		<input type="hidden" name="searchKeywordType" value="title" />
-		<!-- title, body 할 수 있지만 지금은 title만 -->
-		<input type="hidden" name="searchKeywordTypeBody" value="body" />
-		<input type="text" name="searchKeyword" value="${param.searchKeyword}" class="box" />
-		<button type="submit">검색</button>
-	</form>
-</div>
 
 
-<div class="cateItem-content">
-	<div class="con cateItemName "><%=cateItemName%></div>
-	<div class="con total-count">총 게시물 수 : ${totalCount}</div>
-	<div class="con doWrite">
-		<a href="${pageContext.request.contextPath}/s/article/listWrite?cateItemId=${param.cateItemId}&page=${page}">글쓰기</a>
-	</div>
-</div>
+
 
 <div class="con article-list-box-1 ">
 
@@ -95,7 +75,9 @@ String cateItemName = (String) request.getAttribute("cateItemName");
 
 	<div class="list-content">
 
-		<a href="./detail?id=<%=article.getId()%>&cateItemId=<%=article.getCateItemId()%>" class="">
+		<a
+			href="./detail?id=<%=article.getId()%>&cateItemId=<%=article.getCateItemId()%>"
+			class="">
 			<div class="list-title"><%=article.getTitle()%></div>
 			<div class="list-body-box">
 				<div class="list-body"><%=article.getBody()%></div>
@@ -119,6 +101,34 @@ String cateItemName = (String) request.getAttribute("cateItemName");
 	<%
 		}
 	%>
+	<div class="search-box ">
+		<!-- method="get"은 생략 가능하다. 무엇인지 찾아보기. method="get"-->
+		<form action=" ${pageContext.request.contextPath}/s/article/list">
+			
+			<input type="hidden" name="page" value="1" />
+			<!-- 검색하면 page를 모두 0으로 초기화해야 하니까..? -->
+			<input type="hidden" name="cateItemId" value="${param.cateItemId}" />
+			<!--param~ el?이라고 한다. 오른쪽 예시의 줄인 표현이다.  <%//request.getParame~로 바로 할 수 있지만 %> %> -->
+			<input type="hidden" name="searchKeywordType" value="title" />
+			<!-- title, body 할 수 있지만 지금은 title만 -->
+			<input type="hidden" name="searchKeywordTypeBody" value="body" /> <input
+				type="text" name="searchKeyword" value="${param.searchKeyword}"
+				class="box" />
+			
+			<button type="submit" class="search-button">검색</button>
+			
+		</form>
+	</div>
+
+	<div class="cateItem-content">
+		<div class="con total-count">총 게시물 수 : ${totalCount}</div>
+		<div class="con cateItemName "><%=cateItemName%></div>
+		
+		<div class="con doWrite">
+			<a
+				href="${pageContext.request.contextPath}/s/article/listWrite?cateItemId=${param.cateItemId}&page=${page}">글쓰기</a>
+		</div>
+	</div>
 
 </div>
 
