@@ -53,7 +53,7 @@
 @media ( max-width :799px) {
 	.profile-box-1 {
 		flex-flow: column wrap;
-		margin-top:-40px;
+		margin-top:-20px;
 	}
 	.profile-img-box {
 		margin-left: 15%;
@@ -96,11 +96,15 @@
 	align-items:flex-end;
 	justify-content:center;
 	height:100%;
+	position:absolute;
+	bottom:7%;
+	left:0;
 }
-.photo-box img {
+.photo-box >  img {
 	width:20%;
 	
 	margin-bottom:50px;
+	
 }
 
 
@@ -120,7 +124,7 @@
 
 
 
-<div class="con ">
+<div class="con">
 
 	<div class="profile-box-1 flex flex-jc-c absolute-center">
 		<div class="profile-name">

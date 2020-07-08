@@ -16,12 +16,9 @@ import com.sbs.java.blog.util.DBUtil;
 public class ArticleDao extends Dao {
 	private Connection dbConn;
 	private int itemInAPage;
-	private DBUtil dbUtil;
 
-	public ArticleDao(Connection dbConn, HttpServletRequest req, HttpServletResponse resp) {// 생성자에서 입력받고, super로 넘긴다.
-		super(req, resp);
+	public ArticleDao(Connection dbConn) {// 생성자에서 입력받고, super로 넘긴다.구조 개선으로 super 제거
 		this.dbConn = dbConn;
-		dbUtil = new DBUtil(req, resp);
 	}
 
 	public List<Article> getForPrintListArticles(int page, int cateItemId, int itemsInAPage, String searchKeywordType,
@@ -48,7 +45,7 @@ public class ArticleDao extends Dao {
 		// 이 쿼리를 위의 문장으로 바꿨음.sql += String.format("LIMIT 0, 5 "); //최신 5개 가져와라. (1, 5):
 		// 최신꺼 1개 건너띄고 5개 가져와라.
 
-		List<Map<String, Object>> rows = dbUtil.selectRows(dbConn, sql);
+		List<Map<String, Object>> rows = DBUtil.selectRows(dbConn, sql);
 		List<Article> articles = new ArrayList<>();
 
 		for (Map<String, Object> row : rows) {
@@ -68,7 +65,7 @@ public class ArticleDao extends Dao {
 													// 좋다.
 		sql += String.format("AND displayStatus = 1 ");
 
-		return new Article(dbUtil.selectRow(dbConn, sql));
+		return new Article(DBUtil.selectRow(dbConn, sql));
 	}
 
 	/*
@@ -92,7 +89,7 @@ public class ArticleDao extends Dao {
 		sql += String.format("FROM article ");
 		sql += String.format("WHERE cateItemid = %d ", cateItemId);
 
-		row = dbUtil.selectRow(dbConn, sql);
+		row = DBUtil.selectRow(dbConn, sql);
 		int totalCount = (int) row.get("COUNT(*)");
 		int totalPage = (int) Math.ceil((double) totalCount / itemInAPage);
 
@@ -134,7 +131,7 @@ public class ArticleDao extends Dao {
 		
 		
 
-		int count = dbUtil.selectRowIntValue(dbConn, sql);
+		int count = DBUtil.selectRowIntValue(dbConn, sql);
 
 		return count;
 
@@ -166,7 +163,7 @@ public class ArticleDao extends Dao {
 		sql += String.format("WHERE 1 ");
 		sql += String.format("ORDER BY id ASC "); // ASC : 만든 순서로(생성한 순서로)
 
-		List<Map<String, Object>> rows = dbUtil.selectRows(dbConn, sql);
+		List<Map<String, Object>> rows = DBUtil.selectRows(dbConn, sql);
 		List<CateItem> cateItems = new ArrayList<>();
 
 		for (Map<String, Object> row : rows) {
@@ -183,37 +180,40 @@ public class ArticleDao extends Dao {
 		sql += String.format("WHERE 1 ");
 		sql += String.format("AND id = %d ", cateItemId);
 
-		return new CateItem(dbUtil.selectRow(dbConn, sql));
+		return new CateItem(DBUtil.selectRow(dbConn, sql));
 	}
 
-	public void doArticleWrite(int displayStatus, int cateItemId, String title, String body) {
+	public int write(int cateItemId, int displayStatus, String title, String body) {
 
 		String sql = "";
 
 		sql += String.format("INSERT INTO article ");
 		sql += String.format("SET regDate = NOW() ");
 		sql += String.format(", updateDate = NOW() ");
-		sql += String.format(", cateItemId = %d ", cateItemId);
-		sql += String.format(", displayStatus = %d ", displayStatus);
 		sql += String.format(", title = '%s' ", title);
 		sql += String.format(", body = '%s' ", body);
+		sql += String.format(", displayStatus = %d ", displayStatus);
+		sql += String.format(", cateItemId = %d ", cateItemId);
+				
 
-		
-
-		dbUtil.insert(dbConn, sql);
+		return DBUtil.insert(dbConn, sql);
 	}
 
 	
 
-		public void articleModify(int id, int cateItemId, String title, String body) {
+		public int articleModify(int id, int cateItemId, int displayStatus, String title, String body) {
 		String sql = "";
 		sql += String.format("UPDATE article  "); 
-		sql += String.format("SET cateItemId = %d ", cateItemId);
+		sql += String.format("SET regDate = NOW() " );
 		sql += String.format(", updateDate = NOW() ");
+		sql += String.format(", cateItemId = %d ", cateItemId);
 		sql += String.format(", title = '%s' ", title);
-		sql += String.format(", `body` = '%s' ", body);
+		sql += String.format(", body = '%s' ", body);
+		sql += String.format(", displayStatus = %d ", displayStatus);
 		sql += String.format(" WHERE id = %d ", id);
-		dbUtil.insert(dbConn, sql);
+		
+		
+		return DBUtil.insert(dbConn, sql);
 		
 	}
 
@@ -221,7 +221,7 @@ public class ArticleDao extends Dao {
 			String sql = "";
 			sql += String.format("DELETE FROM article ");
 			sql += String.format("WHERE id = %d ", id);
-			dbUtil.insert(dbConn, sql);
+			DBUtil.insert(dbConn, sql);
 		}
 
 		public Article articleDetailForModify(int id) {
@@ -230,8 +230,9 @@ public class ArticleDao extends Dao {
 			sql += String.format("FROM article ");
 			sql += String.format("WHERE 1 ");
 			sql += String.format("AND id = %d ", id);
-
-			return new Article(dbUtil.selectRow(dbConn, sql));
+			
+			return new Article(DBUtil.selectRow(dbConn, sql));
+			
 		}
 
 		public Article getBeforIdForDetail(int id) {
@@ -239,11 +240,11 @@ public class ArticleDao extends Dao {
 			sql += String.format("SELECT * ");
 			sql += String.format("FROM article ");
 			sql += String.format("WHERE id IN ( ");
-			sql += String.format("( ");
+			sql += String.format("( ");	
 			sql += String.format("SELECT MAX(id) ");
 			sql += String.format("FROM article ");
 			sql += String.format("WHERE id < %d ) ", id );
 			sql += String.format(") ");
-			return new Article(dbUtil.selectRow(dbConn, sql));
+			return new Article(DBUtil.selectRow(dbConn, sql));
 		}
 }

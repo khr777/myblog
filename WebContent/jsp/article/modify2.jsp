@@ -1,6 +1,11 @@
 <%@ include file="/jsp/part/head.jspf"%>
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+<%@ page import="com.sbs.java.blog.dto.Article"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"	pageEncoding="UTF-8"%>
+<%
+	Article article = (Article) request.getAttribute("article");
+String cateItemName = (String) request.getAttribute("cateItemName");
+%>
+
 <script
 	src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js"></script>
 <link rel="stylesheet"
@@ -11,11 +16,6 @@
 	integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
 	crossorigin="anonymous">
 
-<!-- Optional theme -->
-<link rel="stylesheet"
-	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"
-	integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp"
-	crossorigin="anonymous">
 
 <!-- Latest compiled and minified JavaScript -->
 <script
@@ -50,18 +50,18 @@
 
 <link rel="stylesheet"
 	href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css" />
+<title>Modify</title>
 
-<title>Write something else you want</title>
+
 <div class="container">
 	<table class="table table-bordered">
 		<thead>
-		<caption class=" caption-write" >게시물 작성하기</caption>
-		        <div class="emoji">
-					<a href="https://www.emojiengine.com/ko/" target="_blank">
-						😵 emoji 이동
-					</a>
-				</div>
-				<div class="pixabay">
+		<caption class="caption-modify">게시물 수정</caption>
+		<div class="emoji">
+			<a href="https://www.emojiengine.com/ko/" target="_blank"> 😵
+				emoji 이동 </a>
+		</div>
+		<div class="pixabay">
 					<a href="https://pixabay.com/ko/" target="_blank">
 						📸 pixabay 이동
 					</a>
@@ -71,18 +71,17 @@
 						🚀 github 이동
 					</a>
 				</div>
-				<div class="write-editor">
+				<div class="modify-editor">
 					<a href="${pageContext.request.contextPath}/s/article/doWrite" target="_blank">
 						🔨 editor 이동
 					</a>
 				</div>
 		</thead>
 		<tbody>
-			<!--   form에  -    method="post"  -  를 뺐더니 한글깨짐 해결되었음 // encType="applica~이 기본값. text 전송용  -->
-			<form method="post" name=form1 action="listWriteOk"
+			<!--   form에  -    method="post"  -  를 뺐더니 한글깨짐 해결되었음   -->
+			<form method="post" name="form1"
+				action="${pageContext.request.contextPath}/s/article/modifyOk?id=${param.id}"
 				encType="application/x-www-form-urlencoded">
-
-				<!-- <tr> <-->
 				<div class="displayStatus" style="font-weight: bold;">
 					게시물 공개 여부 <select name="displayStatus" id="">
 						<option value="1">공개</option>
@@ -97,36 +96,34 @@
 						<option value="4">IT : sql</option>
 						<option value="5">IT : 기타</option>
 						<option value="6">이거저거</option>
-						
+
 					</select>
 
 				</div>
-				
-				<!--<th>공개 여부: </th> -->
-				<%--<td><input type="text" placeholder="공개여부 번호를 입력하세요. " name="displayStatus" value = "${param.displayStatus}"class="form-control"/></td> --%>
-				<!--</tr> -->
-<!-- 				<tr> -->
-<!-- 					<th>카테고리 번호:</th> -->
-<!-- 					<td><input type="text" placeholder="카테고리 번호를 입력하세요. " -->
-<%-- 						name="cateItemId" value="${param.cateItemId}" class="form-control" /></td> --%>
-<!-- 				</tr> -->
+				<tr>
+					<th>현재 카테고리:</th>
+					<input type="hidden" name="id" value="<%=article.getId()%>" />
+					<td><input type="hidden" placeholder="" name="cateItemId"
+						value="<%=article.getCateItemId()%>" class="form-control" /><%=cateItemName%></td>
+
+				</tr>
 				<tr>
 					<th>제목:</th>
 					<td><input type="text" placeholder="제목을 입력하세요. " name="title"
-						value="" class="form-control" /></td>
+						value="<%=article.getTitle()%>" class="form-control" /></td>
 				</tr>
 				<tr>
 					<th>내용:</th>
 					<td><textarea cols="10" placeholder="내용을 입력하세요. " name="body"
-							value="" class="form-control" style="height: 800px;"></textarea></td>
+							class="form-control" style="height: 600px; "><%=article.getBody()%></textarea></td>
 				</tr>
 
 				<tr>
 					<td colspan="2">
-						<!-- 						<input type="button" value="등록" onclick="sendData()" class="pull-right"/> -->
-						<button type="submit" value="저장" id="save-button">저장</button>
-						<button type="button"
-							onclick="location.href='list?cateItemId=${param.cateItemId}&page=${param.page}'">뒤로가기</button>
+						<!--                 	<input type="button" value="등록" onclick="sendData()" class="pull-right"/> -->
+						<button type="submit">저장</button> <!--                     	<button type="button" value="입력완료" onClick="form1.action='detail?id={}';form1.submit();">입력완료</button> -->
+						<button type="submit"
+							onclick="location.href='detail?id=${param.id}'">뒤로가기</button>
 					</td>
 				</tr>
 			</form>
@@ -134,77 +131,29 @@
 	</table>
 </div>
 
-
-<script>
-	var save-button = el.document.Selector('save-button');
-
-	
-
-</script>
-
-
-
-
-
-
-
-
-
-
 <style>
 .container {
 	margin-top: 100px;
 }
 
-.caption-write {
-	position:absolute;
-	left:50%;
-	transform:translateX(-50%);
-	top:90px; 
-	color:inherit; 
-	font-weight:bold; 
-	font-size:3rem;
-	
+.caption-modify {
+	position: absolute;
+	left: 50%;
+	transform: translateX(-50%);
+	top: 90px;
+	color: inherit;
+	font-weight: bold;
+	font-size: 3rem;
 }
 
-@media (max-width:799px) {
-	.caption-write {
-		left:65%;
-		font-size:2rem;
-		top:100px;
-		
+@media ( max-width :799px) {
+	.caption-modify {
+		left: 65%;
+		font-size: 2rem;
+		top: 100px;
 	}
 }
-.article-write-box {
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	transform: translateX(-50%) translateY(-50%);
-}
-
-.article-write-box .title-box {
-	border: 1px solid black;
-}
-
-.article-write-box .body-box {
-	border: 1px solid black;
-}
-
-.article-write-box form .title-box  input:nth-child(4) {
-	
-}
-
-.article-write-box form .body-box input:nth-child(4) {
-	
-}
 </style>
-
-
-
-
-</body>
-</html>
-
 
 
 

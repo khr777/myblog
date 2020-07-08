@@ -77,10 +77,10 @@
 					<%=cateItem.getName()%></div>
 			</div>
 			<!-- 카테고리 게시물 접속했을 때, 목록 클릭하면 최신 게시물을 불러왔음. 카테고리 게시물로 이동하게 수정한 코드 -->
-			<a	href="${pageContext.request.contextPath}/s/article/list?cateItemId=<%=article.getCateItemId()%>"
+			<a href="#" onclick="history.back();"
 				class="back-icon list-icon"><i class="fas fa-arrow-left">목록
 			</i></a> <a
-				href="${pageContext.request.contextPath}/s/article/modify?id=<%=article.getId()%>&cateItemId=<%=article.getCateItemId()%>"
+				href="${pageContext.request.contextPath}/s/article/modify?id=<%=article.getId()%>"
 				class="back-icon  modify-icon"><i class="fas fa-edit">수정
 			</i></a>	
 

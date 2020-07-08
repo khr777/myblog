@@ -72,12 +72,9 @@ String cateItemName = (String) request.getAttribute("cateItemName");
 	%>
 
 
-
+	
 	<div class="list-content">
-
-		<a
-			href="./detail?id=<%=article.getId()%>&cateItemId=<%=article.getCateItemId()%>"
-			class="">
+		<a href="./detail?id=<%=article.getId()%>"  class="">
 			<div class="list-title"><%=article.getTitle()%></div>
 			<div class="list-body-box">
 				<div class="list-body"><%=article.getBody()%></div>
@@ -95,6 +92,8 @@ String cateItemName = (String) request.getAttribute("cateItemName");
 			</div>
 			<div class="list-updateDate" style="display: none;"><%=article.getUpdateDate()%></div>
 		</a> <br>
+		
+		
 
 	</div>
 
@@ -104,7 +103,7 @@ String cateItemName = (String) request.getAttribute("cateItemName");
 	<div class="search-box ">
 		<!-- method="get"은 생략 가능하다. 무엇인지 찾아보기. method="get"-->
 		<form action=" ${pageContext.request.contextPath}/s/article/list">
-			
+
 			<input type="hidden" name="page" value="1" />
 			<!-- 검색하면 page를 모두 0으로 초기화해야 하니까..? -->
 			<input type="hidden" name="cateItemId" value="${param.cateItemId}" />
@@ -114,16 +113,16 @@ String cateItemName = (String) request.getAttribute("cateItemName");
 			<input type="hidden" name="searchKeywordTypeBody" value="body" /> <input
 				type="text" name="searchKeyword" value="${param.searchKeyword}"
 				class="box" />
-			
+
 			<button type="submit" class="search-button">검색</button>
-			
+
 		</form>
 	</div>
 
 	<div class="cateItem-content">
 		<div class="con total-count">총 게시물 수 : ${totalCount}</div>
-		<div class="con cateItemName "><%=cateItemName%></div>
-		
+		<div class="cateItemName "><%=cateItemName%></div>
+
 		<div class="con doWrite">
 			<a
 				href="${pageContext.request.contextPath}/s/article/listWrite?cateItemId=${param.cateItemId}&page=${page}">글쓰기</a>
@@ -153,11 +152,6 @@ String cateItemName = (String) request.getAttribute("cateItemName");
 		//}
 	%>
 </div>
-
-
-
-
-
 
 
 

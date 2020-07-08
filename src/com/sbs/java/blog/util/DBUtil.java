@@ -11,21 +11,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import com.sbs.java.blog.exception.SQLErrorException;
 
 public class DBUtil {
-	private HttpServletRequest req;
-	private HttpServletResponse resp;
-	
-	public DBUtil(HttpServletRequest req, HttpServletResponse resp) {
-		this.req = req;
-		this.resp = resp;
-	}
 
-	public Map<String, Object> selectRow (Connection connection, String sql) throws SQLErrorException {
+	// static으로 할 수 있으면 최대한 static으로 하는게 좋다. 
+	public static Map<String, Object> selectRow (Connection connection, String sql) throws SQLErrorException {
 		
 		List<Map<String, Object>> rows = selectRows(connection, sql);
 		if ( rows.size() == 0 ) {
@@ -35,7 +26,7 @@ public class DBUtil {
 		return rows.get(0);
 	}
 	
-	public List<Map<String, Object>> selectRows(Connection connection, String sql) throws SQLErrorException {
+	public static List<Map<String, Object>> selectRows(Connection connection, String sql) throws SQLErrorException {
 		List<Map<String, Object>> rows = new ArrayList<>();
 		
 		
@@ -98,17 +89,8 @@ public class DBUtil {
 		return rows;
 	}
 
-	public int insert(Connection dbConn, String sql) throws SQLErrorException {
-		/*Statement stmt = null;
-		ResultSet rs = null;
+	public static int insert(Connection dbConn, String sql) throws SQLErrorException {
 		
-		try {
-			stmt = dbConn.createStatement();
-			int no = stmt.executeUpdate(sql); // 추가, 수정된 게시물 개수를 리턴한다.
-			
-		} catch (SQLException e) {
-			System.err.printf("[SQL 예외, SQL : %s] : %s\n", sql, e.getMessage());
-		} */
 		int id = -1;
 
 		// SQL을 적는 문서파일
@@ -121,29 +103,34 @@ public class DBUtil {
 			rs = statement.getGeneratedKeys();
 			if (rs.next()) {
 				id = rs.getInt(1);
-				System.out.println(id);
 			}
 		} catch (SQLException e) {
-			throw new SQLErrorException("INSERT 쿼리 오류 : " + sql);
+			throw new SQLErrorException("SQL 예외, SQL  : " + sql);
 			//System.err.printf("[INSERT 쿼리 오류, %s]\n" + e.getStackTrace() + "\n", sql);
 		}
-
-		try {
-			if (rs != null) {
-				rs.close();
+		finally {
+			if ( rs != null ) {
+				try {
+					rs.close();
+				} catch (SQLException e) {
+					throw new SQLErrorException("SQL 예외, rs 닫기 : " + sql);
+				}
 			}
-			if (statement != null) {
-				statement.close();
+			if ( statement != null ) {
+				try {
+					statement.close();
+				} catch (SQLException e) {
+					throw new SQLErrorException("SQL 예외, stmt 닫기 : " + sql);
+				}
 			}
-			
-		} catch (SQLException e) {
-			System.err.println("[INSERT 종료 오류]\n" + e.getStackTrace());
+ 
 		}
 
+		
 		return id;
 	}
 
-	public int selectRowIntValue(Connection dbConn, String sql) throws SQLErrorException {
+	public static int selectRowIntValue(Connection dbConn, String sql) throws SQLErrorException {
 		Map<String, Object> row = selectRow(dbConn, sql);
 		
 		for ( String key : row.keySet() ) {
@@ -154,7 +141,7 @@ public class DBUtil {
 		return -1;
 	}
 	// String은 return 값을 null로 하면 안된다. 
-	public String selectRowStringValue(Connection dbConn, String sql) throws SQLErrorException  {
+	public static String selectRowStringValue(Connection dbConn, String sql) throws SQLErrorException  {
 		Map<String, Object> row = selectRow(dbConn, sql);
 		
 		for ( String key : row.keySet() ) {
@@ -165,7 +152,7 @@ public class DBUtil {
 		return "";
 	}
 	
-	public boolean selectRowBooleanValue(Connection dbConn, String sql) throws SQLErrorException {
+	public static boolean selectRowBooleanValue(Connection dbConn, String sql) throws SQLErrorException {
 		Map<String, Object> row = selectRow(dbConn, sql);
 		
 		for ( String key : row.keySet() ) {

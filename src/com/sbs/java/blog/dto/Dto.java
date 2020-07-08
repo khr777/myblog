@@ -22,6 +22,7 @@ public class Dto {
 				Object value = row.get(key);
 				String extraKey = key.substring(7);  // "앞에 있는 extra__"는 날려야 하기 때문에 앞에 7글자를 잘라낸다.  
 				this.extra.put(extraKey, value);
+				
 			}
 		}
 	}

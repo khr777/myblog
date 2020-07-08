@@ -49,9 +49,15 @@
 			</a>
 			<nav class="menu-box-1 flex">
 				<ul class="flex">
-					<li><a href="${pageContext.request.contextPath}/s/home/main"
-						class="flex height-100p flex-ai-c">Home</a></li>
-					<li><a href="${pageContext.request.contextPath}/s/article/doWrite" class="flex height-100p flex-ai-c">Editor</a></li>
+					<li>
+					<a href="${pageContext.request.contextPath}/s/home/main"
+						class="flex height-100p flex-ai-c">Home</a>
+					</li>
+					<li>
+					<a href="${pageContext.request.contextPath}/s/article/write"
+						class="flex height-100p flex-ai-c">Write</a>
+					</li>
+					<li><a href="${pageContext.request.contextPath}/s/article/editor" class="flex height-100p flex-ai-c">Editor</a></li>
 					
 					<li><a
 						href="${pageContext.request.contextPath}/s/home/aboutMe"
@@ -92,9 +98,15 @@
 	<div class="mobile-side-bar visible-on-sm-down flex flex-ai-c">
 		<nav class="menu-box-1 flex-grow-1">
 			<ul>
-				<li><a href="${pageContext.request.contextPath}/s/home/main"
-					class="block">Home</a></li>
-				<li><a href="${pageContext.request.contextPath}/s/article/doWrite"	class="block">Editor</a></li>
+				<li>
+					<a href="${pageContext.request.contextPath}/s/home/main"
+					class="block">Home</a>
+				</li>
+				<li>
+					<a href="${pageContext.request.contextPath}/s/article/write"
+					class="block">Write</a>
+				</li>
+				<li><a href="${pageContext.request.contextPath}/s/article/editor"	class="block">Editor</a></li>
 				
 				<li><a href="${pageContext.request.contextPath}/s/home/aboutMe"
 					class="block">About Me</a></li>

@@ -23,7 +23,7 @@ public abstract class Controller {
 		this.actionMethodName = actionMethodName;
 		this.req = req;
 		this.resp = resp;
-		articleService = new ArticleService(dbConn, req, resp);
+		articleService = new ArticleService(dbConn);
 		
 	}
 	
@@ -32,7 +32,8 @@ public abstract class Controller {
 		// [ 액션 전 실행 ]
 		// [ 이 메서드는 모든 컨트롤러의 모든 액션이 실행되기 전에 실행된다. ] 굉장히 유연해진다.
 		List<CateItem> cateItems = articleService.getForPrintCateItems();
-		
+		// beforeAction()  메서드에 만들어놓고 executeAction() 메서드에서 호출했기 때문에 모든 
+		// jsp에서 cateItems 호출이 가능한 것이다.
 		
 		// article/list, detail 을 들어가도 home/main을 들어가도 어느 곳에 있던 게시물 카테고리에 연결이 가능해야 하므로. 
 		// 모든 곳에서 사용해야 할 때 beforeAction()을 이용하면 된다. 

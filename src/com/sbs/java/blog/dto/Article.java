@@ -20,6 +20,7 @@ public class Article extends Dto {
 		this.cateItemId = (int)row.get("cateItemId");
 		this.title = (String)row.get("title");
 		this.body = (String)row.get("body");
+		
 	}
 	
 	

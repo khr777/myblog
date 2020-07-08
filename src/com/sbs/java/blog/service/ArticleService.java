@@ -13,10 +13,9 @@ import com.sbs.java.blog.dto.CateItem;
 public class ArticleService extends Service  {
 	private ArticleDao articleDao;
 	
-	public ArticleService(Connection dbConn, HttpServletRequest req, HttpServletResponse resp) {  // 생성자에 꼭 public을 붙여준다.
+	public ArticleService(Connection dbConn) {  // 생성자에 꼭 public을 붙여준다.
 		//ArticleService에서 특별히 req, resp을 사용할 일은 없지만 긴급한 경우 화면에 출력하기 위함으로 넘겨 놓으면 좋다.
-		super(req, resp);
-		articleDao = new ArticleDao(dbConn, req, resp);
+		articleDao = new ArticleDao(dbConn);
 	}
 
 	public List<Article> getForPrintListArticles(int page, int cateItemId, int itemsInAPage, String searchKeywordType, String searchKeywordTypeBody,  String searchKeyword) {
@@ -55,14 +54,14 @@ public class ArticleService extends Service  {
 		return articleDao.getCateItem(cateItemId);
 	}
 
-	public void doArticleWrite(int displayStatus, int cateItemId, String title, String body) {
-		articleDao.doArticleWrite( displayStatus,  cateItemId,  title,  body);
+	public int write( int cateItemId, int displayStatus, String title, String body) {
+		return articleDao.write( cateItemId, displayStatus,  title,  body);
 		
 	}
 
 
-	public void ArticleModify(int id, int cateItemId, String title, String body) {
-		articleDao.articleModify(id, cateItemId, title, body);
+	public int articleModify(int id, int cateItemId, int displayStatus, String title, String body) {
+		return articleDao.articleModify(id, cateItemId, displayStatus, title, body);
 	}
 
 	public void articleDelete(int id) {

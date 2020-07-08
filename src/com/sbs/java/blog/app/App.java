@@ -123,7 +123,6 @@ public class App { //loadDriver()를 접고 다음 메서드를 보면 편하다
 		if (controller != null) {
 			String actionResult = controller.executeAction();
 			
-			System.out.println("액션결과" + actionResult);
 			if ( actionResult.equals("")) {
 				resp.getWriter().append("액션의 결과가 없습니다.");
 			}

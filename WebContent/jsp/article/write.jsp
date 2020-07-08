@@ -1,11 +1,6 @@
 <%@ include file="/jsp/part/head.jspf"%>
-<%@ page import="com.sbs.java.blog.dto.Article"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%
-	Article article = (Article) request.getAttribute("article");
-String cateItemName = (String) request.getAttribute("cateItemName");
-%>
 <style>
 /* lib   (나중에 다른 곳으로 옮길 예정이라셨음) */
 .form1 {
@@ -102,7 +97,7 @@ String cateItemName = (String) request.getAttribute("cateItemName");
 		</div>
 	</div>
 
-	<form name="form" action="doModify" method="POST" class="write-form form1">
+	<form name="form" action="doWrite" method="POST" class="write-form form1">
 		<div class="form-row">
 			<div class="label">공개여부</div>
 			<div class="input">
@@ -127,35 +122,23 @@ String cateItemName = (String) request.getAttribute("cateItemName");
 			</div>
 		</div>
 		<div class="form-row">
-			<div class="label">번호</div>
-			<div class="input">
-				<input type="text" name="id" readonly="id" value="<%=article.getId()%>" />
-			</div>
-		</div>
-		<div class="form-row">
-			<div class="label">현재 카테고리</div>
-			<div class="input">
-				<input  type="text" readonly="cateItemName" value="<%=cateItemName%>" />
-			</div>
-		</div>
-		<div class="form-row">
 			<div class="label">제목</div>
 			<div class="input">
-				<input name="title" type="text" value="<%=article.getTitle()%>" />
+				<input name="title" type="text" placeholder="제목을 입력해주세요." />
 				
 			</div>
 		</div>
 		<div class="form-row">
 			<div class="label">내용</div>
 			<div class="input">
-				<textarea name="body"  ><%=article.getBody()%></textarea>
+				<textarea name="body" placeholder="내용을 입력해주세요."></textarea>
 			</div>
 		</div>
 		<div class="form-row">
 			<div class="label"></div>
 			<div class="input">
 				<input type="submit" value="전송" /><a href="list">취소</a>
-				
+				<!-- 				<input type="button" value="취소" onclick="history.back();"/> -->
 
 			</div>
 		</div>
