@@ -25,7 +25,7 @@ public class DBUtil {
 		this.resp = resp;
 	}
 
-	public Map<String, Object> selectRow (Connection connection, String sql) {
+	public Map<String, Object> selectRow (Connection connection, String sql) throws SQLErrorException {
 		
 		List<Map<String, Object>> rows = selectRows(connection, sql);
 		if ( rows.size() == 0 ) {
@@ -98,7 +98,7 @@ public class DBUtil {
 		return rows;
 	}
 
-	public int insert(Connection dbConn, String sql) {
+	public int insert(Connection dbConn, String sql) throws SQLErrorException {
 		/*Statement stmt = null;
 		ResultSet rs = null;
 		
@@ -124,17 +124,18 @@ public class DBUtil {
 				System.out.println(id);
 			}
 		} catch (SQLException e) {
-			System.err.printf("[INSERT 쿼리 오류, %s]\n" + e.getStackTrace() + "\n", sql);
+			throw new SQLErrorException("INSERT 쿼리 오류 : " + sql);
+			//System.err.printf("[INSERT 쿼리 오류, %s]\n" + e.getStackTrace() + "\n", sql);
 		}
 
 		try {
-			if (statement != null) {
-				statement.close();
-			}
-
 			if (rs != null) {
 				rs.close();
 			}
+			if (statement != null) {
+				statement.close();
+			}
+			
 		} catch (SQLException e) {
 			System.err.println("[INSERT 종료 오류]\n" + e.getStackTrace());
 		}
@@ -142,7 +143,7 @@ public class DBUtil {
 		return id;
 	}
 
-	public int selectRowIntValue(Connection dbConn, String sql) {
+	public int selectRowIntValue(Connection dbConn, String sql) throws SQLErrorException {
 		Map<String, Object> row = selectRow(dbConn, sql);
 		
 		for ( String key : row.keySet() ) {
@@ -153,7 +154,7 @@ public class DBUtil {
 		return -1;
 	}
 	// String은 return 값을 null로 하면 안된다. 
-	public String selectRowStringValue(Connection dbConn, String sql) {
+	public String selectRowStringValue(Connection dbConn, String sql) throws SQLErrorException  {
 		Map<String, Object> row = selectRow(dbConn, sql);
 		
 		for ( String key : row.keySet() ) {
@@ -164,7 +165,7 @@ public class DBUtil {
 		return "";
 	}
 	
-	public boolean selectRowBooleanValue(Connection dbConn, String sql) {
+	public boolean selectRowBooleanValue(Connection dbConn, String sql) throws SQLErrorException {
 		Map<String, Object> row = selectRow(dbConn, sql);
 		
 		for ( String key : row.keySet() ) {

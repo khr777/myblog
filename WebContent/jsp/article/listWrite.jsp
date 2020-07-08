@@ -71,6 +71,11 @@
 						🚀 github 이동
 					</a>
 				</div>
+				<div class="write-editor">
+					<a href="${pageContext.request.contextPath}/s/article/doWrite" target="_blank">
+						🔨 editor 이동
+					</a>
+				</div>
 		</thead>
 		<tbody>
 			<!--   form에  -    method="post"  -  를 뺐더니 한글깨짐 해결되었음 // encType="applica~이 기본값. text 전송용  -->

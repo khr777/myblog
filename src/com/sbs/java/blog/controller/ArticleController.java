@@ -226,14 +226,14 @@ public class ArticleController extends Controller {
 		req.setAttribute("article", article);
 		
 		//title, body가 null 도 아니고 길이가 0인 문자였음........ 
-		if ( title.length() == 0 || body.length() == 0 ) {
+/*		if ( title.length() == 0 || body.length() == 0 ) {    이 코드들 없어도 될 것 같음( 초반에 method="get" 방식으로 할 때, 내가 작성했었던 것 같음)
 			articleService.ArticleModify(article.getId(), article.getCateItemId(), article.getTitle(), article.getBody());
 			return "article/modify.jsp";
 		}
 		else if ( title.length() == 0 && body.length() == 0 ) {
 			articleService.ArticleModify(article.getId(), article.getCateItemId(), article.getTitle(), article.getBody());
 			return "article/modify.jsp";
-		}
+		} */
 		
 		
 		
@@ -290,18 +290,16 @@ public class ArticleController extends Controller {
 
 		}
 		
+		 
 		CateItem cateItem = articleService.getCateItem(cateItemId);
-		
-		
-		
-		
-		
 
 		// 이 article은 그냥(평범한) article이 아니다.
 		Article article = articleService.getForPrintArticle(id); // sql 쿼리에 작성해놓은 정보들만이 아닌 부가적으로 추가한 자잘한 (항목 추가한)작성자 등
 																	// 항목 모두 불러오는 메서드 네임
+		System.out.println(article);
 		req.setAttribute("article", article);
 		req.setAttribute("cateItem", cateItem);
+		
 		// return "article/detail.jsp";
 
 		// 작성자명이 게시물 상세보기에서 잠깐 필요한데 필드에까지 추가할 필요가 없다. 그래서 extra__를 이용해서 사용한다. sql에는 영향을

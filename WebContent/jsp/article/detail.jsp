@@ -101,13 +101,13 @@
 			<br />
 			<div class="move-button">
 				<button type="button"
-					onclick="location.href='detail?id=${param.id-1}'">이전</button>
+					onclick="location.href='detail?id=<%=article.getId()-1%>'">이전</button> <!--  둘 중에 뭘해도 값은  -->
 				<button type="button"
 					onclick="location.href='detail?id=${param.id+1}'">다음</button>
 			</div>
 			<div class="delete-button">
 				<button type="submit"
-					onclick="location.href='delete?id=${param.id}&cateItemId=${param.cateItemId}'"
+					onclick="location.href='delete?id=${param.id}'"
 					style="position: absolute; left: 80%; top: 30%;">삭제</button>
 			</div>
 		</div>

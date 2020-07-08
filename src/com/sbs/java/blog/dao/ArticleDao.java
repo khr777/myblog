@@ -233,4 +233,17 @@ public class ArticleDao extends Dao {
 
 			return new Article(dbUtil.selectRow(dbConn, sql));
 		}
+
+		public Article getBeforIdForDetail(int id) {
+			String sql = "";
+			sql += String.format("SELECT * ");
+			sql += String.format("FROM article ");
+			sql += String.format("WHERE id IN ( ");
+			sql += String.format("( ");
+			sql += String.format("SELECT MAX(id) ");
+			sql += String.format("FROM article ");
+			sql += String.format("WHERE id < %d ) ", id );
+			sql += String.format(") ");
+			return new Article(dbUtil.selectRow(dbConn, sql));
+		}
 }

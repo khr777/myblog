@@ -72,6 +72,11 @@ String cateItemName = (String) request.getAttribute("cateItemName");
 						🚀 github 이동
 					</a>
 				</div>
+				<div class="modify-editor">
+					<a href="${pageContext.request.contextPath}/s/article/doWrite" target="_blank">
+						🔨 editor 이동
+					</a>
+				</div>
 		</thead>
 		<tbody>
 			<!--   form에  -    method="post"  -  를 뺐더니 한글깨짐 해결되었음   -->

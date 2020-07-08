@@ -53,7 +53,7 @@ public class App { //loadDriver()를 접고 다음 메서드를 보면 편하다
 		return "sbs123414";
 	}
 	
-	public void start() throws IOException  {
+	public void start() throws ServletException, IOException  {
 		// [ DB드라이버 로딩 ]
 		loadDriver(req, resp);
 		

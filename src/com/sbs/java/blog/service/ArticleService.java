@@ -73,4 +73,8 @@ public class ArticleService extends Service  {
 		return articleDao.articleDetailForModify(id);
 	}
 
+	public Article getBeforIdForDetail(int id) {
+		return articleDao.getBeforIdForDetail(id);
+	}
+
 }
