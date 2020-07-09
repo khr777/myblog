@@ -88,6 +88,32 @@ public class DBUtil {
 
 		return rows;
 	}
+	
+	public static int update(Connection dbConn, String sql) throws SQLErrorException {
+		// UPDATE 명령으로 몇개의 데이터가 수정되었는지
+		int affectedRows = 0;
+
+		// SQL을 적는 문서파일
+		Statement statement = null;
+
+		try {
+			statement = dbConn.createStatement();
+			affectedRows = statement.executeUpdate(sql);
+		} catch (SQLException e) {
+			throw new SQLErrorException("SQL UPDATE 예외  : " + sql);
+		}
+
+		try {
+			if (statement != null) {
+				statement.close();
+			}
+		} catch (SQLException e) {
+			throw new SQLErrorException("SQL UPDATE stmt 닫기 예외  : " + sql);
+		}
+
+		return affectedRows;
+	}
+
 
 	public static int insert(Connection dbConn, String sql) throws SQLErrorException {
 		

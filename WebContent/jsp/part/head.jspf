@@ -50,8 +50,10 @@
 			<nav class="menu-box-1 flex">
 				<ul class="flex">
 					<li>
-					<a href="${pageContext.request.contextPath}/s/home/main"
-						class="flex height-100p flex-ai-c">Home</a>
+						<a href="${pageContext.request.contextPath}/s/home/main" class="flex height-100p flex-ai-c">Home</a>
+					</li>
+					<li>
+						<a href="${pageContext.request.contextPath}/s/member/login" class="flex height-100p flex-ai-c">Login</a>
 					</li>
 					<li>
 					<a href="${pageContext.request.contextPath}/s/article/write"
@@ -102,6 +104,9 @@
 					<a href="${pageContext.request.contextPath}/s/home/main"
 					class="block">Home</a>
 				</li>
+				<li>
+						<a href="${pageContext.request.contextPath}/s/member/login" class="flex height-100p flex-ai-c">Login</a>
+					</li>
 				<li>
 					<a href="${pageContext.request.contextPath}/s/article/write"
 					class="block">Write</a>

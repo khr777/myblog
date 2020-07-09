@@ -64,8 +64,8 @@ public class ArticleService extends Service  {
 		return articleDao.articleModify(id, cateItemId, displayStatus, title, body);
 	}
 
-	public void articleDelete(int id) {
-		articleDao.articleDelete(id);
+	public int articleDelete(int id) {
+		return articleDao.articleDelete(id);
 	}
 
 	public Article articleDetailForModify(int id) {

@@ -257,7 +257,7 @@ public class ArticleController extends Controller {
 
 		}
 		
-		articleService.articleDelete(id);
+		int deleteId = articleService.articleDelete(id);
 				
 		
 		

@@ -217,11 +217,11 @@ public class ArticleDao extends Dao {
 		
 	}
 
-		public void articleDelete(int id) {
+		public int articleDelete(int id) {
 			String sql = "";
 			sql += String.format("DELETE FROM article ");
 			sql += String.format("WHERE id = %d ", id);
-			DBUtil.insert(dbConn, sql);
+			return DBUtil.insert(dbConn, sql);
 		}
 
 		public Article articleDetailForModify(int id) {
