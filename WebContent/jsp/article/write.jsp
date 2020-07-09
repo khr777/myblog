@@ -29,6 +29,15 @@
 	flex-grow:1;
 }
 
+
+
+
+.form1 .form-row:nth-child(5) .input  a {
+	display:block;
+	padding:20px;
+}
+
+
 .form1 .form-row>.input>input, .form1 .form-row>.input>textarea {
 	display: block;
 	width: 100%;
@@ -52,13 +61,18 @@
 
 /* cus */
 .write-form-box {
-	margin-top: 200px;
+	margin-top: 170px;
+	border:1px solid black;
+	padding-top:20px;
+	margin-left:150px;
+	margin-right:150px;
+	
 }
 
 .write-form-box .blank-box {
 	position:absolute;
-	top:200px;
-	right:5%;
+	top:180px;
+	right:12%;
 	
 }
 .emoji, .pixabay, .github, .write-editor {
@@ -69,9 +83,18 @@
 	display: block;
 }
 @media ( max-width :799px) {
+	.write-form-box {
+		margin-top: 170px;
+		border:1px solid black;
+		padding-top:20px;
+		margin-left:50px;
+		margin-right:50px;
+	
+	}
+
 	.write-form-box .blank-box {
 	top:240px;
-	right:-8%;
+	right:2%;
 	
 	}
 }
@@ -97,7 +120,7 @@
 		</div>
 	</div>
 
-	<form name="form" action="doWrite" method="POST" class="write-form form1">
+	<form name="form" action="doWrite" method="POST" class="write-form form1" onsubmit="submitWriteForm(this); return false;">
 		<div class="form-row">
 			<div class="label">공개여부</div>
 			<div class="input">
@@ -137,13 +160,31 @@
 		<div class="form-row">
 			<div class="label"></div>
 			<div class="input">
-				<input type="submit" value="전송" /><a href="list">취소</a>
+				<input type="submit" value="전송" />
+				<a href="list">취소</a>
 				<!-- 				<input type="button" value="취소" onclick="history.back();"/> -->
 
 			</div>
 		</div>
 	</form>
 </div>
-
+<script>
+function submitWriteForm(form) {
+	form.title.value = form.title.value.trim();
+	if ( form.title.value.length == 0 ) {
+		alert('제목을 입력해주세요.');
+		form.title.focus();
+		return;
+	}
+	form.body.value = form.body.value.trim();
+	if ( form.body.value.length == 0 ) {
+		alert('내용을 입력해주세요.');
+		form.body.focus();
+		return;
+	}
+	form.submit();
+	
+}
+</script>
 
 <%@ include file="/jsp/part/foot.jspf"%>

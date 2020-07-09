@@ -1,6 +1,7 @@
 package com.sbs.java.blog.util;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
@@ -64,7 +65,7 @@ public class DBUtil {
 			}
 		} catch (SQLException e) {
 			//Util.printEx("SQL 예외, SQL  : " + sql, resp, e);   아래 코드로 대체함
-			throw new SQLErrorException("SQL 예외, SQL  : " + sql);
+			throw new SQLErrorException("SQL 예외, SQL  : " + sql, e);
 		}
 		finally {
 			if ( rs != null ) {  // stmt, rs순으로 열어줬다면 닫을때는 반대로 닫아주어야 한다! (200707 15:36)
@@ -72,7 +73,7 @@ public class DBUtil {
 					rs.close();
 				} catch (SQLException e) {
 					//Util.printEx("SQL 예외, rs 닫기 " , resp, e); 아래 코드로 대체
-					throw new SQLErrorException("SQL 예외, rs 닫기 : " + sql);
+					throw new SQLErrorException("SQL 예외, rs 닫기 : " + sql, e);
 				}
 			}
 			if ( stmt != null ) {
@@ -80,7 +81,7 @@ public class DBUtil {
 					stmt.close();
 				} catch (SQLException e) {
 					//Util.printEx("SQL 예외, stmt 닫기 " , resp, e); 아래 코드로 대체함
-					throw new SQLErrorException("SQL 예외, stmt 닫기 : " + sql);
+					throw new SQLErrorException("SQL 예외, stmt 닫기 : " + sql, e);
 				}
 			}
 			
@@ -100,7 +101,7 @@ public class DBUtil {
 			statement = dbConn.createStatement();
 			affectedRows = statement.executeUpdate(sql);
 		} catch (SQLException e) {
-			throw new SQLErrorException("SQL UPDATE 예외  : " + sql);
+			throw new SQLErrorException("SQL UPDATE 예외  : " + sql, e);
 		}
 
 		try {
@@ -108,30 +109,30 @@ public class DBUtil {
 				statement.close();
 			}
 		} catch (SQLException e) {
-			throw new SQLErrorException("SQL UPDATE stmt 닫기 예외  : " + sql);
+			throw new SQLErrorException("SQL UPDATE stmt 닫기 예외  : " + sql, e);
 		}
 
 		return affectedRows;
 	}
 
 
-	public static int insert(Connection dbConn, String sql) throws SQLErrorException {
+	public static int insert(Connection dbConn, SecSql sql) throws SQLErrorException {
 		
 		int id = -1;
 
 		// SQL을 적는 문서파일
-		Statement statement = null;
+		PreparedStatement statement = null;
 		// SQL의 실행결과 보고서
 		ResultSet rs = null;
 		try {
-			statement = dbConn.createStatement();
-			statement.executeUpdate(sql, Statement.RETURN_GENERATED_KEYS);
+			statement = sql.getPreparedStatement(dbConn);
+			statement.executeUpdate();
 			rs = statement.getGeneratedKeys();
 			if (rs.next()) {
 				id = rs.getInt(1);
 			}
 		} catch (SQLException e) {
-			throw new SQLErrorException("SQL 예외, SQL  : " + sql);
+			throw new SQLErrorException("SQL 예외, SQL  : " + sql, e );
 			//System.err.printf("[INSERT 쿼리 오류, %s]\n" + e.getStackTrace() + "\n", sql);
 		}
 		finally {
@@ -139,14 +140,14 @@ public class DBUtil {
 				try {
 					rs.close();
 				} catch (SQLException e) {
-					throw new SQLErrorException("SQL 예외, rs 닫기 : " + sql);
+					throw new SQLErrorException("SQL 예외, rs 닫기, SQL : " + sql, e);
 				}
 			}
 			if ( statement != null ) {
 				try {
 					statement.close();
 				} catch (SQLException e) {
-					throw new SQLErrorException("SQL 예외, stmt 닫기 : " + sql);
+					throw new SQLErrorException("SQL 예외, stmt 닫기, SQL : " + sql, e);
 				}
 			}
  

@@ -74,7 +74,7 @@ String cateItemName = (String) request.getAttribute("cateItemName");
 
 	
 	<div class="list-content">
-		<a href="./detail?id=<%=article.getId()%>"  class="">
+		<a href="./detail?id=<%=article.getId()%>&cateItemId=${param.cateItemId}&page=${param.page}"  class="">
 			<div class="list-title"><%=article.getTitle()%></div>
 			<div class="list-body-box">
 				<div class="list-body"><%=article.getBody()%></div>
@@ -123,13 +123,12 @@ String cateItemName = (String) request.getAttribute("cateItemName");
 		<div class="con total-count">총 게시물 수 : ${totalCount}</div>
 		<div class="cateItemName "><%=cateItemName%></div>
 
-		<div class="con doWrite">
-			<a
-				href="${pageContext.request.contextPath}/s/article/listWrite?cateItemId=${param.cateItemId}&page=${page}">글쓰기</a>
-		</div>
-	</div>
+<!-- 		<div class="con doWrite"> -->
+<%-- 			<a	href="${pageContext.request.contextPath}/s/article/listWrite?cateItemId=${param.cateItemId}&page=${page}">글쓰기</a> --%>
+<!-- 		</div> -->
+		<!-- 	</div> -->
 
-</div>
+	</div>
 
 
 <div class="paging-box">

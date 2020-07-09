@@ -1,9 +1,12 @@
 package com.sbs.java.blog.controller;
 
 import java.sql.Connection;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import com.sbs.java.blog.dto.Member;
 	
 	public class MemberController extends Controller {
 
@@ -29,20 +32,32 @@ import javax.servlet.http.HttpServletResponse;
 			return doActionDoJoin(req, resp);
 		case "login":
 			return doActionLogin(req, resp);
+		case "idCheck":
+			return doActionIdCheck(req, resp);
 		}
 		return "";
+	}
+
+	private String doActionIdCheck(HttpServletRequest req, HttpServletResponse resp) {
+		
+		return null; 
 	}
 
 	private String doActionDoJoin(HttpServletRequest req, HttpServletResponse resp) {
 		String loginId = req.getParameter("loginId");
 		String name = req.getParameter("name");
 		String nickName = req.getParameter("nickname");
-		String loginPw = req.getParameter("loginPw");
-		System.out.println("memberController");
-		System.out.println(loginId);
-		System.out.println(name);
-		System.out.println(nickName);
-		System.out.println(loginPw);
+		String loginPw = req.getParameter("loginPwReal");
+		
+		List<Member> members = memberService.getForJoinMembers();
+		for ( Member member : members ) {
+			if ( member.getLoginId().equals(loginId)) {
+				return "html:<script> alert('" + loginId + "는(은) 중복되는 아이디로 사용할 수 없습니다.'); history.back(); </script>";
+			}
+			if ( member.getNickname().equals(nickName)) {
+				return "html:<script> alert('" + nickName + "는(은) 중복되는 닉네임으로 사용할 수 없습니다.'); history.back(); </script>";
+			}
+		}
 		
 		int id = memberService.getMemberJoin(loginId, name, nickName, loginPw);
 		

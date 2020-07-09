@@ -13,6 +13,7 @@ import com.sbs.java.blog.controller.ArticleController;
 import com.sbs.java.blog.controller.Controller;
 import com.sbs.java.blog.controller.HomeController;
 import com.sbs.java.blog.controller.MemberController;
+import com.sbs.java.blog.controller.TestController;
 import com.sbs.java.blog.exception.SQLErrorException;
 import com.sbs.java.blog.util.Util;
 
@@ -79,7 +80,7 @@ public class App { //loadDriver()를 접고 다음 메서드를 보면 편하다
 			Util.printEx("SQL 예외(커넥션 열기)", resp, e);
 			//return;      catch 문에도 해당 메서드 마지막에 위치하고 있어서 더 실행될 것이 없으므로 쓰지 않아도 된다. 
 		} catch (SQLErrorException e) {   // ← 이 catch를 추가해줌 (200707 15:32)  
-			Util.printEx(e.getMessage(), resp, e);
+			Util.printEx(e.getMessage(), resp, e.getOrigin());
 		} catch (Exception e) {
 			Util.printEx("기타 예외", resp, e);
 			//return;
@@ -118,6 +119,8 @@ public class App { //loadDriver()를 접고 다음 메서드를 보면 편하다
 		case "home":
 			controller = new HomeController(dbConn, actionMethodName, req, resp);
 			break;
+		case "test":
+			controller = new TestController(dbConn, actionMethodName, req, resp);
 			
 		}
 		if (controller != null) {

@@ -62,6 +62,18 @@ CREATE TABLE article (
     `body` LONGTEXT NOT NULL
 );
 
+# 게시물 테이블 생성
+DROP TABLE IF EXISTS `member`;
+CREATE TABLE `member`   (
+    id INT(10) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    regDate DATETIME NOT NULL,
+    loginId CHAR(100) NOT NULL UNIQUE ,
+    `name` CHAR(100) NOT NULL,
+    nickname CHAR(100) NOT NULL UNIQUE ,
+    loginPwReal CHAR(255) NOT NULL
+    );
+
+
 SELECT *
 FROM article;
 
@@ -725,4 +737,76 @@ displayStatus = 1,
 
 
 
+
+SELECT * 
+FROM article;
+
+INSERT INTO article
+SET regDate = NOW(),
+updateDate = NOW(),
+cateItemId = 1,
+displayStatus = 1,
+`title` = "# 회원가입 폼 만들기",
+`body` = "# 회원가입 폼 만들기 참고 자료 
+
+
+## onsubmit 의미 : submit버튼을 누르면 onsubmit이 실행되어 특정함수가 실행되고 특정함수의 return 값이 true일 경우에만 폼을 전송한다.
+
+## submitJoinForm(this) 의미 : this는 특정 객체를 말하는 것으로 이 form 태그의 form을 가리킨다.
+
+<img width="897" alt="onsubmit1" src="https://USER-images.githubusercontent.com/63379459/87073341-33c9df80-c258-11ea-8a5b-ffc12a19c29d.PNG">
+
+<img width="841" alt="onsubmit2" src="https://USER-images.githubusercontent.com/63379459/87073360-3cbab100-c258-11ea-8c1b-36e7d750da55.PNG">
+
+* 버튼을 누를때마다 함수가 실행되지만 return false이므로 데이터가 전송되지 않는다.
+<img width="831" alt="onsubmit5" src="https://USER-images.githubusercontent.com/63379459/87073382-45ab8280-c258-11ea-850f-25503ea52f33.PNG">
+
+* form.loginId.value 의미 : form(this)의 name인 loginId의 값을 의미.
+* trim()  혹시 모를 앞뒤 공백을 제거(space만 입력한것을 잡아낸다)
+* 로그인 아이디가 제대로 입력되지 않아 오류메세지를 받는 경우 커서를 loginId창에서 깜빡거리게 하기 위해서는 form.loginId.focus(); 를 입력해주면 된다.
+
+<img width="2201" alt="submit6" src="https://USER-images.githubusercontent.com/63379459/87073401-4e03bd80-c258-11ea-90d4-9d41bba819d9.png">
+* 중간에 if~라면 return; 넘어가지않고 여기서 끝내겠다.
+* 마지막에 form.submit();    마지막까지 입력이 제대로 되었다면 함수를 호출한 태그인 form을 제출하겠다. 
+
+<img width="908" alt="submit7" src="https://USER-images.githubusercontent.com/63379459/87073420-565bf880-c258-11ea-9a71-cf217df8fadd.PNG">
+
+* indexOf(' ') != -1 의미 : 글자 사이에 공백이 들어있다..
+
+## 우리나라 법률상 패스워드를 원문으로 데이터 전송하는것은 좋지 않다. 
+* 패스워드를 암호화해야 한다.
+
+### 계획 : 자바스크립트 수준에서 직접 암호화를 한 다음 데이터 전송
+
+### 암호화 방법 2가지 (복호화 : 암호 해석)
+1. 복호화 가능
+2. 복호화 불가능 
+* 복호화가 불가능한 방법으로 해야 한다. 
+#### hash 함수 사용 ( 그 중에서도 sha256 )
+1. cdnjs.com 접속
+2. js-sha256 검색
+3. Link 복사 
+<img width="870" alt="submit8" src="https://USER-images.githubusercontent.com/63379459/87073442-607df700-c258-11ea-8d96-6f441c475d3d.PNG">
+* script src를 통해서 불러온다.";
+
+
+INSERT INTO article
+SET regDate = NOW(),
+updateDate = NOW(),
+cateItemId = 4,
+displayStatus = 1,
+`title` = "# 조건에 부합하는 10보다 작은 번호 SELECT",
+`body` = "# SQL 쿼리문 
+
+```sql
+
+SELECT id 
+FROM article 
+WHERE id < 10 
+AND displayStatus =1 
+AND cateItemId = 3 
+ORDER BY id ASC 
+LIMIT 1
+
+``` ";
 

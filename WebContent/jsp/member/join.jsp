@@ -1,28 +1,31 @@
 <%@ include file="/jsp/part/head.jspf"%>
+<%@ page import="java.util.List"%>
+<%@ page import="com.sbs.java.blog.dto.Member"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%List<Member> members = (List<Member>)request.getAttribute("members"); %>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/js-sha256/0.9.0/sha256.min.js"></script>
 <style>
 /* lib   (나중에 다른 곳으로 옮길 예정이라셨음) */
 .form1 {
 	position: absolute;
 	display: block;
 	width: 550px;
-	top: 30%;
+	top: 40%;
 	left: 50%;
 	transform: translateX(-50%) translateY(-50%);
 }
 
 .form1 .form-row {
+	padding:5px;
 	align-items: center;
-	display: flex;
-	text-align: center;
-	margin-top: 5px;
-	
+	display:flex;
+	text-align:center;
 	
 }
 
 
-.form1 .form-row>.label {
+.form1 .form-row >.label {
 	width: 150px;
 }
 
@@ -33,18 +36,6 @@
 }
 
 
-.form1 .form-row:nth-child(6) .input:nth-child(1) {
-	width: 80px;
-	flex-grow: 0;
-	margin-left: 0;
-}
-
-.form1 .form-row:nth-child(6) .input:nth-child(2) {
-	width: 290px;
-	flex-grow: 0;
-	margin-left: auto;
-	margin-right: 0;
-}
 
 .form1 .form-row>.input>input, .form1 .form-row>.input>textarea {
 	display: block;
@@ -54,7 +45,12 @@
 }
 
 .form1 .form-row>.input>select {
-	padding: 10px;
+	padding: 12px;
+}
+
+
+.form1 .form-row:last-child .input:first-child input {
+	width:80px;
 }
 
 .form1 .form-row>.input>textarea {
@@ -74,33 +70,26 @@
 	left: 50%;
 	transform: translateX(-50%) translateY(-50%);
 	height: 500px;
-	width: 30%;
+	width: 40%;
+	border:4px solid gold;
+}
+.blog-name {
+	position:absolute;
+	font-size:2rem;
+	top:85%;
+	left:50%;
+	transform:translateX(-50%);
+	letter-spacing:10px;
+	width:100%;
+	text-align:center;
+	
 }
 
-.write-form-box .blank-box {
-	position: absolute;
-	top: 200px;
-	right: 5%;
-}
-
-.emoji, .pixabay, .github, .write-editor {
-	width: 200px;
-}
-
-.emoji, .pixabay, .github, .write-editor a {
-	display: block;
-}
-
-@media ( max-width :799px) {
-	.write-form-box .blank-box {
-		top: 240px;
-		right: -8%;
-	}
-}
 </style>
 
 <div class="write-form-box">
 	<form name="form" action="doJoin" method="POST"	class="write-form form1" onsubmit="submitJoinForm(this); return false">
+	<input type="hidden" name="loginPwReal"/>
 		<div class="form-row">
 			<div class="label">로그인 아이디</div>
 			<div class="input">
@@ -128,12 +117,12 @@
 		<div class="form-row">
 			<div class="label">로그인 비밀번호 확인</div>
 			<div class="input">
-				<input name="loginPw" type="password" placeholder="로그인 비밀번호 확인을 입력해주세요." />
+				<input name="loginPwConfirm" type="password" placeholder="로그인 비밀번호 확인을 입력해주세요." />
 			</div>
 		</div>
 		<div class="form-row">
 			<div class="input">
-				<input type="button" value="취소" onclick="history.back();" />
+				<input type="button" value="취소" onclick="location.href='../home/main'" />
 			</div>
 			<div class="input">
 				<input type="submit" value="회원가입" />
@@ -143,16 +132,91 @@
 			</div>
 		</div>
 	</form>
+	<div class="blog-name">Welcome to my blog!</div>
 </div>
 <script>
+var joinFormSubmitted = false;
+
 function submitJoinForm(form) {
+	if ( joinFormSubmitted ) {
+		alert('가입 처리중입니다.');
+		return;
+	}
 	form.loginId.value = form.loginId.value.trim();
 	if ( form.loginId.value.length == 0 ) {
 		alert('아이디를 입력해주세요.');
 		form.loginId.focus();	
+		return;
+	}
+	if ( form.loginId.value.length < 4 || form.loginId.value.length > 12 ) {
+		alert('아이디를 4~12자까지 입력해주세요.');
+		form.loginId.focus();
+		return;
 	}
 
-	form.loginPw.value = form.loginPw.
+	if ( form.loginId.value.indexOf(' ') != -1 ) {
+		alert('아이디를 영문소문자와 숫자의 조합으로 입력해주세요.');
+		form.loginId.focus();
+		return;
+	}
+	
+
+	form.name.value = form.name.value.trim();
+	if ( form.name.value.length == 0 ) {
+		alert('이름을 입력해주세요.');
+		form.name.focus();
+		return;
+	}
+	if ( form.name.value.length < 2 ) {
+		alert('이름을 2자 이상 입력해주세요.');
+		form.name.focus();
+		return;
+	}
+
+	form.nickname.value = form.nickname.value.trim();
+	if ( form.nickname.value.length == 0 ) {
+		alert('닉네임을 입력해주세요.');
+		form.nickname.focus();
+		return;
+	}
+	if ( form.nickname.value.length < 2 ) {
+		alert('닉네임을 2자 이상 입력해주세요.');
+		form.nickname.focus();
+		return;
+	}
+
+	form.loginPw.value = form.loginPw.value.trim();
+	if ( form.loginPw.value.length == 0 ) {
+		alert('비밀번호를 입력해주세요.');
+		form.loginPw.focus();
+		return;
+	}
+	if ( form.loginPw.value.length < 4 || form.loginPw.value.length > 12 ) {
+		alert('로그인 비밀번호를 4~12자까지 입력해주세요.');
+		form.loginPw.value = "";
+		form.loginPwConfirm.value = "";
+		form.loginPw.focus();
+		return;
+	}
+
+	form.loginPwConfirm.value = form.loginPwConfirm.value.trim();
+	if ( form.loginPwConfirm.value.length == 0 ) {
+		alert('비밀번호 확인을 입력해주세요.');
+		form.loginPwConfirm.focus();
+		return;
+	}
+	if ( form.loginPw.value != form.loginPwConfirm.value ) {
+		alert('비밀번호가 일치하지 않습니다. 다시 입력해주세요.');
+		form.loginPw.value = "";
+		form.loginPwConfirm.value = "";
+		form.loginPw.focus();
+		return;
+	}
+	form.loginPwReal.value = sha256(form.loginPw.value);  /* 암호화된 텍스트를 넘겨준다.*/
+	form.loginPw.value = "";  /* 이 값은 비워준다. */
+	
+	form.submit();
+	joinFormSubmitted = true;
 }
 
 

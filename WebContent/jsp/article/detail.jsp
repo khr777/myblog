@@ -52,6 +52,9 @@
 <%
 	Article article = (Article) request.getAttribute("article");
 	CateItem cateItem = (CateItem) request.getAttribute("cateItem");
+	int beforeId = (int)request.getAttribute("beforeId");
+	int afterId = (int)request.getAttribute("afterId");
+	int cateItemId = (int)request.getAttribute("cateItemId");
 %>
 
 <div class="con">
@@ -77,7 +80,7 @@
 					<%=cateItem.getName()%></div>
 			</div>
 			<!-- 카테고리 게시물 접속했을 때, 목록 클릭하면 최신 게시물을 불러왔음. 카테고리 게시물로 이동하게 수정한 코드 -->
-			<a href="#" onclick="history.back();"
+			<a href="list?cateItemId=${param.cateItemId}&page=${param.page}"
 				class="back-icon list-icon"><i class="fas fa-arrow-left">목록
 			</i></a> <a
 				href="${pageContext.request.contextPath}/s/article/modify?id=<%=article.getId()%>"
@@ -100,10 +103,13 @@
 			</script>
 			<br />
 			<div class="move-button">
-				<button type="button"
-					onclick="location.href='detail?id=<%=article.getId()-1%>'">이전</button> <!--  둘 중에 뭘해도 값은  -->
-				<button type="button"
-					onclick="location.href='detail?id=${param.id+1}'">다음</button>
+				<%if ( beforeId > 0 ) { %>
+					<input class="before" value="이전" type="button" onclick="location.href='detail?id=<%=beforeId%>&cateItemId=<%=cateItemId%>'"></button> <!--  둘 중에 뭘해도 값은  -->	
+				<% } %>
+				<%if ( afterId != -1 ) { %>
+					<input class="after" value="다음" type="button" onclick="location.href='detail?id=<%=afterId%>&cateItemId=<%=cateItemId%>'"></button> <!--  둘 중에 뭘해도 값은  -->
+				<%} %>
+				
 			</div>
 			<div class="delete-button">
 				<button type="submit"
@@ -137,7 +143,7 @@
 .delete-button {
 	position: absolute;
 	buttom: 0;
-	right:2%;
+	right:4%;
 	width: 100px;
 }
 

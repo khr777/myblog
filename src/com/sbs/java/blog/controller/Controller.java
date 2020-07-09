@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.sbs.java.blog.dto.CateItem;
+import com.sbs.java.blog.dto.Member;
 import com.sbs.java.blog.service.ArticleService;
 import com.sbs.java.blog.service.MemberService;
 
@@ -41,6 +42,9 @@ public abstract class Controller {
 		// article/list, detail 을 들어가도 home/main을 들어가도 어느 곳에 있던 게시물 카테고리에 연결이 가능해야 하므로. 
 		// 모든 곳에서 사용해야 할 때 beforeAction()을 이용하면 된다. 
 		req.setAttribute("cateItems", cateItems);
+		
+		List<Member> members = memberService.getForJoinMembers();
+		req.setAttribute("members", members);
 		
 		
 	}

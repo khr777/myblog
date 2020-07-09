@@ -105,8 +105,9 @@
 					class="block">Home</a>
 				</li>
 				<li>
-						<a href="${pageContext.request.contextPath}/s/member/login" class="flex height-100p flex-ai-c">Login</a>
-					</li>
+					<a href="${pageContext.request.contextPath}/s/member/login"
+					class="block">login</a>
+				</li>
 				<li>
 					<a href="${pageContext.request.contextPath}/s/article/write"
 					class="block">Write</a>

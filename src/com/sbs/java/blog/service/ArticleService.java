@@ -60,8 +60,8 @@ public class ArticleService extends Service  {
 	}
 
 
-	public int articleModify(int id, int cateItemId, int displayStatus, String title, String body) {
-		return articleDao.articleModify(id, cateItemId, displayStatus, title, body);
+	public void articleModify(int id, int cateItemId, int displayStatus, String title, String body) {
+		articleDao.articleModify(id, cateItemId, displayStatus, title, body);
 	}
 
 	public int articleDelete(int id) {
@@ -75,5 +75,14 @@ public class ArticleService extends Service  {
 	public Article getBeforIdForDetail(int id) {
 		return articleDao.getBeforIdForDetail(id);
 	}
+
+	public int getForPageMoveBeforeArticle(int id, int cateItemId) {
+		return articleDao.getForPageMoveBeforeArticle(id, cateItemId);
+	}
+
+	public int getForPageMoveAfterArticle(int id, int cateItemId) {
+		return articleDao.getForPageMoveAfterArticle(id, cateItemId);
+	}
+
 
 }

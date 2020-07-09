@@ -10,17 +10,18 @@
 	top:30%;
 	left:50%;
 	transform:translateX(-50%) translateY(-50%);
+	
 }
 
 .form1 .form-row {
+	padding:5px;
 	align-items: center;
 	display:flex;
 	text-align:center;
+	
 }
 
-.form1 .form-row:not(:first-child) {
-	margin-top: 10px;
-}
+
 
 .form1 .form-row>.label {
 	width:130px;
@@ -78,7 +79,19 @@
 	transform:translateX(-50%) translateY(-50%);
 	height:500px;
 	width:30%;
+	border:2px solid gold;
 }
+
+.blog-name {
+	position:absolute;
+	font-size:2.4rem;
+	top:70%;
+	left:50%;
+	transform:translateX(-50%);
+	letter-spacing:10px;
+	
+}
+
 
 .write-form-box .blank-box {
 	position:absolute;
@@ -130,6 +143,7 @@
 			</div>
 		</div>
 	</form>
+	<div class="blog-name">harry.my.iu.gy</div>
 </div>
 
 

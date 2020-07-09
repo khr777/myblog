@@ -6,12 +6,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import com.sbs.java.blog.dto.Article;
 import com.sbs.java.blog.dto.CateItem;
 import com.sbs.java.blog.util.DBUtil;
+import com.sbs.java.blog.util.SecSql;
 
 public class ArticleDao extends Dao {
 	private Connection dbConn;
@@ -184,8 +182,18 @@ public class ArticleDao extends Dao {
 	}
 
 	public int write(int cateItemId, int displayStatus, String title, String body) {
+		SecSql secSql = new SecSql();
+		
+		
+		secSql.append("INSERT INTO article");
+		secSql.append("SET regDate = NOW()");
+		secSql.append(", updateDate = NOW()");
+		secSql.append(", title = ? ", title);
+		secSql.append(", body = ? ", body);
+		secSql.append(", displayStatus = ? ", displayStatus);
+		secSql.append(", cateItemId = ?", cateItemId); 
 
-		String sql = "";
+		/* String sql = "";
 
 		sql += String.format("INSERT INTO article ");
 		sql += String.format("SET regDate = NOW() ");
@@ -193,15 +201,28 @@ public class ArticleDao extends Dao {
 		sql += String.format(", title = '%s' ", title);
 		sql += String.format(", body = '%s' ", body);
 		sql += String.format(", displayStatus = %d ", displayStatus);
-		sql += String.format(", cateItemId = %d ", cateItemId);
+		sql += String.format(", cateItemId = %d ", cateItemId); */
 				
 
-		return DBUtil.insert(dbConn, sql);
+		return DBUtil.insert(dbConn, secSql);
 	}
 
 	
 
-		public int articleModify(int id, int cateItemId, int displayStatus, String title, String body) {
+		public void articleModify(int id, int cateItemId, int displayStatus, String title, String body) {
+		
+			SecSql secSql = new SecSql();
+			
+			secSql.append("UPDATE article  "); 
+			secSql.append("SET regDate = NOW()" );
+			secSql.append(", updateDate = NOW()");
+			secSql.append(", cateItemId = ?", cateItemId);
+			secSql.append(", title = ?", title);
+			secSql.append(", body = ? ", body);
+			secSql.append(", displayStatus = ?", displayStatus);
+			secSql.append(" WHERE id = ?", id);
+			
+		/* 
 		String sql = "";
 		sql += String.format("UPDATE article  "); 
 		sql += String.format("SET regDate = NOW() " );
@@ -211,17 +232,25 @@ public class ArticleDao extends Dao {
 		sql += String.format(", body = '%s' ", body);
 		sql += String.format(", displayStatus = %d ", displayStatus);
 		sql += String.format(" WHERE id = %d ", id);
+		*/
 		
-		
-		return DBUtil.insert(dbConn, sql);
+		DBUtil.insert(dbConn, secSql);
 		
 	}
 
 		public int articleDelete(int id) {
+			SecSql secSql = new SecSql();
+			
+			secSql.append("DELETE FROM article ");
+			secSql.append("WHERE id = ? ", id);
+			
+			
+			/*
 			String sql = "";
 			sql += String.format("DELETE FROM article ");
 			sql += String.format("WHERE id = %d ", id);
-			return DBUtil.insert(dbConn, sql);
+			*/
+			return DBUtil.insert(dbConn, secSql);
 		}
 
 		public Article articleDetailForModify(int id) {
@@ -247,4 +276,35 @@ public class ArticleDao extends Dao {
 			sql += String.format(") ");
 			return new Article(DBUtil.selectRow(dbConn, sql));
 		}
+
+		public int getForPageMoveBeforeArticle(int id, int cateItemId) {
+			String sql = "";
+			sql += String.format("SELECT id ");
+			sql += String.format("FROM article ");
+			sql += String.format("WHERE id < %d ", id);
+			sql += String.format("AND displayStatus = 1 ");
+			sql += String.format("AND cateItemId = %d ", cateItemId);
+			sql += String.format("ORDER BY id DESC ");
+			sql += String.format("LIMIT 1");
+			
+			int articleId = DBUtil.selectRowIntValue(dbConn, sql);
+			
+			return  articleId;
+		}
+
+		public int getForPageMoveAfterArticle(int id, int cateItemId) {
+			String sql = "";
+			sql += String.format("SELECT id ");
+			sql += String.format("FROM article ");
+			sql += String.format("WHERE id > %d ", id);
+			sql += String.format("AND displayStatus = 1 ");
+			sql += String.format("AND cateItemId = %d ", cateItemId);
+			sql += String.format("ORDER BY id DESC ");
+			sql += String.format("LIMIT 1");
+			
+			int articleId = DBUtil.selectRowIntValue(dbConn, sql);
+			
+			return  articleId;
+		}
+
 }
