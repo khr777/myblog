@@ -170,6 +170,7 @@
 </div>
 <script>
 function submitWriteForm(form) {
+
 	form.title.value = form.title.value.trim();
 	if ( form.title.value.length == 0 ) {
 		alert('제목을 입력해주세요.');
@@ -182,6 +183,16 @@ function submitWriteForm(form) {
 		form.body.focus();
 		return;
 	}
+	
+	//변수 추가해서 원하는 값을 얻지 못했을 경우, 게시물 생성하지 못하도록하는 방법 찾아보기.
+	// form.cateItemId.vaule = form.cateItem.value.trim();
+	//if ( form.cateItemId == 0 ) {
+		//alert('카테고리를 선택해주세요.');
+	//	return;
+//	}
+
+	
+	
 	form.submit();
 	
 }

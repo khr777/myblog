@@ -21,7 +21,36 @@ public class ArticleDao extends Dao {
 
 	public List<Article> getForPrintListArticles(int page, int cateItemId, int itemsInAPage, String searchKeywordType,
 			String searchKeywordTypeBody, String searchKeyword) {
+		
+		//String sql = "";
+			SecSql sql = new SecSql();
 
+		int itemInAPage = 10; // 한 페이지에 담을 게시물 개수.    //샘 구조랑 조금 다른듯.. 내 구조에서는 이 3가지 코드 지우면 안됌.
+		this.itemInAPage = itemInAPage;
+		int limitFrom = (page - 1) * itemInAPage;
+		sql.append("SELECT *");
+		sql.append("FROM article");
+		sql.append("WHERE displayStatus = 1");
+		if (cateItemId != 0) {
+			sql.append("AND cateItemId = ?", cateItemId);
+		}
+		if (searchKeywordType.equals("title") && searchKeywordTypeBody.equals("body") && searchKeyword.length() > 0) {
+			sql.append("AND title LIKE CONCAT('%', ? , '%')", searchKeyword);
+			sql.append("OR body LIKE CONCAT('%', ? , '%')", searchKeyword);
+		}
+		sql.append("ORDER BY id DESC");
+		sql.append("LIMIT ?, ? ", limitFrom, itemInAPage);
+
+		// 이 쿼리를 위의 문장으로 바꿨음.sql += String.format("LIMIT 0, 5 "); //최신 5개 가져와라. (1, 5):
+		// 최신꺼 1개 건너띄고 5개 가져와라.
+
+		List<Map<String, Object>> rows = DBUtil.selectRows(dbConn, sql);
+		List<Article> articles = new ArrayList<>();
+
+		for (Map<String, Object> row : rows) {
+			articles.add(new Article(row));
+		}
+		/*  2020-07-10 SecSql 적용하기 직전 ( 적용 과정에 오류나서 혹시몰라 복사해서 작업중) 
 		String sql = "";
 
 		int itemInAPage = 10; // 한 페이지에 담을 게시물 개수.
@@ -49,19 +78,20 @@ public class ArticleDao extends Dao {
 		for (Map<String, Object> row : rows) {
 			articles.add(new Article(row));
 		}
-
+		*/ 
 		return articles;
 	}
 
 	public Article getForPrintArticle(int id) {
-		String sql = "";
-		sql += String.format("SELECT *, '김혜련' AS extra__writer "); // 만들어놓은 쿼리에는 작성자명을 담을 수가 없다. 그래서 'extra__' 를 적은 것.
-		sql += String.format("FROM article ");
-		sql += String.format("WHERE 1 "); // 이유는 id 가 RPIMARY KEY라서 중복되는 값이 없기 때문이다. 그리고 순서를 바꿀 수 있는 이유는 WHERE 1을 걸어놨기
+		SecSql sql = new SecSql();
+		//String sql = "";
+		sql.append("SELECT *, '김혜련' AS extra__writer "); // 만들어놓은 쿼리에는 작성자명을 담을 수가 없다. 그래서 'extra__' 를 적은 것.
+		sql.append("FROM article ");
+		sql.append("WHERE 1 "); // 이유는 id 가 RPIMARY KEY라서 중복되는 값이 없기 때문이다. 그리고 순서를 바꿀 수 있는 이유는 WHERE 1을 걸어놨기
 											// 때문에 가능한 것이다.
-		sql += String.format("AND id = %d ", id); // tip : displayStatus가 이 줄에 와도 상관없지만 검색 속도를 빠르게 하고 싶다면 id를 먼저 써주는 것이
+		sql.append("AND id = ? ", id); // tip : displayStatus가 이 줄에 와도 상관없지만 검색 속도를 빠르게 하고 싶다면 id를 먼저 써주는 것이
 													// 좋다.
-		sql += String.format("AND displayStatus = 1 ");
+		sql.append("AND displayStatus = 1 ");
 
 		return new Article(DBUtil.selectRow(dbConn, sql));
 	}
@@ -79,20 +109,21 @@ public class ArticleDao extends Dao {
 	 * return dbUtil.insert(dbConn, sql); }
 	 */
 
+	/*
 	public int doPaging(int cateItemId) {
 		Map<String, Object> row = new HashMap<>();
-
-		String sql = "";
-		sql += String.format("SELECT COUNT(*) ");
-		sql += String.format("FROM article ");
-		sql += String.format("WHERE cateItemid = %d ", cateItemId);
+		SecSql sql = new SecSql();
+		//String sql = "";
+		sql.append("SELECT COUNT(*) ");
+		sql.append("FROM article ");
+		sql.append("WHERE cateItemid = ? ", cateItemId);
 
 		row = DBUtil.selectRow(dbConn, sql);
 		int totalCount = (int) row.get("COUNT(*)");
 		int totalPage = (int) Math.ceil((double) totalCount / itemInAPage);
 
 		return totalPage;
-	}
+	}*/
 
 	/*
 	 * public List<Article> getForPrintListNewArticles() {
@@ -111,19 +142,19 @@ public class ArticleDao extends Dao {
 	 */
 
 	public int getForPrintListArticlesCount(int cateItemId, String searchKeywordType, String searchKeywordTypeBody, String searchKeyword) {
+		SecSql sql = new SecSql();
+		//String sql = "";
 
-		String sql = "";
-
-		sql += String.format("SELECT COUNT(*) AS cnt ");
-		sql += String.format("FROM article ");
-		sql += String.format("WHERE displayStatus = 1 ");
+		sql.append("SELECT COUNT(*) AS cnt ");
+		sql.append("FROM article ");
+		sql.append("WHERE displayStatus = 1 ");
 		if (cateItemId != 0) {
-			sql += String.format("AND cateItemId = %d ", cateItemId);
+			sql.append("AND cateItemId = ? ", cateItemId);
 		}
 
 		if (searchKeywordType.equals("title") && searchKeywordTypeBody.equals("body") && searchKeyword.length() > 0) {
-			sql += String.format("AND title LIKE CONCAT('%%', '%s', '%%')", searchKeyword);
-			sql += String.format("OR body LIKE CONCAT('%%', '%s', '%%')", searchKeyword);
+			sql.append("AND title LIKE CONCAT('%', ?, '%')", searchKeyword);
+			sql.append("OR body LIKE CONCAT('%', ?, '%')", searchKeyword);
 		}
 		
 		
@@ -135,31 +166,15 @@ public class ArticleDao extends Dao {
 
 	}
 
-	/*
-	 * public List<Article> getSearchContents(String contents) { String sql = "";
-	 * 
-	 * sql += String.format("SELECT * "); sql += String.format("FROM article "); sql
-	 * += String.format("WHERE 1 "); sql +=
-	 * String.format("AND title LIKE '%%%s%%' ", contents); sql +=
-	 * String.format("OR `body` LIKE '%%%s%%' ", contents); sql +=
-	 * String.format("ORDER BY id DESC "); List<Map<String, Object>> rows =
-	 * dbUtil.selectRows(dbConn, sql); List<Article> articles = new ArrayList<>();
-	 * 
-	 * for ( Map<String, Object> row : rows ) { articles.add(new Article(row)); }
-	 * 
-	 * return articles;
-	 * 
-	 * }
-	 */
 
 	public List<CateItem> getForPrintCateItems() {
+		SecSql sql = new SecSql();
+		//String sql = "";
 
-		String sql = "";
-
-		sql += String.format("SELECT * ");
-		sql += String.format("FROM cateItem ");
-		sql += String.format("WHERE 1 ");
-		sql += String.format("ORDER BY id ASC "); // ASC : 만든 순서로(생성한 순서로)
+		sql.append("SELECT * ");
+		sql.append("FROM cateItem ");
+		sql.append("WHERE 1 ");
+		sql.append("ORDER BY id ASC "); // ASC : 만든 순서로(생성한 순서로)
 
 		List<Map<String, Object>> rows = DBUtil.selectRows(dbConn, sql);
 		List<CateItem> cateItems = new ArrayList<>();
@@ -172,11 +187,12 @@ public class ArticleDao extends Dao {
 	}
 
 	public CateItem getCateItem(int cateItemId) {
-		String sql = "";
-		sql += String.format("SELECT * ");
-		sql += String.format("FROM cateItem ");
-		sql += String.format("WHERE 1 ");
-		sql += String.format("AND id = %d ", cateItemId);
+		SecSql sql = new SecSql();
+		//String sql = "";
+		sql.append("SELECT * ");
+		sql.append("FROM cateItem ");
+		sql.append("WHERE 1 ");
+		sql.append("AND id = ? ", cateItemId);
 
 		return new CateItem(DBUtil.selectRow(dbConn, sql));
 	}
@@ -252,40 +268,48 @@ public class ArticleDao extends Dao {
 			*/
 			return DBUtil.insert(dbConn, secSql);
 		}
-
+		
+		/*   해당 메서드 지워도 되는건지 테스트 해보기.
 		public Article articleDetailForModify(int id) {
-			String sql = "";
-			sql += String.format("SELECT * ");
-			sql += String.format("FROM article ");
-			sql += String.format("WHERE 1 ");
-			sql += String.format("AND id = %d ", id);
+			SecSql sql = new SecSql();
+			//String sql = "";
+			sql.append("SELECT * ");
+			sql.append("FROM article ");
+			sql.append("WHERE 1 ");
+			sql.append("AND id = %d ", id);
 			
 			return new Article(DBUtil.selectRow(dbConn, sql));
 			
 		}
-
+		*/
+		
+		/*  지워도 될 듯.  없어도 되는 메서드인지 확인해보기.
 		public Article getBeforIdForDetail(int id) {
-			String sql = "";
-			sql += String.format("SELECT * ");
-			sql += String.format("FROM article ");
-			sql += String.format("WHERE id IN ( ");
-			sql += String.format("( ");	
-			sql += String.format("SELECT MAX(id) ");
-			sql += String.format("FROM article ");
-			sql += String.format("WHERE id < %d ) ", id );
-			sql += String.format(") ");
+			SecSql sql = new SecSql();
+			//String sql = "";
+			sql.append("SELECT * ");
+			sql.append("FROM article ");
+			sql.append("WHERE id IN ( ");
+			sql.append("( ");	
+			sql.append("SELECT MAX(id) ");
+			sql.append("FROM article ");
+			sql.append("WHERE id < ? ) ", id );
+			sql.append(") ");
 			return new Article(DBUtil.selectRow(dbConn, sql));
-		}
+		}*/
 
 		public int getForPageMoveBeforeArticle(int id, int cateItemId) {
-			String sql = "";
-			sql += String.format("SELECT id ");
-			sql += String.format("FROM article ");
-			sql += String.format("WHERE id < %d ", id);
-			sql += String.format("AND displayStatus = 1 ");
-			sql += String.format("AND cateItemId = %d ", cateItemId);
-			sql += String.format("ORDER BY id DESC ");
-			sql += String.format("LIMIT 1");
+			SecSql sql = new SecSql();
+			//String sql = "";
+			sql.append("SELECT id ");
+			sql.append("FROM article ");
+			sql.append("WHERE id < ? ", id);
+			sql.append("AND displayStatus = 1 ");
+			if ( cateItemId != 0 ) {
+				sql.append("AND cateItemId = ? ", cateItemId);
+			}
+			sql.append("ORDER BY id DESC ");
+			sql.append("LIMIT 1");
 			
 			int articleId = DBUtil.selectRowIntValue(dbConn, sql);
 			
@@ -293,14 +317,18 @@ public class ArticleDao extends Dao {
 		}
 
 		public int getForPageMoveAfterArticle(int id, int cateItemId) {
-			String sql = "";
-			sql += String.format("SELECT id ");
-			sql += String.format("FROM article ");
-			sql += String.format("WHERE id > %d ", id);
-			sql += String.format("AND displayStatus = 1 ");
-			sql += String.format("AND cateItemId = %d ", cateItemId);
-			sql += String.format("ORDER BY id DESC ");
-			sql += String.format("LIMIT 1");
+			SecSql sql = new SecSql();
+			//String sql = "";
+			sql.append("SELECT id");
+			sql.append("FROM article");
+			sql.append("WHERE id > ?", id);
+			sql.append("AND displayStatus = 1");
+			if ( cateItemId != 0 ) {
+				sql.append("AND cateItemId = ?", cateItemId);
+			}
+			
+			sql.append("ORDER BY id DESC ");
+			sql.append("LIMIT 1");
 			
 			int articleId = DBUtil.selectRowIntValue(dbConn, sql);
 			

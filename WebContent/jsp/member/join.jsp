@@ -17,10 +17,11 @@
 }
 
 .form1 .form-row {
-	padding:5px;
+	padding:6px;
 	align-items: center;
 	display:flex;
 	text-align:center;
+	
 	
 }
 
@@ -40,37 +41,33 @@
 .form1 .form-row>.input>input, .form1 .form-row>.input>textarea {
 	display: block;
 	width: 100%;
+	height:50px;
 	box-sizing: border-box;
 	padding: 10px;
-}
-
-.form1 .form-row>.input>select {
-	padding: 12px;
+	
 }
 
 
 .form1 .form-row:last-child .input:first-child input {
 	width:80px;
+	
 }
 
-.form1 .form-row>.input>textarea {
-	height: 600px;
-}
 
 @media ( max-width :799px) {
 	.form1 .form-row {
 		display: block;
 	}
 }
-
+	
 /* cus */
 .write-form-box {
 	position: absolute;
 	top: 50%;
 	left: 50%;
 	transform: translateX(-50%) translateY(-50%);
-	height: 500px;
-	width: 40%;
+	height: 600px;
+	width: 41%;
 	border:4px solid gold;
 }
 .blog-name {
@@ -125,7 +122,7 @@
 				<input type="button" value="취소" onclick="location.href='../home/main'" />
 			</div>
 			<div class="input">
-				<input type="submit" value="회원가입" />
+				<input type="submit" value="회원가입 정보 제출" />
 				<!-- <a href="#" onclick="history.back();">취소</a>   샘 코드 -->
 				<!-- 				<input type="button" value="취소" onclick="history.back();"/> -->
 

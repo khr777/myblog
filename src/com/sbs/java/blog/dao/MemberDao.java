@@ -41,10 +41,11 @@ public class MemberDao {
 	}
 
 	public List<Member> getForJoinMembers() {
-		String sql = "";
+		SecSql sql = new SecSql();
+		//String sql = "";
 		
-		sql += String.format("SELECT * ");
-		sql += String.format("FROM member ");
+		sql.append("SELECT * ");
+		sql.append("FROM member ");
 		
 		
 		List<Map<String, Object>> rows = DBUtil.selectRows(dbConn, sql);

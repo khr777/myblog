@@ -17,7 +17,7 @@ import com.sbs.java.blog.exception.SQLErrorException;
 public class DBUtil {
 
 	// static으로 할 수 있으면 최대한 static으로 하는게 좋다. 
-	public static Map<String, Object> selectRow (Connection connection, String sql) throws SQLErrorException {
+	public static Map<String, Object> selectRow (Connection connection, SecSql sql) throws SQLErrorException {
 		
 		List<Map<String, Object>> rows = selectRows(connection, sql);
 		if ( rows.size() == 0 ) {
@@ -27,18 +27,18 @@ public class DBUtil {
 		return rows.get(0);
 	}
 	
-	public static List<Map<String, Object>> selectRows(Connection connection, String sql) throws SQLErrorException {
+	public static List<Map<String, Object>> selectRows(Connection dbConn, SecSql sql) throws SQLErrorException {
 		List<Map<String, Object>> rows = new ArrayList<>();
 		
 		
-		Statement stmt = null;
+		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		
 		
 		
 		try {
-			stmt = connection.createStatement();
-			rs = stmt.executeQuery(sql);
+			stmt = sql.getPreparedStatement(dbConn);
+			rs = stmt.executeQuery();    // select는 executeQuery를 해주어야 한다.
 			ResultSetMetaData metaData = rs.getMetaData();
 			int columnSize = metaData.getColumnCount();
 
@@ -133,7 +133,6 @@ public class DBUtil {
 			}
 		} catch (SQLException e) {
 			throw new SQLErrorException("SQL 예외, SQL  : " + sql, e );
-			//System.err.printf("[INSERT 쿼리 오류, %s]\n" + e.getStackTrace() + "\n", sql);
 		}
 		finally {
 			if ( rs != null ) {
@@ -157,7 +156,7 @@ public class DBUtil {
 		return id;
 	}
 
-	public static int selectRowIntValue(Connection dbConn, String sql) throws SQLErrorException {
+	public static int selectRowIntValue(Connection dbConn, SecSql sql) throws SQLErrorException {
 		Map<String, Object> row = selectRow(dbConn, sql);
 		
 		for ( String key : row.keySet() ) {
@@ -168,7 +167,7 @@ public class DBUtil {
 		return -1;
 	}
 	// String은 return 값을 null로 하면 안된다. 
-	public static String selectRowStringValue(Connection dbConn, String sql) throws SQLErrorException  {
+	public static String selectRowStringValue(Connection dbConn, SecSql sql) throws SQLErrorException  {
 		Map<String, Object> row = selectRow(dbConn, sql);
 		
 		for ( String key : row.keySet() ) {
@@ -179,7 +178,7 @@ public class DBUtil {
 		return "";
 	}
 	
-	public static boolean selectRowBooleanValue(Connection dbConn, String sql) throws SQLErrorException {
+	public static boolean selectRowBooleanValue(Connection dbConn, SecSql sql) throws SQLErrorException {
 		Map<String, Object> row = selectRow(dbConn, sql);
 		
 		for ( String key : row.keySet() ) {

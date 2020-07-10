@@ -75,10 +75,15 @@ String cateItemName = (String) request.getAttribute("cateItemName");
 	
 	<div class="list-content">
 		<a href="./detail?id=<%=article.getId()%>&cateItemId=${param.cateItemId}&page=${param.page}"  class="">
-			<div class="list-title"><%=article.getTitle()%></div>
+			<div class="list-title">
+				<%=article.getTitle()%>
+			</div>
 			<div class="list-body-box">
-				<div class="list-body"><%=article.getBody()%></div>
-			</div> <br>
+				<div class="list-body">
+					<%=article.getSummary()%>
+				</div>
+			</div> 
+			<br>
 			<div class="list-id-regDate-box flex">
 				<div class="list-id">
 					<img src="../../resource/img/no.PNG" alt="" style="width: 30px;"
@@ -88,13 +93,11 @@ String cateItemName = (String) request.getAttribute("cateItemName");
 				<div class="list-regDate">
 					<img src="../../resource/img/date.PNG" alt="" style="width: 50px;"
 						style="block" />
-					<%=article.getRegDate()%></div>
+					<%=article.getRegDate()%>
+				</div>
 			</div>
 			<div class="list-updateDate" style="display: none;"><%=article.getUpdateDate()%></div>
 		</a> <br>
-		
-		
-
 	</div>
 
 	<%

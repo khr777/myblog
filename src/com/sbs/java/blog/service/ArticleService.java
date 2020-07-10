@@ -29,10 +29,12 @@ public class ArticleService extends Service  {
 	/*public void doWriteArticle(String title, String body) {
 		articleDao.doWriteArticle(title, body);
 	}*/
-
+	
+	
+	/*  없어도 되는 메서드 같음. 
 	public int doPaging(int cateItemId) {
 		return articleDao.doPaging(cateItemId);
-	}
+	}/*
 
 	/*public List<Article> getForPrintListNewArticles() {
 		return articleDao.getForPrintListNewArticles();
@@ -67,14 +69,15 @@ public class ArticleService extends Service  {
 	public int articleDelete(int id) {
 		return articleDao.articleDelete(id);
 	}
-
+	/*  없어도 되는 메서드 같음.
 	public Article articleDetailForModify(int id) {
 		return articleDao.articleDetailForModify(id);
-	}
-
+	}*/ 
+	
+	/* 없어도 되는 메서드 같음.
 	public Article getBeforIdForDetail(int id) {
 		return articleDao.getBeforIdForDetail(id);
-	}
+	} */
 
 	public int getForPageMoveBeforeArticle(int id, int cateItemId) {
 		return articleDao.getForPageMoveBeforeArticle(id, cateItemId);

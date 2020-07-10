@@ -63,6 +63,7 @@
 
 .form1 .form-row>.input>textarea {
 	height: 500px;
+	
 }
 
 @media ( max-width :799px) {
