@@ -51,10 +51,10 @@
 
 <%
 	Article article = (Article) request.getAttribute("article");
-	CateItem cateItem = (CateItem) request.getAttribute("cateItem");
-	int beforeId = (int)request.getAttribute("beforeId");
-	int afterId = (int)request.getAttribute("afterId");
-	int cateItemId = (int)request.getAttribute("cateItemId");
+CateItem cateItem = (CateItem) request.getAttribute("cateItem");
+int beforeId = (int) request.getAttribute("beforeId");
+int afterId = (int) request.getAttribute("afterId");
+int cateItemId = (int) request.getAttribute("cateItemId");
 %>
 
 <div class="con">
@@ -72,20 +72,23 @@
 				<div class="updateDate visible-on-md-up">
 					수정일 :
 					<%=article.getUpdateDate()%></div>
+				<div class="hit">
+					조회수 :
+					<%=article.getHit()%></div>
 				<div class="writer">
 					작성자 :
 					<%=article.getExtra().get("writer")%></div>
 				<div class="cateItemName">
 					카테고리 :
 					<%=cateItem.getName()%></div>
+				
 			</div>
 			<!-- 카테고리 게시물 접속했을 때, 목록 클릭하면 최신 게시물을 불러왔음. 카테고리 게시물로 이동하게 수정한 코드 -->
 			<a href="list?cateItemId=${param.cateItemId}&page=${param.page}"
 				class="back-icon list-icon"><i class="fas fa-arrow-left">목록
 			</i></a> <a
 				href="${pageContext.request.contextPath}/s/article/modify?id=<%=article.getId()%>"
-				class="back-icon  modify-icon"><i class="fas fa-edit">수정
-			</i></a>	
+				class="back-icon  modify-icon"><i class="fas fa-edit">수정 </i></a>
 
 		</div>
 		<div class="editor-box">
@@ -103,13 +106,27 @@
 			</script>
 			<br />
 			<div class="move-button">
-				<%if ( beforeId > 0 ) { %>
-					<input class="before" value="이전" type="button" onclick="location.href='detail?id=<%=beforeId%>&cateItemId=<%=cateItemId%>'"></button> <!--  둘 중에 뭘해도 값은  -->	
-				<% } %>
-				<%if ( afterId != -1 ) { %>
-					<input class="after" value="다음" type="button" onclick="location.href='detail?id=<%=afterId%>&cateItemId=<%=cateItemId%>'"></button> <!--  둘 중에 뭘해도 값은  -->
-				<%} %>
-				
+				<%
+					if (beforeId > 0) {
+				%>
+				<input class="before" value="이전" type="button"
+					onclick="location.href='detail?id=<%=beforeId%>&cateItemId=<%=cateItemId%>'">
+				</button>
+				<!--  둘 중에 뭘해도 값은  -->
+				<%
+					}
+				%>
+				<%
+					if (afterId != -1) {
+				%>
+				<input class="after" value="다음" type="button"
+					onclick="location.href='detail?id=<%=afterId%>&cateItemId=<%=cateItemId%>'">
+				</button>
+				<!--  둘 중에 뭘해도 값은  -->
+				<%
+					}
+				%>
+
 			</div>
 			<div class="delete-button">
 				<button type="submit"
@@ -137,44 +154,41 @@
 .move-button {
 	position: absolute;
 	buttom: 0;
-	
 }
 
 .delete-button {
 	position: absolute;
 	buttom: 0;
-	right:4%;
+	right: 4%;
 	width: 100px;
 }
 
-
 .toast-youtube-embed {
-  background-color:red;
+	background-color: red;
 }
 
 .toast-youtube-embed {
-  position:relative;
+	position: relative;
 }
 
 .ratio-16-9::after {
-  content:"";
-  display:block;
-  padding-top:56.25%;
+	content: "";
+	display: block;
+	padding-top: 56.25%;
 }
 
 .ratio-1-1::after {
-  content:"";
-  display:block;
-  padding-top:100%;
+	content: "";
+	display: block;
+	padding-top: 100%;
 }
 
-
 .abs-full {
-  position:absolute;
-  top:0;
-  left:0;
-  width:100%;
-  height:100%;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
 }
 </style>
 

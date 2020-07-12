@@ -250,7 +250,7 @@ public class ArticleDao extends Dao {
 		sql += String.format(" WHERE id = %d ", id);
 		*/
 		
-		DBUtil.insert(dbConn, secSql);
+		DBUtil.update(dbConn, secSql);
 		
 	}
 
@@ -266,7 +266,7 @@ public class ArticleDao extends Dao {
 			sql += String.format("DELETE FROM article ");
 			sql += String.format("WHERE id = %d ", id);
 			*/
-			return DBUtil.insert(dbConn, secSql);
+			return DBUtil.update(dbConn, secSql);
 		}
 		
 		/*   해당 메서드 지워도 되는건지 테스트 해보기.
@@ -333,6 +333,14 @@ public class ArticleDao extends Dao {
 			int articleId = DBUtil.selectRowIntValue(dbConn, sql);
 			
 			return  articleId;
+		}
+
+		public int increaseHit(int id) {
+			SecSql sql = SecSql.from("UPDATE article");
+			sql.append("SET hit = hit + 1");
+			sql.append("WHERE id = ?", id);
+			
+			return DBUtil.update(dbConn, sql);
 		}
 
 }

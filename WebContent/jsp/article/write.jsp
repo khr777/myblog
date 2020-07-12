@@ -1,6 +1,8 @@
 <%@ include file="/jsp/part/head.jspf"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+	
+	
 <style>
 /* lib   (나중에 다른 곳으로 옮길 예정이라셨음) */
 .form1 {
@@ -155,6 +157,7 @@
 			<div class="label">내용</div>
 			<div class="input">
 				<textarea name="body" placeholder="내용을 입력해주세요."></textarea>
+				<div id="editor1"></div>
 			</div>
 		</div>
 		<div class="form-row">

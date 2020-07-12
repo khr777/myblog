@@ -188,4 +188,34 @@ public class DBUtil {
 		
 		return false ;
 	}
+
+	public static int update(Connection dbConn, SecSql sql) {
+		
+		int affectedRows = 0; // 영향을 받은 개수.
+
+		// SQL을 적는 문서파일
+		PreparedStatement statement = null; 
+		try {
+			statement = sql.getPreparedStatement(dbConn);
+			affectedRows = statement.executeUpdate();  // executeUpdate라는 것은 영향을 받은 개수를 return 한다.
+			
+			
+		} catch (SQLException e) {
+			throw new SQLErrorException("SQL 예외, SQL  : " + sql, e );
+		}
+		finally {
+			if ( statement != null ) {
+				try {
+					statement.close();
+				} catch (SQLException e) {
+					throw new SQLErrorException("SQL 예외, stmt 닫기, SQL : " + sql, e);
+				}
+			}
+ 
+		}
+
+		
+		return affectedRows;
+		
+	}
 }

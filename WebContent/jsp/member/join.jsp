@@ -11,8 +11,8 @@
 	position: absolute;
 	display: block;
 	width: 550px;
-	top: 40%;
-	left: 50%;
+	top:40%;
+	left:50%;
 	transform: translateX(-50%) translateY(-50%);
 }
 
@@ -27,39 +27,42 @@
 
 
 .form1 .form-row >.label {
-	width: 150px;
+	width: 160px;
 }
+.form1 .form-row .input > input {
+	border-radius:5px;
+}
+
 
 .form1 .form-row>.input {
 	flex-grow: 1;
-	
+	margin-left:20px;
 	
 }
-
-
 
 .form1 .form-row>.input>input, .form1 .form-row>.input>textarea {
 	display: block;
 	width: 100%;
-	height:50px;
 	box-sizing: border-box;
 	padding: 10px;
 	
 }
 
+.form1 .form-row:last-child {
+}
 
-.form1 .form-row:last-child .input:first-child input {
+.form1 .form-row:last-child .input:first-child input{
+	width:400px;
+	
+	
+}
+.form1 .form-row:last-child .input:nth-child(2) input  {
 	width:80px;
 	
-}
-
-
-@media ( max-width :799px) {
-	.form1 .form-row {
-		display: block;
-	}
-}
 	
+}
+
+
 /* cus */
 .write-form-box {
 	position: absolute;
@@ -67,7 +70,7 @@
 	left: 50%;
 	transform: translateX(-50%) translateY(-50%);
 	height: 600px;
-	width: 41%;
+	width: 700px;
 	border:4px solid gold;
 }
 .blog-name {
@@ -81,6 +84,60 @@
 	text-align:center;
 	
 }
+
+
+@media ( max-width :799px) {
+	.form1 {
+		margin-top:200px;
+		width:300px;
+		
+	}
+	.blog-name {
+		font-size:1.3rem;
+		top:700px;
+		left:50%;
+		transform:translateX(-50%);
+		letter-spacing:6px;
+		width:350px;
+		text-align:center;
+	
+	}
+	.form1 .form-row >.label {
+		text-align:left;
+	}
+	.form1 .form-row {
+		display: block;
+		
+	}
+	.write-form-box {
+		border:none;
+		width:20%;
+		top:230px;
+		
+	}
+	
+	.form1 .form-row .label {
+	}
+	.form1 .form-row .input {
+		
+	}
+	.form1 .form-row>.input>input, .form1 .form-row>.input>textarea {
+	height:40px;
+	
+	
+	}
+	.form1 .form-row:last-child .input:first-child input{
+		width:265px;
+	
+	}
+	.form1 .form-row:last-child .input:nth-child(2) input  {
+		width:100px;
+	
+	}
+	
+	
+}
+	
 
 </style>
 
@@ -119,13 +176,13 @@
 		</div>
 		<div class="form-row">
 			<div class="input">
-				<input type="button" value="취소" onclick="location.href='../home/main'" />
-			</div>
-			<div class="input">
 				<input type="submit" value="회원가입 정보 제출" />
 				<!-- <a href="#" onclick="history.back();">취소</a>   샘 코드 -->
 				<!-- 				<input type="button" value="취소" onclick="history.back();"/> -->
 
+			</div>
+			<div class="input">
+				<input type="button" value="취소" onclick="location.href='../home/main'" />
 			</div>
 		</div>
 	</form>

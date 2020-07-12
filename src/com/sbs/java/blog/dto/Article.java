@@ -7,6 +7,7 @@ public class Article extends Dto {
 	private int cateItemId;
 	private String title;
 	private String body;
+	private int hit;
 
 	public Article() {
 
@@ -20,14 +21,25 @@ public class Article extends Dto {
 		this.cateItemId = (int) row.get("cateItemId");
 		this.title = (String) row.get("title");
 		this.body = (String) row.get("body");
+		this.hit = (int)row.get("hit");
 
 	}
-
+	
 	@Override
 	public String toString() {
 		return "Article [updateDate=" + updateDate + ", cateItemId=" + cateItemId + ", title=" + title + ", body="
-				+ body + ", getId()=" + getId() + ", getRegDate()=" + getRegDate() + ", dto=" + super.toString() + "]";
+				+ body + ", hit + " + hit + ", getId()=" + getId() + ", getRegDate()=" + getRegDate() + ", dto=" + super.toString() + "]";
 	}
+
+	public int getHit() {
+		return hit;
+	}
+
+	public void setHit(int hit) {
+		this.hit = hit;
+	}
+
+
 
 	public String getUpdateDate() {
 		return updateDate;
@@ -55,7 +67,7 @@ public class Article extends Dto {
 
 	public String getBody() {
 		return body;
-	}
+	}	
 
 	public void setBody(String body) {
 		this.body = body;
@@ -67,6 +79,8 @@ public class Article extends Dto {
 		summary = summary.replace("-", ""); // - 없애기
 		summary = summary.replace("!", ""); // ! 없애기
 		summary = summary.replace("#", ""); // # 없애기
+		summary = summary.replace("*", ""); // # 없애기
+		
 		summary = summary.replaceAll("\\(.*?\\)", ""); // (~) 없애기
 		summary = summary.replaceAll("\\[.*?\\]", ""); // [~] 없애기
 

@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SecSql {
-	private String sqlType;
 	private StringBuilder sqlBuilder;
 	private List<Object> datas;
 
@@ -23,7 +22,7 @@ public class SecSql {
 	
 	
 	
-	public void append(Object... args) {
+	public SecSql append(Object... args) {
 		if (args.length > 0) {
 			String sqlBit = (String) args[0];
 			sqlBuilder.append(sqlBit + " ");
@@ -32,6 +31,7 @@ public class SecSql {
 		for (int i = 1; i < args.length; i++) {
 			datas.add(args[i]);
 		}
+		return this; // append가 자신이 할 일을 한 후, 자기 자신을 return 한다. 
 	}
 
 	public PreparedStatement getPreparedStatement(Connection dbConn) throws SQLException {
@@ -40,7 +40,7 @@ public class SecSql {
 		if (isInsert()) {
 			stmt = dbConn.prepareStatement(getFormat(), Statement.RETURN_GENERATED_KEYS);
 		} else {
-			stmt = dbConn.prepareStatement(getFormat(), Statement.RETURN_GENERATED_KEYS);
+			stmt = dbConn.prepareStatement(getFormat());
 		}												//이걸 추가하니까 수정, 삭제 가능해짐...왜 때문이지ㅠㅠ
 
 		for (int i = 0; i < datas.size(); i++) {
@@ -59,5 +59,10 @@ public class SecSql {
 
 	public String getFormat() {
 		return sqlBuilder.toString();
+	}
+	
+	//빌더 패턴
+	public static SecSql from(String sql) {
+		return new SecSql().append(sql);
 	}
 }

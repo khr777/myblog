@@ -553,7 +553,7 @@ html {
 	height:70%;
 	top:20%;
 }
-.detail-box-1 .writeData > .date, .updateDate, .writer, .id, .cateItemName {
+.detail-box-1 .writeData > .date, .updateDate, .writer, .id, .cateItemName, .hit{
 	position:absolute;
 }
 
@@ -567,6 +567,10 @@ html {
 
 .detail-box-1 .writeData  .updateDate {
 	margin-top:50px;
+}
+.detail-box-1 .writeData .hit {
+	margin-top:10px;
+	margin-left:300px;
 }
 
 .detail-box-1 .writeData .cateItemName  {
@@ -612,7 +616,7 @@ html {
 
 .detail-box-1 .data-box-1  {
 	border:1px solid black;
-	padding:10px 0;
+	padding:15px 0;
 	border-top-width:0;
 	border-left-width:0;
 	border-right-width:0;
@@ -665,6 +669,11 @@ html {
 		
 	} 
 	
+	.detail-box-1 .data-box-1 .hit {
+		margin-top:90px;
+		margin-left:0;
+		
+	} 
 }
 /* 모바일 상세보기 반응형 끝 */
 

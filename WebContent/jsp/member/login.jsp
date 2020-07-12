@@ -19,17 +19,25 @@
 	display:flex;
 	text-align:center;
 	
+	
+	
 }
 
 
 
 .form1 .form-row>.label {
-	width:130px;
+	width:30%;
+	
 	
 }
 
 .form1 .form-row>.input {
 	flex-grow:1;
+	
+}
+
+.form1 .form-row .input > input {
+	border-radius:5px;
 }
 
 .form1 .form-row:nth-child(4) .input {
@@ -66,11 +74,7 @@
 	
 }
 
-@media ( max-width :799px) {
-	.form1 .form-row {
-		display: block;
-	}
-}
+
 
 /* cus */
 .write-form-box {
@@ -78,8 +82,8 @@
 	top:50%;
 	left:50%;
 	transform:translateX(-50%) translateY(-50%);
-	height:500px;
-	width:30%;
+	height:600px;
+	width:500px;
 	border:2px solid gold;
 }
 
@@ -108,11 +112,51 @@
 	display: block;
 }
 @media ( max-width :799px) {
+	.form1 {
+		margin-top:200px;
+		
+	}
+	.blog-name {
+		font-size:1.7rem;
+		top:100%;
+		left:96%;
+		transform:translateX(-50%);
+		letter-spacing:10px;
+	}
+	.write-form-box {
+		border:none;
+		width:20%;
+		top:250px;
+		left:42%;
+		
+		
+	}
 	.write-form-box .blank-box {
 	top:240px;
 	right:-8%;
 	
+	
 	}
+	.form1 .form-row {
+		display: block;
+		width:80%;
+		margin-left:auto;
+		margin-top:auto;
+		text-align:left;
+		
+	}
+	.form1 .form-row>.input {
+		flex-grow:1;
+	}
+	.form1 .form-row .label {
+		width:45%;
+	}
+	.form1 .form-row:nth-child(4) { 
+		display:flex;
+		
+	}
+	
+	
 }
 </style>
 

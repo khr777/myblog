@@ -87,5 +87,10 @@ public class ArticleService extends Service  {
 		return articleDao.getForPageMoveAfterArticle(id, cateItemId);
 	}
 
+	public void increaseHit(int id) {
+		articleDao.increaseHit(id);
+		
+	}
+
 
 }

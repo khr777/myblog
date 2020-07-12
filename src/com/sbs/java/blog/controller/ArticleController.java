@@ -38,16 +38,10 @@ public class ArticleController extends Controller {
 			return doActionEditor(req, resp);
 		case "aboutMe":
 			return doActionAboutMe(req, resp);
-		/*case "listWrite":
-			return doActionListWrite(req, resp);*/
 		case "modify":
 			return doActionModify(req, resp);
 		case "delete":
 			return doActionDelete(req, resp);
-		/*case "listWriteOk":
-			return doActionListWriteOk(req,resp);*/
-		/*case "modifyOk":
-			return doActionModifyOk(req, resp);*/
 		case "write":
 			return doActionWrite(req, resp);
 		case "doWrite":
@@ -145,50 +139,7 @@ public class ArticleController extends Controller {
 		return "article/write.jsp";
 	}
 	
-	/* private String doActionListWriteOk(HttpServletRequest req, HttpServletResponse resp) {
-		// 샘이 만들어주신 검색 기능
-
-				int displayStatus = 0;
-
-				if (!Util.empty(req, "displayStatus") && Util.isNum(req, "displayStatus")) { // cateItemId가 없지 않고 숫자가 맞으면
-
-					displayStatus = Util.getInt(req, "displayStatus");
-
-				}
-
-				int cateItemId = 0;
-
-				if (!Util.empty(req, "cateItemId") && Util.isNum(req, "cateItemId")) { // cateItemId가 없지 않고 숫자가 맞으면
-
-					cateItemId = Util.getInt(req, "cateItemId");
-
-				}
-
-				String title = ""; // keywordType이 더 중요하니까 searchkeyword보다 위에 써주는게 낫다.
-
-				if (!Util.empty(req, "title")) { // cateItemId가 없지 않고 숫자가 맞으면
-
-					title = Util.getString(req, "title");
-					
-
-				}
-				
-				
-
-				String body = "";
-
-				if (!Util.empty(req, "body")) { // cateItemId가 없지 않고 숫자가 맞으면
-
-					body = Util.getString(req, "body");
-					
-				}
-				
-				
-				
-				articleService.write(displayStatus, cateItemId, title, body);
-				
-		return "article/listWriteOk.jsp";
-	}  */
+	
 
 	private String doActionDelete(HttpServletRequest req, HttpServletResponse resp) {
 		
@@ -209,104 +160,7 @@ public class ArticleController extends Controller {
 		return "html:<script> alert('" + id + "번 게시물이 삭제되었습니다.'); location.replace('list'); </script>";
 	} 
 
-	/*private String doActionModify2(HttpServletRequest req, HttpServletResponse resp) {
-		String title = req.getParameter("title");
-		String body = req.getParameter("body");
-		
-		
-		int cateItemId = Util.getInt(req, "cateItemId");
-		int displayStatus = Util.getInt(req, "displayStatus");
-	
-		if (title.length() == 0 && body.length() == 0 ) {
-			return "html:<script> alert('제목과 내용을 입력바랍니다.'); history.back();  </script>";
-		}
-		else if ( title.length() == 0 ) {
-			return "html:<script> alert('제목을 입력바랍니다.'); history.back(); </script>";
-		}
-		else if ( body.length() == 0 ) {
-			return "html:<script> alert('내용을 입력바랍니다.'); history.back(); </script>";
-		}
-		
-		int id = articleService.write(cateItemId, displayStatus, title, body);
-		
-				
-		return "html:<script> alert('" + id + "번 게시물이 생성되었습니다.'); location.replace('list'); </script>";
-		
-		int id = 0;
 
-		if (!Util.empty(req, "id") && Util.isNum(req, "id")) { // cateItemId가 없지 않고 숫자가 맞으면
-
-			id = Util.getInt(req, "id");
-
-		}
-	
-		
-		
-		
-		int cateItemId = 0;
-
-		if (!Util.empty(req, "cateItemId") && Util.isNum(req, "cateItemId")) { // cateItemId가 없지 않고 숫자가 맞으면
-
-			cateItemId = Util.getInt(req, "cateItemId");
-
-		}
-		
-		
-		String title = ""; // keywordType이 더 중요하니까 searchkeyword보다 위에 써주는게 낫다.
-
-		if (!Util.empty(req, "title")) { // cateItemId가 없지 않고 숫자가 맞으면
-
-			title = Util.getString(req, "title");
-
-		}
-
-		String body = "";
-
-		if (!Util.empty(req, "body")) { 
-
-			body = Util.getString(req, "body");
-
-		}
-		
-		
-		String cateItemName = "전체";
-
-		if (cateItemId != 0) {
-			CateItem cateItem = articleService.getCateItem(cateItemId);
-			cateItemName = cateItem.getName();
-		}
-
-		req.setAttribute("cateItemName", cateItemName);
-		
-		Article article = articleService.articleDetailForModify(id);
-		req.setAttribute("article", article);
-		
-		//title, body가 null 도 아니고 길이가 0인 문자였음........ 
-		if ( title.length() == 0 || body.length() == 0 ) { //   이 코드들 없어도 될 것 같음( 초반에 method="get" 방식으로 할 때, 내가 작성했었던 것 같음)
-			articleService.ArticleModify(article.getId(), article.getCateItemId(), article.getTitle(), article.getBody());
-			return "article/modify.jsp";
-		}
-		else if ( title.length() == 0 && body.length() == 0 ) {
-			articleService.ArticleModify(article.getId(), article.getCateItemId(), article.getTitle(), article.getBody());
-			return "article/modify.jsp";
-		} 
-		
-		
-		
-		articleService.ArticleModify(id, cateItemId, title, body);
-		req.setAttribute("id", id);
-		req.setAttribute("cateItemId", cateItemId);
-		req.setAttribute("title", title);
-		req.setAttribute("body", body);
-			
-	
-		
-		
-		
-		
-
-		return "article/modify.jsp"; 
-	}*/
 	
 	private String doActionListWrite(HttpServletRequest req, HttpServletResponse resp) {
 
@@ -345,6 +199,8 @@ public class ArticleController extends Controller {
 			cateItemId = Util.getInt(req, "cateItemId");
 
 		}
+		
+		articleService.increaseHit(id);
 		
 		// 이 article은 그냥(평범한) article이 아니다.
 		Article article = articleService.getForPrintArticle(id); // sql 쿼리에 작성해놓은 정보들만이 아닌 부가적으로 추가한 자잘한 (항목 추가한)작성자 등
