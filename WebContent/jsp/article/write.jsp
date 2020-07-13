@@ -1,6 +1,34 @@
 <%@ include file="/jsp/part/head.jspf"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+
+
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/languages/css.min.js"></script>
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/languages/javascript.min.js"></script>
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/languages/java.min.js"></script>
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/languages/xml.min.js"></script>
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/languages/php.min.js"></script>
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/languages/php-template.min.js"></script>
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/languages/sql.min.js"></script>
+
+	<link rel="stylesheet"
+		href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.48.4/codemirror.min.css" />
+
+	<script
+		src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
+
+	<script
+		src="https://uicdn.toast.com/editor-plugin-code-syntax-highlight/latest/toastui-editor-plugin-code-syntax-highlight-all.min.js"></script>
+
+	<link rel="stylesheet"
+		href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css" />
 	
 	
 <style>
@@ -156,7 +184,8 @@
 		<div class="form-row">
 			<div class="label">내용</div>
 			<div class="input">
-				<textarea name="body" placeholder="내용을 입력해주세요."></textarea>
+				<input type="hidden" name="body" /> 
+<!-- 				<textarea name="body" placeholder="내용을 입력해주세요."></textarea> -->
 				<div id="editor1"></div>
 			</div>
 		</div>
@@ -172,6 +201,18 @@
 	</form>
 </div>
 <script>
+
+
+var editor1 = new toastui.Editor({
+el: document.querySelector("#editor1"),
+height: "600px",
+initialEditType: "markdown",
+previewStyle: "vertical",
+initialValue: "# 안녕",
+plugins: [toastui.Editor.plugin.codeSyntaxHighlight, youtubePlugin, replPlugin, codepenPlugin]
+});
+
+
 function submitWriteForm(form) {
 
 	form.title.value = form.title.value.trim();
@@ -180,25 +221,18 @@ function submitWriteForm(form) {
 		form.title.focus();
 		return;
 	}
-	form.body.value = form.body.value.trim();
-	if ( form.body.value.length == 0 ) {
+	var source = editor1.getMarkdown().trim();
+	if ( source.length == 0 ) {
 		alert('내용을 입력해주세요.');
-		form.body.focus();
+		editor1.focus();
 		return;
 	}
-	
-	//변수 추가해서 원하는 값을 얻지 못했을 경우, 게시물 생성하지 못하도록하는 방법 찾아보기.
-	// form.cateItemId.vaule = form.cateItem.value.trim();
-	//if ( form.cateItemId == 0 ) {
-		//alert('카테고리를 선택해주세요.');
-	//	return;
-//	}
-
-	
-	
+	form.body.value = source;
 	form.submit();
 	
 }
+
+
 </script>
 
 <%@ include file="/jsp/part/foot.jspf"%>

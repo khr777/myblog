@@ -66,23 +66,28 @@ public class Article extends Dto {
 	}
 
 	public String getBody() {
+		
+		
 		return body;
+
 	}	
 
 	public void setBody(String body) {
+
 		this.body = body;
+		
 	}
 
 	public String getSummary() {
 		String summary = this.getBody();
-
+		
 		summary = summary.replace("-", ""); // - 없애기
 		summary = summary.replace("!", ""); // ! 없애기
 		summary = summary.replace("#", ""); // # 없애기
-		summary = summary.replace("*", ""); // # 없애기
-		
+		summary = summary.replace("*", ""); // * 없애기
 		summary = summary.replaceAll("\\(.*?\\)", ""); // (~) 없애기
 		summary = summary.replaceAll("\\[.*?\\]", ""); // [~] 없애기
+		
 
 		return summary;
 	}

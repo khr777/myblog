@@ -2,6 +2,35 @@
 <%@ page import="com.sbs.java.blog.dto.Article"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+	
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/languages/css.min.js"></script>
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/languages/javascript.min.js"></script>
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/languages/java.min.js"></script>
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/languages/xml.min.js"></script>
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/languages/php.min.js"></script>
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/languages/php-template.min.js"></script>
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/languages/sql.min.js"></script>
+
+	<link rel="stylesheet"
+		href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.48.4/codemirror.min.css" />
+
+	<script
+		src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
+
+	<script
+		src="https://uicdn.toast.com/editor-plugin-code-syntax-highlight/latest/toastui-editor-plugin-code-syntax-highlight-all.min.js"></script>
+
+	<link rel="stylesheet"
+		href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css" />
+	
+	
 <%
 	Article article = (Article) request.getAttribute("article");
 String cateItemName = (String) request.getAttribute("cateItemName");
@@ -148,7 +177,9 @@ String cateItemName = (String) request.getAttribute("cateItemName");
 		<div class="form-row">
 			<div class="label">내용</div>
 			<div class="input">
-				<textarea name="body"  ><%=article.getBody()%></textarea>
+				<input id="body" type="hidden" name="body" value="<%=article.getBody()%>"/> 
+<!-- 				<textarea name="body" placeholder="내용을 입력해주세요."></textarea> -->
+				<div id="editor1"></div>
 			</div>
 		</div>
 		<div class="form-row">
@@ -162,6 +193,16 @@ String cateItemName = (String) request.getAttribute("cateItemName");
 	</form>
 </div>
 <script>
+
+var editor1 = new toastui.Editor({
+	el: document.querySelector("#editor1"),
+	height: "600px",
+	initialEditType: "markdown",
+	previewStyle: "vertical",
+	initialValue: document.querySelector("#body").value,
+	plugins: [toastui.Editor.plugin.codeSyntaxHighlight, youtubePlugin, replPlugin, codepenPlugin]
+	});
+
 function submitModifyForm(form) {
 	form.title.value = form.title.value.trim();
 	if ( form.title.value.length == 0 ) {
@@ -169,12 +210,13 @@ function submitModifyForm(form) {
 		form.title.focus();
 		return;
 	}
-	form.body.value = form.body.value.trim();
-	if ( form.body.value.length == 0 ) {
+	var source = editor1.getMarkdown().trim();
+	if ( source.length == 0 ) {
 		alert('내용을 입력해주세요.');
-		form.body.focus();
+		editor1.focus();
 		return;
 	}
+	form.body.value = source;
 	
 	form.submit();
 	

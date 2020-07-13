@@ -61,7 +61,8 @@
 			console.clear();
 			var editor1 = new toastui.Editor({
 				el : document.querySelector('#editor1'),
-				height : '600px',
+// 				height : '600px',
+				width : '100%',
 				initialEditType : 'markdown',
 				previewStyle : 'vertical',
 				initialValue : "# 안녕하세요",
