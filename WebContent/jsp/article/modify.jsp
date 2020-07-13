@@ -145,6 +145,7 @@ String cateItemName = (String) request.getAttribute("cateItemName");
 			<div class="label">카테고리 선택</div>
 			<div class="input">
 				<select name="cateItemId">
+					<option value="<%=article.getCateItemId()%>"><%=cateItemName%></option>
 					<%
 						for (CateItem cateItem : cateItems) {
 					%>
@@ -177,9 +178,22 @@ String cateItemName = (String) request.getAttribute("cateItemName");
 		<div class="form-row">
 			<div class="label">내용</div>
 			<div class="input">
-				<input id="body" type="hidden" name="body" value="<%=article.getBody()%>"/> 
-<!-- 				<textarea name="body" placeholder="내용을 입력해주세요."></textarea> -->
-				<div id="editor1"></div>
+				<input type="hidden" name="body" />
+				<script type="text/x-template" id="origin1" style="display: none;"  ><%=article.getBodyForXTemplate()%></script>
+			<div id="editor1"></div>
+			<script>
+				var editor1__initialValue = $('#origin1').html().trim(); // trim() 추가했음. 
+				var editor1 = new toastui.Editor({
+					el : document.querySelector("#editor1"),
+					previewStyle: "vertical",
+					height:"700px",
+					initialEditType: "markdown",
+					viewer : true,
+					initialValue : editor1__initialValue.replace(/<!--REPLACE:script-->/gi,'script'),
+					plugins : [ toastui.Editor.plugin.codeSyntaxHighlight,
+							youtubePlugin, replPlugin, codepenPlugin ]
+				});
+			</script>
 			</div>
 		</div>
 		<div class="form-row">
@@ -194,14 +208,14 @@ String cateItemName = (String) request.getAttribute("cateItemName");
 </div>
 <script>
 
-var editor1 = new toastui.Editor({
-	el: document.querySelector("#editor1"),
-	height: "600px",
-	initialEditType: "markdown",
-	previewStyle: "vertical",
-	initialValue: document.querySelector("#body").value,
-	plugins: [toastui.Editor.plugin.codeSyntaxHighlight, youtubePlugin, replPlugin, codepenPlugin]
-	});
+// var editor1 = new toastui.Editor({
+// 	el: document.querySelector("#editor1"),
+// 	height: "600px",
+// 	initialEditType: "markdown",
+// 	previewStyle: "vertical",
+// 	initialValue: document.querySelector("#body").value.replace(/<!--REPLACE:script-->/gi,'script'),
+// 	plugins: [toastui.Editor.plugin.codeSyntaxHighlight, youtubePlugin, replPlugin, codepenPlugin]
+// 	});
 
 function submitModifyForm(form) {
 	form.title.value = form.title.value.trim();

@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.sbs.java.blog.dto.Article;
+import com.sbs.java.blog.dto.ArticleReply;
 import com.sbs.java.blog.dto.CateItem;
 import com.sbs.java.blog.util.DBUtil;
 import com.sbs.java.blog.util.SecSql;
@@ -230,8 +231,7 @@ public class ArticleDao extends Dao {
 			SecSql secSql = new SecSql();
 			
 			secSql.append("UPDATE article  "); 
-			secSql.append("SET regDate = NOW()" );
-			secSql.append(", updateDate = NOW()");
+			secSql.append("SET updateDate = NOW()");
 			secSql.append(", cateItemId = ?", cateItemId);
 			secSql.append(", title = ?", title);
 			secSql.append(", body = ? ", body);
@@ -341,6 +341,52 @@ public class ArticleDao extends Dao {
 			sql.append("WHERE id = ?", id);
 			
 			return DBUtil.update(dbConn, sql);
+		}
+
+		public int getArticleReply(String body, int articleId) {
+			SecSql sql = SecSql.from("INSERT INTO articleReply");
+			sql.append("SET regDate = NOW()");
+			sql.append(", updateDate = NOW()");
+			sql.append(", articleId = ?", articleId);
+			sql.append(", `body` = ?",body );
+			sql.append(", memberId = 1");
+			
+			
+			return DBUtil.insert(dbConn, sql);
+		}
+
+		public List<ArticleReply> getArticleRepliesForDetail(int articleId) {
+			SecSql sql = SecSql.from("SELECT * ");
+			sql.append("FROM articleReply");
+			sql.append("WHERE articleId = ?", articleId);
+			
+			List<Map<String, Object>> rows = DBUtil.selectRows(dbConn, sql);
+			List<ArticleReply> articleReplies = new ArrayList<>();
+
+			for (Map<String, Object> row : rows) {
+				articleReplies.add(new ArticleReply(row));
+			}
+			return articleReplies;
+		}
+
+		public int articleReplyDelete(int replyId) {
+			SecSql secSql = new SecSql();
+			
+			secSql.append("DELETE FROM articleReply ");
+			secSql.append("WHERE id = ? ", replyId);
+			
+			return DBUtil.update(dbConn, secSql);
+		}
+
+		public void articleReplyModify(int replyId, String body) {
+			SecSql sql = SecSql.from("UPDATE articleReply ");
+			sql.append("SET updateDate = NOW()");
+			sql.append(", body = ? ", body);
+			sql.append(" WHERE id = ?", replyId);
+			
+		
+			DBUtil.update(dbConn, sql);
+		
 		}
 
 }

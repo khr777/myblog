@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.sbs.java.blog.dao.ArticleDao;
 import com.sbs.java.blog.dto.Article;
+import com.sbs.java.blog.dto.ArticleReply;
 import com.sbs.java.blog.dto.CateItem;
 
 public class ArticleService extends Service  {
@@ -90,6 +91,22 @@ public class ArticleService extends Service  {
 	public void increaseHit(int id) {
 		articleDao.increaseHit(id);
 		
+	}
+
+	public int getArticleReply(String body, int articleId) {
+		return articleDao.getArticleReply(body, articleId);
+	}
+
+	public List<ArticleReply> getArticleRepliesForDetail(int articleId) {
+		return articleDao.getArticleRepliesForDetail(articleId);
+	}
+
+	public void articleReplyDelete(int replyId) {
+		articleDao.articleReplyDelete(replyId);
+	}
+
+	public void articleReplyModify(int replyId, String body) {
+		articleDao.articleReplyModify(replyId, body);
 	}
 
 

@@ -1,5 +1,6 @@
 <%@ include file="/jsp/part/head.jspf"%>
 <%@ page import="com.sbs.java.blog.dto.Article"%>
+<%@ page import="com.sbs.java.blog.dto.ArticleReply"%>
 <%@ page import="java.util.List"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
@@ -50,11 +51,12 @@
 
 
 <%
-	Article article = (Article) request.getAttribute("article");
+Article article = (Article) request.getAttribute("article");
 CateItem cateItem = (CateItem) request.getAttribute("cateItem");
 int beforeId = (int) request.getAttribute("beforeId");
 int afterId = (int) request.getAttribute("afterId");
 int cateItemId = (int) request.getAttribute("cateItemId");
+List<ArticleReply> articleReplies = (List<ArticleReply>)request.getAttribute("articleReplies");
 %>
 
 <div class="con">
@@ -92,14 +94,14 @@ int cateItemId = (int) request.getAttribute("cateItemId");
 
 		</div>
 		<div class="editor-box">
-			<script type="text/x-template" id="origin1" style="display: none;"><%=article.getBody()%></script>
+			<script type="text/x-template" id="origin1" style="display: none;"><%=article.getBodyForXTemplate()%></script>
 			<div id="viewer1"></div>
 			<script>
 				var editor1__initialValue = $('#origin1').html().trim(); // trim() 추가했음. 
 				var editor1 = new toastui.Editor({
 					el : document.querySelector("#viewer1"),
 					viewer : true,
-					initialValue : editor1__initialValue,
+					initialValue : editor1__initialValue.replace(/<!--REPLACE:script-->/gi,'script'),
 					plugins : [ toastui.Editor.plugin.codeSyntaxHighlight,
 							youtubePlugin, replPlugin, codepenPlugin ]
 				});
@@ -134,15 +136,50 @@ int cateItemId = (int) request.getAttribute("cateItemId");
 					style="position: absolute; left: 80%; top: 30%;">삭제</button>
 			</div>
 		</div>
+		<form name="replyForm" action="doArticleReply" method="POST" class="form2" onsubmit="submitArticleReply(this); return false;">
+			<div class="replyWrite-box">
+				<div class="write">
+					<div class="label">댓글
+					<input type="hidden" name="articleId" value="${param.id}"/>
+					<input type="text" name="body" placeholder="댓글을 입력해주세요."/>
+					</div>
+				</div>
+				<div class="submit">
+					<input type="submit" value="등록"/>
+				</div>
+			</div>
+		</form>
+		<% for ( ArticleReply articleReply : articleReplies) { %>
+		<div class="replyList">
+			<div class="reply-contents">
+				<div class="writer-data">
+					<div class="writer1">작성자 : <%=articleReply.getMemberId()%></div>
+					<div class="regDate1">작성일 : <%=articleReply.getRegDate()%> </div>
+					<input type="hidden" value="${param.id}"/>
+				</div>
+				<div class="body"><%=articleReply.getBody()%></div>	
+			</div>
+			<div class="button">
+				<form action="doReplyModify" name="reply" method="POST" onsubmit="replyModify(this)">
+					<input type="submit" name="body" value="수정"/>
+					<input type="hidden" name="replyId" value="<%=articleReply.getId()%>"/>
+					<input type="hidden" name="articleId" value="${param.id}"/>
+				</form>
+				<button type="submit"  onclick="location.href='doReplyDelete?replyId=<%=articleReply.getId()%>&id=${param.id}'">삭제</button>
+			</div>
+		</div>
+		<div class="border"></div>
+		<% } %>
 	</div>
+	
 </div>
 
 
-
-
-
-
-
+<!-- 1. 작성자  -->
+<!-- 2. regDate -->
+<!-- 3. body -->
+<!-- 4. 수정 -->
+<!-- 5. 삭제 -->
 
 
 
@@ -190,6 +227,96 @@ int cateItemId = (int) request.getAttribute("cateItemId");
 	width: 100%;
 	height: 100%;
 }
+
+/* 댓글 등록 시작 */ 
+.form2 {
+	margin-bottom:30px;
+}
+.form2 .replyWrite-box {
+	display:flex;
+	justify-content:space-between;
+	align-items:center;
+}
+
+.form2 .replyWrite-box .write {
+	width:100%;
+}
+
+.form2 .replyWrite-box .submit {
+	margin-right:25px;
+}
+
+
+.form2 .replyWrite-box .write .label > input {
+	margin-left:20px;
+	height:20px;
+	width:90%;
+}
+
+/* 댓글 등록 끝 */
+
+/* 댓글 리스팅 시작 */
+.replyList {
+	margin-top:10px;
+	display:flex;
+	justify-content:space-between;
+}
+
+.border {
+	border:1px solid #dfdfdf;
+	border-top:0;
+	border-left:0;
+	border-right:0;
+	margin-top:10px;
+	margin-bottom:10px;
+}
+.replyList .reply-contents {
+	width:87%;
+}
+
+.replyList .reply-contents .writer-data .writer1, .regDate1 {
+	font-size:0.7rem;
+}
+
+.replyList .reply-contents  .body {
+}
+
+.replyList .button {
+	display:flex;
+	flex-direction:column;
+	margin-right:23px;
+}
+
 </style>
+<script>
+var articleReplySubmitted = false;
+function submitArticleReply(replyForm) {
+	
+	if ( articleReplySubmitted ) {
+		alert('처리중입니다.');
+		return;
+	}
+	replyForm.body.value = replyForm.body.value.trim();
+	if ( replyForm.body.value.length == 0 ) {
+		alert('댓글을 입력해주세요.');
+		replyForm.body.focus();
+		return;
+	}
+	replyForm.submit();
+	articleReplySubmitted = true;
+}
+
+function replyModify(reply) {
+	reply.body.value = prompt("댓글을 수정해주세요.");
+	if ( reply.body.value.length == 0  ) {
+		alert('수정하실 댓글을 입력바랍니다.');
+		reply.body.value = prompt("댓글을 수정해주세요.");
+	}
+	
+	
+	reply.submit();
+	
+}
+</script>
 
 <%@ include file="/jsp/part/foot.jspf"%>

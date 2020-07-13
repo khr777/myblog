@@ -4,12 +4,12 @@
 SET NAMES utf8mb4;
 
 #DB 생성
-DROP DATABASE IF EXISTS site24;
-CREATE DATABASE site24;
-USE site24;
+# DROP DATABASE IF EXISTS site24;
+# CREATE DATABASE site24;
+# USE site24;
 
 #카테고리 테이블 생성
-DROP TABLE IF EXISTS cateItem;
+# DROP TABLE IF EXISTS cateItem;
 CREATE TABLE cateItem (
     id INT(10) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
     regDate DATETIME NOT NULL,
@@ -51,7 +51,7 @@ SELECT *
 FROM cateItem;
 
 # 게시물 테이블 생성
-DROP TABLE IF EXISTS article;
+# DROP TABLE IF EXISTS article;
 CREATE TABLE article (
     id INT(10) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
     regDate DATETIME NOT NULL,
@@ -813,5 +813,25 @@ LIMIT 1
 # 조회수 칼럼 추가
 ALTER TABLE article ADD COLUMN hit INT(10) UNSIGNED NOT NULL AFTER `body`;
 
-SELECT * 
-FROM article;
+DESC article;
+
+# member field 추가 (updateDate)
+ALTER TABLE MEMBER ADD COLUMN updateDate DATETIME NOT NULL AFTER regDate;
+
+# member field 추가 (email)
+ALTER TABLE `member` ADD COLUMN email CHAR(200) NOT NULL AFTER loginPwReal;
+
+# article table에 field 추가(memberId)
+ALTER TABLE article ADD COLUMN memberId INT(10) UNSIGNED NOT NULL AFTER hit;
+
+CREATE TABLE articleReply (
+    id INT(10) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    regDate DATETIME NOT NULL,
+    updateDate DATETIME NOT NULL,
+    articleId INT(10) UNSIGNED NOT NULL,
+    `body` TEXT NOT NULL,
+    memberId INT(10) UNSIGNED NOT NULL
+);
+
+SELECT *
+FROM articleReply;

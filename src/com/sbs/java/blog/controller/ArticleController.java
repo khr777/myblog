@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.xml.ws.RequestWrapper;
 
 import com.sbs.java.blog.dto.Article;
+import com.sbs.java.blog.dto.ArticleReply;
 import com.sbs.java.blog.dto.CateItem;
 import com.sbs.java.blog.util.Util;
 
@@ -48,11 +49,68 @@ public class ArticleController extends Controller {
 			return doActionDoWrite(req, resp);
 		case "doModify":
 			return doModify(req, resp);
+		case "doArticleReply":
+			return doActionArticleReply(req, resp);
+		case "doReplyModify":
+			return doActionDoReplyModify(req,resp);
+		case "doReplyDelete":
+			return doActionDoReplyDelete(req,resp);
 		}
-
 		return "";
 	}
 	
+	private String doActionDoReplyDelete(HttpServletRequest req, HttpServletResponse resp) {
+		int replyId = 0;
+
+		if (!Util.empty(req, "replyId") && Util.isNum(req, "replyId")) { // cateItemId가 없지 않고 숫자가 맞으면
+			replyId = Util.getInt(req, "replyId");
+		}
+		System.out.println(replyId);
+		int id = 0;
+
+		if (!Util.empty(req, "id") && Util.isNum(req, "id")) { // cateItemId가 없지 않고 숫자가 맞으면
+			id = Util.getInt(req, "id");
+		}
+		
+		articleService.articleReplyDelete(replyId);
+		
+
+		return "html:<script> alert('작성하신 댓글을 삭제했습니다.'); location.replace('detail?id=" + id + "'); </script>";
+	}
+
+	private String doActionDoReplyModify(HttpServletRequest req, HttpServletResponse resp) {
+		int replyId = 0;
+
+		if (!Util.empty(req, "replyId") && Util.isNum(req, "replyId")) { // cateItemId가 없지 않고 숫자가 맞으면
+			replyId = Util.getInt(req, "replyId");
+		}
+		
+		int articleId = 0;
+
+		if (!Util.empty(req, "articleId") && Util.isNum(req, "articleId")) { // cateItemId가 없지 않고 숫자가 맞으면
+			articleId = Util.getInt(req, "articleId");
+		}
+		String body = req.getParameter("body");
+		
+		articleService.articleReplyModify(replyId,body);
+		
+		return "html:<script> alert('댓글을 수정했습니다.'); location.replace('detail?id=" + articleId + "');  </script>";
+	}
+
+	private String doActionArticleReply(HttpServletRequest req, HttpServletResponse resp) {
+		String body = req.getParameter("body");
+		int articleId = 0;
+		if (!Util.empty(req, "articleId") && Util.isNum(req, "articleId")) { // articleId가 없지 않고 숫자가 맞으면
+			articleId = Util.getInt(req, "articleId");
+		}
+	
+		int articleReplyId = articleService.getArticleReply(body, articleId);
+		
+		
+		
+		return "html:<script> alert('" + articleId + "번 게시물 댓글을 작성하셨습니다.'); location.replace('detail?id=" + articleId + "'); </script>";
+	}
+
 	private String doModify(HttpServletRequest req, HttpServletResponse resp) {
 		String title = req.getParameter("title");
 		String body = req.getParameter("body");
@@ -213,6 +271,11 @@ public class ArticleController extends Controller {
 		req.setAttribute("article", article);
 		req.setAttribute("cateItem", cateItem);
 		req.setAttribute("cateItemId", cateItemId);
+		
+		
+		
+		List<ArticleReply> articleReplies = articleService.getArticleRepliesForDetail(id);
+		req.setAttribute("articleReplies", articleReplies);
 		
 		// return "article/detail.jsp";
 

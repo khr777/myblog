@@ -79,7 +79,7 @@ String cateItemName = (String) request.getAttribute("cateItemName");
 				<%=article.getTitle()%>
 			</div>
 			<div class="list-body-box">
-				<div class="list-body">
+				<div class="list-body" >
 					<%=article.getSummary()%>
 				</div>
 			</div> 

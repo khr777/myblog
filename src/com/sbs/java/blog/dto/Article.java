@@ -77,6 +77,9 @@ public class Article extends Dto {
 		this.body = body;
 		
 	}
+	public String getBodyForXTemplate() {
+		return body.replaceAll("(?i)script", "<!--REPLACE:script-->").trim();
+	}
 
 	public String getSummary() {
 		String summary = this.getBody();
@@ -85,8 +88,12 @@ public class Article extends Dto {
 		summary = summary.replace("!", ""); // ! 없애기
 		summary = summary.replace("#", ""); // # 없애기
 		summary = summary.replace("*", ""); // * 없애기
+		summary = summary.replaceAll("`", ""); // * 없애기
+		summary = summary.replaceAll("<([^>]+)>", "");   //html 태그 제거 정규식.
+
 		summary = summary.replaceAll("\\(.*?\\)", ""); // (~) 없애기
 		summary = summary.replaceAll("\\[.*?\\]", ""); // [~] 없애기
+		
 		
 
 		return summary;

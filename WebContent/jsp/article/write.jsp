@@ -208,13 +208,16 @@ el: document.querySelector("#editor1"),
 height: "600px",
 initialEditType: "markdown",
 previewStyle: "vertical",
-initialValue: "# 안녕",
+initialValue: "# 내용을 입력해주세요.",
 plugins: [toastui.Editor.plugin.codeSyntaxHighlight, youtubePlugin, replPlugin, codepenPlugin]
 });
 
-
+var writeFormSubmitted = false;
 function submitWriteForm(form) {
-
+	if ( writeFormSubmitted ) {
+		alert('처리중입니다.');
+		return;
+	}
 	form.title.value = form.title.value.trim();
 	if ( form.title.value.length == 0 ) {
 		alert('제목을 입력해주세요.');
@@ -229,6 +232,7 @@ function submitWriteForm(form) {
 	}
 	form.body.value = source;
 	form.submit();
+	writeFormSubmitted = true;
 	
 }
 
