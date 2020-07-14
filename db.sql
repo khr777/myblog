@@ -1,4 +1,4 @@
-# to2.kr/brX
+ # to2.kr/brX
 
 # 캐릭터SET 설정 (제일 먼저 작성해주어야 하는 쿼리문!)
 SET NAMES utf8mb4;
@@ -62,22 +62,25 @@ CREATE TABLE article (
     `body` LONGTEXT NOT NULL
 );
 
-# 게시물 테이블 생성
+# 회원 테이블 생성
 DROP TABLE IF EXISTS `member`;
 CREATE TABLE `member`   (
     id INT(10) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
     regDate DATETIME NOT NULL,
+    updateDate DATETIME NOT NULL,
     loginId CHAR(100) NOT NULL UNIQUE ,
     `name` CHAR(100) NOT NULL,
     nickname CHAR(100) NOT NULL UNIQUE ,
-    loginPwReal CHAR(255) NOT NULL
+    loginPw CHAR(100) NOT NULL,
+    email CHAR(100) NOT NULL,
+    `level` INT(1) UNSIGNED DEFAULT 0 NOT NULL
     );
 
 
 SELECT *
 FROM article;
 
-TRUNCATE article;
+# TRUNCATE article;
 
 
 INSERT INTO article
@@ -833,5 +836,16 @@ CREATE TABLE articleReply (
     memberId INT(10) UNSIGNED NOT NULL
 );
 
+DESC article;
+
+# member loginPwReal을 loginPw로 변경(혜련 실수)
+ALTER TABLE `member` CHANGE loginPwReal loginPw CHAR(255) NOT NULL;
+
+# level 칼럼 추가 
+ALTER TABLE `member` ADD COLUMN `level` INT(1) UNSIGNED NOT NULL AFTER email;
+
+
 SELECT *
-FROM articleReply;
+FROM `article`;
+
+
