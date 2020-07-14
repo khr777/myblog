@@ -51,14 +51,32 @@ public class ArticleController extends Controller {
 			return doModify(req, resp);
 		case "doArticleReply":
 			return doActionArticleReply(req, resp);
+		case "replyModify":
+			return doActionReplyModify(req, resp);
 		case "doReplyModify":
-			return doActionDoReplyModify(req,resp);
+			return doActionDoReplyModify(req, resp);
 		case "doReplyDelete":
-			return doActionDoReplyDelete(req,resp);
+			return doActionDoReplyDelete(req, resp);
 		}
 		return "";
 	}
-	
+
+	private String doActionReplyModify(HttpServletRequest req, HttpServletResponse resp) {
+		int id = 0;
+
+		if (!Util.empty(req, "id") && Util.isNum(req, "id")) { // cateItemId가 없지 않고 숫자가 맞으면
+			id = Util.getInt(req, "id");
+		}
+		
+		
+		//  ★★★★★ dto 작성자(extra_ 빈값으로 출력되고 있음. 로그인 성공하면 수정해야 할 것 같음!
+		ArticleReply articleReply = articleService.getArticleReplyForModify(id);
+		
+		req.setAttribute("articleReply", articleReply);
+		
+		return "article/replyModify.jsp";
+	}
+
 	private String doActionDoReplyDelete(HttpServletRequest req, HttpServletResponse resp) {
 		int replyId = 0;
 
@@ -71,50 +89,53 @@ public class ArticleController extends Controller {
 		if (!Util.empty(req, "id") && Util.isNum(req, "id")) { // cateItemId가 없지 않고 숫자가 맞으면
 			id = Util.getInt(req, "id");
 		}
-		
+
 		articleService.articleReplyDelete(replyId);
-		
 
 		return "html:<script> alert('작성하신 댓글을 삭제했습니다.'); location.replace('detail?id=" + id + "'); </script>";
 	}
 
 	private String doActionDoReplyModify(HttpServletRequest req, HttpServletResponse resp) {
-		int replyId = 0;
+		int id = 0;   // 댓글 id
 
-		if (!Util.empty(req, "replyId") && Util.isNum(req, "replyId")) { // cateItemId가 없지 않고 숫자가 맞으면
-			replyId = Util.getInt(req, "replyId");
+		if (!Util.empty(req, "id") && Util.isNum(req, "id")) {  
+			id = Util.getInt(req, "id");
 		}
-		
-		int articleId = 0;
 
-		if (!Util.empty(req, "articleId") && Util.isNum(req, "articleId")) { // cateItemId가 없지 않고 숫자가 맞으면
+		
+		int articleId = 0;  // 게시물 id 
+
+		if (!Util.empty(req, "articleId") && Util.isNum(req, "articleId")) {  
 			articleId = Util.getInt(req, "articleId");
 		}
+
 		String body = req.getParameter("body");
+		articleService.articleReplyModify(id, body);
 		
-		articleService.articleReplyModify(replyId,body);
 		
-		return "html:<script> alert('댓글을 수정했습니다.'); location.replace('detail?id=" + articleId + "');  </script>";
+
+		return "html:<script> alert('" + articleId + "번 게시물의 " + id + "댓글을 수정하셨습니다.'); location.replace('detail?id=" + articleId
+				+ "'); </script>";
 	}
 
 	private String doActionArticleReply(HttpServletRequest req, HttpServletResponse resp) {
 		String body = req.getParameter("body");
+		
 		int articleId = 0;
 		if (!Util.empty(req, "articleId") && Util.isNum(req, "articleId")) { // articleId가 없지 않고 숫자가 맞으면
 			articleId = Util.getInt(req, "articleId");
 		}
-	
+
 		int articleReplyId = articleService.getArticleReply(body, articleId);
-		
-		
-		
-		return "html:<script> alert('" + articleId + "번 게시물 댓글을 작성하셨습니다.'); location.replace('detail?id=" + articleId + "'); </script>";
+
+		return "html:<script> alert('" + articleId + "번 게시물 댓글을 작성하셨습니다.'); location.replace('detail?id=" + articleId
+				+ "'); </script>";
 	}
 
 	private String doModify(HttpServletRequest req, HttpServletResponse resp) {
 		String title = req.getParameter("title");
 		String body = req.getParameter("body");
-		
+
 		int id = 0;
 
 		if (!Util.empty(req, "id") && Util.isNum(req, "id")) { // cateItemId가 없지 않고 숫자가 맞으면
@@ -122,27 +143,24 @@ public class ArticleController extends Controller {
 			id = Util.getInt(req, "id");
 
 		}
-		
+
 		int cateItemId = Util.getInt(req, "cateItemId");
 		int displayStatus = Util.getInt(req, "displayStatus");
-		
-		
-		
-		/*    jsp 파일에서 script로 함수 추가하기 전 구상했던 코드(작동은 됐었음)
-		if (title.length() == 0 && body.length() == 0 ) {
-			return "html:<script> alert('제목과 내용을 입력바랍니다.'); history.back();  </script>";
-		}
-		else if ( title.length() == 0 ) {
-			return "html:<script> alert('제목을 입력바랍니다.'); history.back(); </script>";
-		}
-		else if ( body.length() == 0 ) {
-			return "html:<script> alert('내용을 입력바랍니다.'); history.back(); </script>";
-		}*/
-		
+
+		/*
+		 * jsp 파일에서 script로 함수 추가하기 전 구상했던 코드(작동은 됐었음) if (title.length() == 0 &&
+		 * body.length() == 0 ) { return
+		 * "html:<script> alert('제목과 내용을 입력바랍니다.'); history.back();  </script>"; } else
+		 * if ( title.length() == 0 ) { return
+		 * "html:<script> alert('제목을 입력바랍니다.'); history.back(); </script>"; } else if (
+		 * body.length() == 0 ) { return
+		 * "html:<script> alert('내용을 입력바랍니다.'); history.back(); </script>"; }
+		 */
+
 		articleService.articleModify(id, cateItemId, displayStatus, title, body);
-				
+
 		return "html:<script> alert('" + id + "번 게시물이 수정되었습니다.'); location.replace('detail?id=" + id + "'); </script>";
-		
+
 	}
 
 	private String doActionModify(HttpServletRequest req, HttpServletResponse resp) {
@@ -153,7 +171,7 @@ public class ArticleController extends Controller {
 			id = Util.getInt(req, "id");
 
 		}
-		
+
 		Article article = articleService.getForPrintArticle(id);
 		String cateItemName = "전체";
 
@@ -170,37 +188,33 @@ public class ArticleController extends Controller {
 	private String doActionDoWrite(HttpServletRequest req, HttpServletResponse resp) {
 		String title = req.getParameter("title");
 		String body = req.getParameter("body");
-		
-		
+
 		int cateItemId = Util.getInt(req, "cateItemId");
 		int displayStatus = Util.getInt(req, "displayStatus");
-		/*  jsp 파일에서 script로 함수 추가하기 전 구상했던 코드(작동은 됐었음)
-		if (title.length() == 0 && body.length() == 0 ) {
-			return "html:<script> alert('제목과 내용을 입력바랍니다.'); history.back();  </script>";
-		}
-		else if ( title.length() == 0 ) {
-			return "html:<script> alert('제목을 입력바랍니다.'); history.back(); </script>";
-		}
-		else if ( body.length() == 0 ) {
-			return "html:<script> alert('내용을 입력바랍니다.'); history.back(); </script>";
-		} */
-		
+		/*
+		 * jsp 파일에서 script로 함수 추가하기 전 구상했던 코드(작동은 됐었음) if (title.length() == 0 &&
+		 * body.length() == 0 ) { return
+		 * "html:<script> alert('제목과 내용을 입력바랍니다.'); history.back();  </script>"; } else
+		 * if ( title.length() == 0 ) { return
+		 * "html:<script> alert('제목을 입력바랍니다.'); history.back(); </script>"; } else if (
+		 * body.length() == 0 ) { return
+		 * "html:<script> alert('내용을 입력바랍니다.'); history.back(); </script>"; }
+		 */
+
 		int id = articleService.write(cateItemId, displayStatus, title, body);
-		
-				
+
 		return "html:<script> alert('" + id + "번 게시물이 생성되었습니다.'); location.replace('list'); </script>";
-		// 자바스크립트로써 페이지 이동 명령. 꼭 이렇게해야 한다. 그러지 않으면 뒤로가기?로 또 글을 생성하게 된다. history에서 남기지 말고 이동해야 한다. 그래서 replace! 
+		// 자바스크립트로써 페이지 이동 명령. 꼭 이렇게해야 한다. 그러지 않으면 뒤로가기?로 또 글을 생성하게 된다. history에서 남기지 말고
+		// 이동해야 한다. 그래서 replace!
 	}
 
-	// 게시물 작성 신청 폼을 한번 보여주는 정도(용도)의 메서드.	
+	// 게시물 작성 신청 폼을 한번 보여주는 정도(용도)의 메서드.
 	private String doActionWrite(HttpServletRequest req, HttpServletResponse resp) {
 		return "article/write.jsp";
 	}
-	
-	
 
 	private String doActionDelete(HttpServletRequest req, HttpServletResponse resp) {
-		
+
 		int id = 0;
 
 		if (!Util.empty(req, "id") && Util.isNum(req, "id")) { // cateItemId가 없지 않고 숫자가 맞으면
@@ -208,21 +222,13 @@ public class ArticleController extends Controller {
 			id = Util.getInt(req, "id");
 
 		}
-		
+
 		int deleteId = articleService.articleDelete(id);
-				
-		
-		
-		
-		
+
 		return "html:<script> alert('" + id + "번 게시물이 삭제되었습니다.'); location.replace('list'); </script>";
-	} 
+	}
 
-
-	
 	private String doActionListWrite(HttpServletRequest req, HttpServletResponse resp) {
-
-		
 
 		return "article/listWrite.jsp";
 	}
@@ -232,7 +238,7 @@ public class ArticleController extends Controller {
 	}
 
 	private String doActionEditor(HttpServletRequest req, HttpServletResponse resp) {
-		
+
 		return "article/editor.jsp";
 	}
 
@@ -243,23 +249,23 @@ public class ArticleController extends Controller {
 		if (Util.isNum(req, "id") == false) {
 			return "html:id를 정수로 입력해주세요.";
 		}
-		
+
 		int id = Util.getInt(req, "id");
-		
+
 		if (Util.empty(req, "id")) {
 			return "html:id를 입력해주세요.";
 		}
-		
+
 		int cateItemId = 0;
-		
+
 		if (!Util.empty(req, "cateItemId") && Util.isNum(req, "cateItemId")) { // cateItemId가 없지 않고 숫자가 맞으면
 
 			cateItemId = Util.getInt(req, "cateItemId");
 
 		}
-		
+
 		articleService.increaseHit(id);
-		
+
 		// 이 article은 그냥(평범한) article이 아니다.
 		Article article = articleService.getForPrintArticle(id); // sql 쿼리에 작성해놓은 정보들만이 아닌 부가적으로 추가한 자잘한 (항목 추가한)작성자 등
 																	// 항목 모두 불러오는 메서드 네임
@@ -271,12 +277,10 @@ public class ArticleController extends Controller {
 		req.setAttribute("article", article);
 		req.setAttribute("cateItem", cateItem);
 		req.setAttribute("cateItemId", cateItemId);
-		
-		
-		
+
 		List<ArticleReply> articleReplies = articleService.getArticleRepliesForDetail(id);
 		req.setAttribute("articleReplies", articleReplies);
-		
+
 		// return "article/detail.jsp";
 
 		// 작성자명이 게시물 상세보기에서 잠깐 필요한데 필드에까지 추가할 필요가 없다. 그래서 extra__를 이용해서 사용한다. sql에는 영향을
@@ -284,8 +288,6 @@ public class ArticleController extends Controller {
 		return "article/detail.jsp";
 		// 다시 한번 설명! 자질구래한 것들을 모아놓는 것이 dto의 extra 변수이다.
 	}
-
-	
 
 	private String doActionList(HttpServletRequest req, HttpServletResponse resp) {
 
@@ -298,14 +300,13 @@ public class ArticleController extends Controller {
 		}
 
 		int cateItemId = 0;
-		
+
 		if (!Util.empty(req, "cateItemId") && Util.isNum(req, "cateItemId")) { // cateItemId가 없지 않고 숫자가 맞으면
 
 			cateItemId = Util.getInt(req, "cateItemId");
 
 		}
-		
-		
+
 		String cateItemName = "전체";
 
 		if (cateItemId != 0) {
@@ -321,18 +322,14 @@ public class ArticleController extends Controller {
 			searchKeywordType = Util.getString(req, "searchKeywordType");
 
 		}
-		
+
 		String searchKeywordTypeBody = "";
-		
+
 		if (!Util.empty(req, "searchKeywordTypeBody")) { // cateItemId가 없지 않고 숫자가 맞으면
 
 			searchKeywordTypeBody = Util.getString(req, "searchKeywordTypeBody");
 
 		}
-		
-		
-		
-		
 
 		String searchKeyword = "";
 
@@ -342,12 +339,10 @@ public class ArticleController extends Controller {
 
 		}
 
-		
-
 		int itemsInAPage = 10; // 게시물 리스트에 보여줄 게시물 개수
-		int totalCount = articleService.getForPrintListArticlesCount(cateItemId, searchKeywordType, searchKeywordTypeBody, searchKeyword);
+		int totalCount = articleService.getForPrintListArticlesCount(cateItemId, searchKeywordType,
+				searchKeywordTypeBody, searchKeyword);
 		int totalPage = (int) Math.ceil(totalCount / (double) itemsInAPage);
-		
 
 		req.setAttribute("totalCount", totalCount);
 		req.setAttribute("totalPage", totalPage);
@@ -356,8 +351,6 @@ public class ArticleController extends Controller {
 		List<Article> articles = articleService.getForPrintListArticles(page, cateItemId, itemsInAPage,
 				searchKeywordType, searchKeywordTypeBody, searchKeyword);
 		req.setAttribute("articles", articles);
-
-	
 
 		return "article/list.jsp";
 	}

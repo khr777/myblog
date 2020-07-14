@@ -109,5 +109,9 @@ public class ArticleService extends Service  {
 		articleDao.articleReplyModify(replyId, body);
 	}
 
+	public ArticleReply getArticleReplyForModify(int id) {
+		return articleDao.getArticleReplyForModify(id);
+	}
+
 
 }

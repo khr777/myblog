@@ -51,12 +51,12 @@
 
 
 <%
-Article article = (Article) request.getAttribute("article");
-CateItem cateItem = (CateItem) request.getAttribute("cateItem");
-int beforeId = (int) request.getAttribute("beforeId");
-int afterId = (int) request.getAttribute("afterId");
-int cateItemId = (int) request.getAttribute("cateItemId");
-List<ArticleReply> articleReplies = (List<ArticleReply>)request.getAttribute("articleReplies");
+	Article article = (Article) request.getAttribute("article");
+	CateItem cateItem = (CateItem) request.getAttribute("cateItem");
+	int beforeId = (int) request.getAttribute("beforeId");
+	int afterId = (int) request.getAttribute("afterId");
+	int cateItemId = (int) request.getAttribute("cateItemId");
+	List<ArticleReply> articleReplies = (List<ArticleReply>) request.getAttribute("articleReplies");
 %>
 
 <div class="con">
@@ -83,7 +83,7 @@ List<ArticleReply> articleReplies = (List<ArticleReply>)request.getAttribute("ar
 				<div class="cateItemName">
 					카테고리 :
 					<%=cateItem.getName()%></div>
-				
+
 			</div>
 			<!-- 카테고리 게시물 접속했을 때, 목록 클릭하면 최신 게시물을 불러왔음. 카테고리 게시물로 이동하게 수정한 코드 -->
 			<a href="list?cateItemId=${param.cateItemId}&page=${param.page}"
@@ -101,7 +101,8 @@ List<ArticleReply> articleReplies = (List<ArticleReply>)request.getAttribute("ar
 				var editor1 = new toastui.Editor({
 					el : document.querySelector("#viewer1"),
 					viewer : true,
-					initialValue : editor1__initialValue.replace(/<!--REPLACE:script-->/gi,'script'),
+					initialValue : editor1__initialValue.replace(
+							/<!--REPLACE:script-->/gi, 'script'),
 					plugins : [ toastui.Editor.plugin.codeSyntaxHighlight,
 							youtubePlugin, replPlugin, codepenPlugin ]
 				});
@@ -111,7 +112,7 @@ List<ArticleReply> articleReplies = (List<ArticleReply>)request.getAttribute("ar
 				<%
 					if (beforeId > 0) {
 				%>
-				<input class="before" value="이전" type="button"
+				<input class="before" value="이전글" type="button"
 					onclick="location.href='detail?id=<%=beforeId%>&cateItemId=<%=cateItemId%>'">
 				</button>
 				<!--  둘 중에 뭘해도 값은  -->
@@ -121,7 +122,7 @@ List<ArticleReply> articleReplies = (List<ArticleReply>)request.getAttribute("ar
 				<%
 					if (afterId != -1) {
 				%>
-				<input class="after" value="다음" type="button"
+				<input class="after" value="다음글" type="button"
 					onclick="location.href='detail?id=<%=afterId%>&cateItemId=<%=cateItemId%>'">
 				</button>
 				<!--  둘 중에 뭘해도 값은  -->
@@ -136,50 +137,50 @@ List<ArticleReply> articleReplies = (List<ArticleReply>)request.getAttribute("ar
 					style="position: absolute; left: 80%; top: 30%;">삭제</button>
 			</div>
 		</div>
-		<form name="replyForm" action="doArticleReply" method="POST" class="form2" onsubmit="submitArticleReply(this); return false;">
+		<form name="replyForm" action="doArticleReply" method="POST"
+			class="form2" onsubmit="submitArticleReply(this); return false;">
 			<div class="replyWrite-box">
 				<div class="write">
-					<div class="label">댓글
-					<input type="hidden" name="articleId" value="${param.id}"/>
-					<input type="text" name="body" placeholder="댓글을 입력해주세요."/>
+					<div class="label">
+						댓글 <input type="hidden" name="articleId" value="${param.id}" /> <input
+							type="text" name="body" placeholder="댓글을 입력해주세요." />
 					</div>
 				</div>
 				<div class="submit">
-					<input type="submit" value="등록"/>
+					<input type="submit" value="등록" />
 				</div>
 			</div>
 		</form>
-		<% for ( ArticleReply articleReply : articleReplies) { %>
+		<%
+			for (ArticleReply articleReply : articleReplies) {
+		%>
 		<div class="replyList">
 			<div class="reply-contents">
 				<div class="writer-data">
-					<div class="writer1">작성자 : <%=articleReply.getMemberId()%></div>
-					<div class="regDate1">작성일 : <%=articleReply.getRegDate()%> </div>
-					<input type="hidden" value="${param.id}"/>
+					<div class="writer1">
+						작성자 :
+						<%=articleReply.getMemberId()%></div>
+					<div class="regDate1">
+						작성일 :
+						<%=articleReply.getRegDate()%>
+					</div>
+					<input type="hidden" value="${param.id}" />
 				</div>
-				<div class="body"><%=articleReply.getBody()%></div>	
+				<div class="body"><%=articleReply.getBody()%></div>
 			</div>
 			<div class="button">
-				<form action="doReplyModify" name="reply" method="POST" onsubmit="replyModify(this)">
-					<input type="submit" name="body" value="수정"/>
-					<input type="hidden" name="replyId" value="<%=articleReply.getId()%>"/>
-					<input type="hidden" name="articleId" value="${param.id}"/>
-				</form>
-				<button type="submit"  onclick="location.href='doReplyDelete?replyId=<%=articleReply.getId()%>&id=${param.id}'">삭제</button>
+					<input type="button" onclick="location.href='replyModify?id=<%=articleReply.getId()%>'" name="body" value="수정" /> 
+					<button type="submit"
+					onclick="location.href='doReplyDelete?replyId=<%=articleReply.getId()%>&id=${param.id}'">삭제</button>
 			</div>
 		</div>
 		<div class="border"></div>
-		<% } %>
+		<%
+			}
+		%>
 	</div>
-	
+
 </div>
-
-
-<!-- 1. 작성자  -->
-<!-- 2. regDate -->
-<!-- 3. body -->
-<!-- 4. 수정 -->
-<!-- 5. 삭제 -->
 
 
 
@@ -228,95 +229,87 @@ List<ArticleReply> articleReplies = (List<ArticleReply>)request.getAttribute("ar
 	height: 100%;
 }
 
-/* 댓글 등록 시작 */ 
+/* 댓글 등록 시작 */
 .form2 {
-	margin-bottom:30px;
+	margin-bottom: 30px;
 }
+
 .form2 .replyWrite-box {
-	display:flex;
-	justify-content:space-between;
-	align-items:center;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
 }
 
 .form2 .replyWrite-box .write {
-	width:100%;
+	width: 100%;
 }
 
 .form2 .replyWrite-box .submit {
-	margin-right:25px;
+	margin-right: 25px;
 }
 
-
-.form2 .replyWrite-box .write .label > input {
-	margin-left:20px;
-	height:20px;
-	width:90%;
+.form2 .replyWrite-box .write .label>input {
+	margin-left: 20px;
+	height: 20px;
+	width: 90%;
 }
 
 /* 댓글 등록 끝 */
 
 /* 댓글 리스팅 시작 */
 .replyList {
-	margin-top:10px;
-	display:flex;
-	justify-content:space-between;
+	margin-top: 10px;
+	display: flex;
+	justify-content: space-between;
 }
 
 .border {
-	border:1px solid #dfdfdf;
-	border-top:0;
-	border-left:0;
-	border-right:0;
-	margin-top:10px;
-	margin-bottom:10px;
+	border: 1px solid #dfdfdf;
+	border-top: 0;
+	border-left: 0;
+	border-right: 0;
+	margin-top: 10px;
+	margin-bottom: 10px;
 }
+
 .replyList .reply-contents {
-	width:87%;
+	width: 87%;
 }
 
 .replyList .reply-contents .writer-data .writer1, .regDate1 {
-	font-size:0.7rem;
+	font-size: 0.7rem;
 }
 
 .replyList .reply-contents  .body {
+	
 }
 
 .replyList .button {
-	display:flex;
-	flex-direction:column;
-	margin-right:23px;
+	display: flex;
+	flex-direction: column;
+	margin-right: 23px;
 }
+
 
 </style>
 <script>
-var articleReplySubmitted = false;
-function submitArticleReply(replyForm) {
-	
-	if ( articleReplySubmitted ) {
-		alert('처리중입니다.');
-		return;
-	}
-	replyForm.body.value = replyForm.body.value.trim();
-	if ( replyForm.body.value.length == 0 ) {
-		alert('댓글을 입력해주세요.');
-		replyForm.body.focus();
-		return;
-	}
-	replyForm.submit();
-	articleReplySubmitted = true;
-}
+	var articleReplySubmitted = false;
+	function submitArticleReply(replyForm) {
 
-function replyModify(reply) {
-	reply.body.value = prompt("댓글을 수정해주세요.");
-	if ( reply.body.value.length == 0  ) {
-		alert('수정하실 댓글을 입력바랍니다.');
-		reply.body.value = prompt("댓글을 수정해주세요.");
+		if (articleReplySubmitted) {
+			alert('처리중입니다.');
+			return;
+		}
+		replyForm.body.value = replyForm.body.value.trim();
+		if (replyForm.body.value.length == 0) {
+			alert('댓글을 입력해주세요.');
+			replyForm.body.focus();
+			return;
+		}
+		replyForm.submit();
+		articleReplySubmitted = true;
 	}
-	
-	
-	reply.submit();
-	
-}
+
 </script>
 
 <%@ include file="/jsp/part/foot.jspf"%>
