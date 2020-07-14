@@ -14,14 +14,39 @@ public class MemberService extends Service {
 	}
 
 
-	public int getMemberJoin(String loginId, String name, String nickName, String loginPw) {
+	public int join(String loginId, String name, String nickName, String loginPw, String email) {
 		
-		return memberDao.getMemberJoin(loginId, name, nickName, loginPw);
+		return memberDao.join(loginId, name, nickName, loginPw, email);
 	}
 
 
 	public List<Member> getForJoinMembers() {
 		
 		return memberDao.getForJoinMembers();
+	}
+
+
+	public boolean isJoinableLoginId(String loginId) {
+		return memberDao.isJoinableLoginId(loginId);
+	}
+
+
+	public boolean isJoinableNickName(String nickName) {
+		return memberDao.isJoinableNickName(nickName);
+	}
+
+
+	public boolean loginIdAndPwValid(String loginId, String loginPw) {
+		return memberDao.loginIdAndPwValid(loginId, loginPw);
+	}
+
+
+	public Member getForLoginMember(String loginId) {
+		return memberDao.getForLoginMember(loginId);
+	}
+
+
+	public Member getForLogoutMember(int loginedMemberId) {
+		return memberDao.getForLogoutMember(loginedMemberId);
 	}
 }

@@ -39,9 +39,9 @@ String cateItemName = (String) request.getAttribute("cateItemName");
 /* lib   (나중에 다른 곳으로 옮길 예정이라셨음) */
 .form1 {
 	display: block;
-	width: 80%;
-	margin-left:10%;
-	margin-right:10%;
+	width: 95%;
+	margin-left:2%;
+	margin-right:2%;
 }
 
 .form1 .form-row {
@@ -86,7 +86,11 @@ String cateItemName = (String) request.getAttribute("cateItemName");
 
 /* cus */
 .write-form-box {
-	margin-top: 200px;
+	margin-top: 170px;
+	border:1px solid black;
+	padding-top:20px;
+	margin-left:100px;
+	margin-right:100px;
 }
 
 .write-form-box .blank-box {
@@ -124,10 +128,6 @@ String cateItemName = (String) request.getAttribute("cateItemName");
 		<div class="github">
 			<a href="https://github.com/hyeryeonkim" target="_blank"> 🚀
 				github 이동 </a>
-		</div>
-		<div class="write-editor">
-			<a href="${pageContext.request.contextPath}/s/article/editor"
-				target="_blank"> 🔨 editor 이동 </a>
 		</div>
 	</div>
 

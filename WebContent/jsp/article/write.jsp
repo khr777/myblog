@@ -35,9 +35,9 @@
 /* lib   (나중에 다른 곳으로 옮길 예정이라셨음) */
 .form1 {
 	display: block;
-	width: 80%;
-	margin-left:10%;
-	margin-right:10%;
+	width: 95%;
+	margin-left:2%;
+	margin-right:2%;
 }
 
 .form1 .form-row {
@@ -94,15 +94,15 @@
 	margin-top: 170px;
 	border:1px solid black;
 	padding-top:20px;
-	margin-left:150px;
-	margin-right:150px;
+	margin-left:100px;
+	margin-right:100px;
 	
 }
 
 .write-form-box .blank-box {
 	position:absolute;
-	top:180px;
-	right:12%;
+	top:200px;
+	right:5%;
 	
 }
 .emoji, .pixabay, .github, .write-editor {
@@ -144,10 +144,7 @@
 			<a href="https://github.com/hyeryeonkim" target="_blank"> 🚀
 				github 이동 </a>
 		</div>
-		<div class="write-editor">
-			<a href="${pageContext.request.contextPath}/s/article/editor"
-				target="_blank"> 🔨 editor 이동 </a>
-		</div>
+		
 	</div>
 
 	<form name="form" action="doWrite" method="POST" class="write-form form1" onsubmit="submitWriteForm(this); return false;">
@@ -189,6 +186,7 @@
 				<div id="editor1"></div>
 			</div>
 		</div>
+		<input type="hidden" name="memberId" value="<%=session.getAttribute("loginedMemberId")%>"/>
 		<div class="form-row">
 			<div class="label"></div>
 			<div class="input">

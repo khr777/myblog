@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import com.sbs.java.blog.dto.ArticleReply;
 import com.sbs.java.blog.dto.Member;
 import com.sbs.java.blog.util.DBUtil;
 import com.sbs.java.blog.util.SecSql;
@@ -16,26 +17,17 @@ public class MemberDao {
 		this.dbConn = dbConn;
 	}
 
-	public int getMemberJoin(String loginId, String name, String nickName, String loginPw) {
+	public int join(String loginId, String name, String nickName, String loginPw, String email) {
 		SecSql secSql = new SecSql();
 		
 		secSql.append("INSERT INTO `member` ");
 		secSql.append("SET regDate = NOW() ");
+		secSql.append(", updateDate = NOW() ");
 		secSql.append(", loginId = ? ", loginId);
 		secSql.append(", name = ? ", name);
 		secSql.append(", nickname = ?", nickName);
-		secSql.append(", loginPwReal = ?", loginPw);
-		
-		/*
-		String sql = "";
-
-		sql += String.format("INSERT INTO `member` ");
-		sql += String.format("SET regDate = NOW() ");
-		sql += String.format(", loginId = ? ", loginId);
-		sql += String.format(", name = ? ", name);
-		sql += String.format(", nickname = ?", nickName);
-		sql += String.format(", loginPwReal = ?", loginPw);
-		*/
+		secSql.append(", loginPw = ?", loginPw);
+		secSql.append(", email = ?", email);
 		return DBUtil.insert(dbConn, secSql);
 
 	}
@@ -55,6 +47,43 @@ public class MemberDao {
 			members.add(new Member(row));
 		}
 		return members;
+	}
+
+	public boolean isJoinableLoginId(String loginId) {
+		SecSql sql = SecSql.from("SELECT COUNT(*) AS cnt");  // 여기서부터 시작하겠다는 의미.
+		sql.append("FROM `member`");
+		sql.append("WHERE loginId = ?", loginId);
+		
+		
+		return DBUtil.selectRowIntValue(dbConn, sql) == 0 ;
+	}
+
+	public boolean isJoinableNickName(String nickName) {
+		SecSql sql = SecSql.from("SELECT COUNT(*) AS cnt");  // 여기서부터 시작하겠다는 의미.
+		sql.append("FROM `member`");
+		sql.append("WHERE nickname = ?", nickName);
+		
+		
+		return DBUtil.selectRowIntValue(dbConn, sql) == 0 ;
+	}
+
+	public boolean loginIdAndPwValid(String loginId, String loginPw) {
+		
+		return false;
+	}
+
+	public Member getForLoginMember(String loginId) {
+		SecSql sql = SecSql.from("SELECT *");
+		sql.append("FROM `member`");
+		sql.append("WHERE loginId = ?", loginId);
+		 return new Member(DBUtil.selectRow(dbConn, sql));
+	}
+
+	public Member getForLogoutMember(int loginedMemberId) {
+		SecSql sql = SecSql.from("SELECT *");
+		sql.append("FROM `member`");
+		sql.append("WHERE id = ?", loginedMemberId);
+		 return new Member(DBUtil.selectRow(dbConn, sql));
 	}
 	
 }

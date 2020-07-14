@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import com.sbs.java.blog.dto.CateItem;
 import com.sbs.java.blog.dto.Member;
@@ -46,6 +47,12 @@ public abstract class Controller {
 		List<Member> members = memberService.getForJoinMembers();
 		req.setAttribute("members", members);
 		
+		/*    안되넹... 
+		 * HttpSession session = req.getSession(); if ( session != null ) { int
+		 * loginedMemberId = (int)session.getAttribute("loginedMemberId"); Member member
+		 * = memberService.getForLogoutMember(loginedMemberId);
+		 * req.setAttribute("loginMember", member); }
+		 */
 		
 	}
 	

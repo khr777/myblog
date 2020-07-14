@@ -3,7 +3,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"	pageEncoding="UTF-8"%>
 
 
-<% List<CateItem> cateItems = (List)request.getAttribute("cateItems"); %>	
+<% 
+List<CateItem> cateItems = (List)request.getAttribute("cateItems");
+
+%>	
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -52,15 +55,21 @@
 					<li>
 						<a href="${pageContext.request.contextPath}/s/home/main" class="flex height-100p flex-ai-c">Home</a>
 					</li>
+					<% if (session.getAttribute("loginedMemberId") == null ) { %>
 					<li>
 						<a href="${pageContext.request.contextPath}/s/member/login" class="flex height-100p flex-ai-c">Login</a>
-					</li>
+					</li>	
+					<%} %>
+					<% if (session.getAttribute("loginedMemberId") != null ) { %>
+					<li>
+						<a href="${pageContext.request.contextPath}/s/member/logout" class="flex height-100p flex-ai-c">Logout</a>
+					</li>	
+					<%} %>
+					
 					<li>
 					<a href="${pageContext.request.contextPath}/s/article/write"
 						class="flex height-100p flex-ai-c">Write</a>
 					</li>
-					<li><a href="${pageContext.request.contextPath}/s/article/editor" class="flex height-100p flex-ai-c">Editor</a></li>
-					
 					<li><a
 						href="${pageContext.request.contextPath}/s/home/aboutMe"
 						class="flex height-100p flex-ai-c">About Me</a></li>
@@ -104,16 +113,22 @@
 					<a href="${pageContext.request.contextPath}/s/home/main"
 					class="block">Home</a>
 				</li>
+				<% if (session.getAttribute("loginedMemberId") == null ) { %>
 				<li>
 					<a href="${pageContext.request.contextPath}/s/member/login"
 					class="block">login</a>
 				</li>
+				<%} %>
+				<% if (session.getAttribute("loginedMemberId") != null ) { %>
+				<li>
+					<a href="${pageContext.request.contextPath}/s/member/logout"
+					class="block">logout</a>
+				</li>
+				<%} %>
 				<li>
 					<a href="${pageContext.request.contextPath}/s/article/write"
 					class="block">Write</a>
 				</li>
-				<li><a href="${pageContext.request.contextPath}/s/article/editor"	class="block">Editor</a></li>
-				
 				<li><a href="${pageContext.request.contextPath}/s/home/aboutMe"
 					class="block">About Me</a></li>
 				<li><a href="${pageContext.request.contextPath}/s/article/list"

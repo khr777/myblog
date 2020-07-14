@@ -1,5 +1,6 @@
 <%@ include file="/jsp/part/head.jspf"%>
 <%@ page import="com.sbs.java.blog.dto.Article"%>
+<%@ page import="com.sbs.java.blog.dto.Member"%>
 <%@ page import="com.sbs.java.blog.dto.ArticleReply"%>
 <%@ page import="java.util.List"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
@@ -57,6 +58,7 @@
 	int afterId = (int) request.getAttribute("afterId");
 	int cateItemId = (int) request.getAttribute("cateItemId");
 	List<ArticleReply> articleReplies = (List<ArticleReply>) request.getAttribute("articleReplies");
+	Member member = (Member)request.getAttribute("loginedMember");
 %>
 
 <div class="con">
@@ -79,7 +81,7 @@
 					<%=article.getHit()%></div>
 				<div class="writer">
 					작성자 :
-					<%=article.getExtra().get("writer")%></div>
+					<%=member.getNickname()%></div>
 				<div class="cateItemName">
 					카테고리 :
 					<%=cateItem.getName()%></div>
@@ -97,12 +99,12 @@
 			<script type="text/x-template" id="origin1" style="display: none;"><%=article.getBodyForXTemplate()%></script>
 			<div id="viewer1"></div>
 			<script>
-				var editor1__initialValue = $('#origin1').html().trim(); // trim() 추가했음. 
+				var editor1__initialValue = getBodyFromXTemplate('#origin1') // trim() 추가했음. 
 				var editor1 = new toastui.Editor({
 					el : document.querySelector("#viewer1"),
 					viewer : true,
-					initialValue : editor1__initialValue.replace(
-							/<!--REPLACE:script-->/gi, 'script'),
+					initialValue : editor1__initialValue, 
+// 					.replace(/<!--REPLACE:script-->/gi, 'script'),   common.js 로 옮겼음. (공용으로 사용하는)
 					plugins : [ toastui.Editor.plugin.codeSyntaxHighlight,
 							youtubePlugin, replPlugin, codepenPlugin ]
 				});
@@ -153,7 +155,7 @@
 		</form>
 		<%
 			for (ArticleReply articleReply : articleReplies) {
-		%>
+		%>  
 		<div class="replyList">
 			<div class="reply-contents">
 				<div class="writer-data">

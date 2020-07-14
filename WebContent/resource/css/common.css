@@ -259,6 +259,10 @@ html {
     border:10px solid pink;
   }
   
+  /* lib   (나중에 다른 곳으로 옮길 예정이라셨음) */
+
+/* lib 회원가입 폼  두루두루 쓰일 예정이라서 여기에 넣어놓고 쓰는 것임.*/
+  
   /* 라이브러리 - flex */
   * > .flex {
     display:flex;

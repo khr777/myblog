@@ -5,11 +5,12 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.xml.ws.RequestWrapper;
+import javax.servlet.http.HttpSession;
 
 import com.sbs.java.blog.dto.Article;
 import com.sbs.java.blog.dto.ArticleReply;
 import com.sbs.java.blog.dto.CateItem;
+import com.sbs.java.blog.dto.Member;
 import com.sbs.java.blog.util.Util;
 
 public class ArticleController extends Controller {
@@ -49,11 +50,11 @@ public class ArticleController extends Controller {
 			return doActionDoWrite(req, resp);
 		case "doModify":
 			return doModify(req, resp);
-		case "doArticleReply":
-			return doActionArticleReply(req, resp);
-		case "replyModify":
+		case "doArticleReply":  // 댓글 작성
+ 			return doActionArticleReply(req, resp);  
+		case "replyModify":    //댓글 수정 페이지 이동
 			return doActionReplyModify(req, resp);
-		case "doReplyModify":
+		case "doReplyModify":  // 댓글 수정 후 저장하기 위한 페이지
 			return doActionDoReplyModify(req, resp);
 		case "doReplyDelete":
 			return doActionDoReplyDelete(req, resp);
@@ -61,40 +62,75 @@ public class ArticleController extends Controller {
 		return "";
 	}
 
+	
+	
 	private String doActionReplyModify(HttpServletRequest req, HttpServletResponse resp) {
+		
+		HttpSession session = req.getSession();
+		session.getAttribute("loginedMemberId");
+		int memberId = 0;
+		if ( session.getAttribute("loginedMemberId") == null ) {
+			return "html:<script> alert('댓글 수정은 로그인 후 가능합니다.'); history.back(); </script>"; 
+		} 
+		else {
+			memberId = (int)session.getAttribute("loginedMemberId");
+		}
+		
+		
+		
 		int id = 0;
 
-		if (!Util.empty(req, "id") && Util.isNum(req, "id")) { // cateItemId가 없지 않고 숫자가 맞으면
+		if (!Util.empty(req, "id") && Util.isNum(req, "id")) { // 댓글 번호가 없지 않고 숫자가 맞으면
 			id = Util.getInt(req, "id");
 		}
 		
 		
 		//  ★★★★★ dto 작성자(extra_ 빈값으로 출력되고 있음. 로그인 성공하면 수정해야 할 것 같음!
 		ArticleReply articleReply = articleService.getArticleReplyForModify(id);
+		if ( memberId != articleReply.getMemberId() ) {
+			return "html:<script> alert('댓글 수정은 작성자 본인만 가능합니다.'); history.back(); </script>"; 
+		}
+		
 		
 		req.setAttribute("articleReply", articleReply);
 		
 		return "article/replyModify.jsp";
 	}
 
+	
+	
 	private String doActionDoReplyDelete(HttpServletRequest req, HttpServletResponse resp) {
+		HttpSession session = req.getSession();
+		session.getAttribute("loginedMemberId");
+		int memberId = 0;
+		if ( session.getAttribute("loginedMemberId") == null ) {
+			return "html:<script> alert('댓글 삭제는 로그인 후 가능합니다.'); history.back(); </script>"; 
+		}
+		else {
+			memberId = (int)session.getAttribute("loginedMemberId");
+		}
 		int replyId = 0;
 
 		if (!Util.empty(req, "replyId") && Util.isNum(req, "replyId")) { // cateItemId가 없지 않고 숫자가 맞으면
 			replyId = Util.getInt(req, "replyId");
 		}
-		System.out.println(replyId);
 		int id = 0;
 
 		if (!Util.empty(req, "id") && Util.isNum(req, "id")) { // cateItemId가 없지 않고 숫자가 맞으면
 			id = Util.getInt(req, "id");
 		}
-
+		ArticleReply articleReply = articleService.getArticleReplyForModify(replyId);
+		if ( memberId != articleReply.getMemberId()) {
+			return "html:<script> alert('댓글 삭제는 작성자 본인만 가능합니다.'); history.back(); </script>";
+		}
+		
 		articleService.articleReplyDelete(replyId);
 
 		return "html:<script> alert('작성하신 댓글을 삭제했습니다.'); location.replace('detail?id=" + id + "'); </script>";
 	}
 
+	
+	
 	private String doActionDoReplyModify(HttpServletRequest req, HttpServletResponse resp) {
 		int id = 0;   // 댓글 id
 
@@ -118,20 +154,38 @@ public class ArticleController extends Controller {
 				+ "'); </script>";
 	}
 
+	
+	
 	private String doActionArticleReply(HttpServletRequest req, HttpServletResponse resp) {
+		HttpSession session = req.getSession();
+		session.getAttribute("loginedMemberId");
+		int memberId = 0;
+		if ( session.getAttribute("loginedMemberId") == null ) {
+			return "html:<script> alert('댓글 작성은 로그인 후 가능합니다.'); history.back(); </script>"; 
+		}
+		else {
+			memberId = (int)session.getAttribute("loginedMemberId");
+		}
+		Member member = memberService.getForLogoutMember(memberId);
 		String body = req.getParameter("body");
 		
 		int articleId = 0;
 		if (!Util.empty(req, "articleId") && Util.isNum(req, "articleId")) { // articleId가 없지 않고 숫자가 맞으면
 			articleId = Util.getInt(req, "articleId");
 		}
-
-		int articleReplyId = articleService.getArticleReply(body, articleId);
-
+		
+		int articleReplyId = articleService.getArticleReply(body, articleId, member.getId()); //댓글 저장하는 메서드
+		
+		
+		
+		
+		
 		return "html:<script> alert('" + articleId + "번 게시물 댓글을 작성하셨습니다.'); location.replace('detail?id=" + articleId
 				+ "'); </script>";
 	}
 
+	
+	
 	private String doModify(HttpServletRequest req, HttpServletResponse resp) {
 		String title = req.getParameter("title");
 		String body = req.getParameter("body");
@@ -144,18 +198,13 @@ public class ArticleController extends Controller {
 
 		}
 
+		
+		
 		int cateItemId = Util.getInt(req, "cateItemId");
 		int displayStatus = Util.getInt(req, "displayStatus");
 
-		/*
-		 * jsp 파일에서 script로 함수 추가하기 전 구상했던 코드(작동은 됐었음) if (title.length() == 0 &&
-		 * body.length() == 0 ) { return
-		 * "html:<script> alert('제목과 내용을 입력바랍니다.'); history.back();  </script>"; } else
-		 * if ( title.length() == 0 ) { return
-		 * "html:<script> alert('제목을 입력바랍니다.'); history.back(); </script>"; } else if (
-		 * body.length() == 0 ) { return
-		 * "html:<script> alert('내용을 입력바랍니다.'); history.back(); </script>"; }
-		 */
+		
+		
 
 		articleService.articleModify(id, cateItemId, displayStatus, title, body);
 
@@ -164,6 +213,18 @@ public class ArticleController extends Controller {
 	}
 
 	private String doActionModify(HttpServletRequest req, HttpServletResponse resp) {
+		
+		HttpSession session = req.getSession();
+		session.getAttribute("loginedMemberId");
+		int memberId = 0;
+		if ( session.getAttribute("loginedMemberId") == null ) {
+			return "html:<script> alert('게시물 수정은 로그인 후 가능합니다.'); history.back(); </script>"; 
+		}
+		else {
+			memberId = (int)session.getAttribute("loginedMemberId");
+		}
+		
+		
 		int id = 0;
 
 		if (!Util.empty(req, "id") && Util.isNum(req, "id")) { // cateItemId가 없지 않고 숫자가 맞으면
@@ -173,6 +234,11 @@ public class ArticleController extends Controller {
 		}
 
 		Article article = articleService.getForPrintArticle(id);
+		
+		if ( article.getMemberId() != memberId ) {
+			return "html:<script> alert('게시물 수정은 작성자 본인만 가능합니다.'); history.back(); </script>";
+		}
+		
 		String cateItemName = "전체";
 
 		if (article.getCateItemId() != 0) {
@@ -188,20 +254,11 @@ public class ArticleController extends Controller {
 	private String doActionDoWrite(HttpServletRequest req, HttpServletResponse resp) {
 		String title = req.getParameter("title");
 		String body = req.getParameter("body");
-
+		int loginedMemberId = Util.getInt(req, "memberId");
 		int cateItemId = Util.getInt(req, "cateItemId");
 		int displayStatus = Util.getInt(req, "displayStatus");
-		/*
-		 * jsp 파일에서 script로 함수 추가하기 전 구상했던 코드(작동은 됐었음) if (title.length() == 0 &&
-		 * body.length() == 0 ) { return
-		 * "html:<script> alert('제목과 내용을 입력바랍니다.'); history.back();  </script>"; } else
-		 * if ( title.length() == 0 ) { return
-		 * "html:<script> alert('제목을 입력바랍니다.'); history.back(); </script>"; } else if (
-		 * body.length() == 0 ) { return
-		 * "html:<script> alert('내용을 입력바랍니다.'); history.back(); </script>"; }
-		 */
-
-		int id = articleService.write(cateItemId, displayStatus, title, body);
+		
+		int id = articleService.write(cateItemId, displayStatus, title, body, loginedMemberId);
 
 		return "html:<script> alert('" + id + "번 게시물이 생성되었습니다.'); location.replace('list'); </script>";
 		// 자바스크립트로써 페이지 이동 명령. 꼭 이렇게해야 한다. 그러지 않으면 뒤로가기?로 또 글을 생성하게 된다. history에서 남기지 말고
@@ -210,10 +267,24 @@ public class ArticleController extends Controller {
 
 	// 게시물 작성 신청 폼을 한번 보여주는 정도(용도)의 메서드.
 	private String doActionWrite(HttpServletRequest req, HttpServletResponse resp) {
+		HttpSession session = req.getSession();
+		session.getAttribute("loginedMemberId");
+		if ( session.getAttribute("loginedMemberId") == null ) {
+			return "html:<script> alert('게시물 작성은 로그인 후 가능합니다.'); history.back(); </script>"; 
+		}
 		return "article/write.jsp";
 	}
 
 	private String doActionDelete(HttpServletRequest req, HttpServletResponse resp) {
+		HttpSession session = req.getSession();
+		session.getAttribute("loginedMemberId");
+		int memberId = 0;
+		if ( session.getAttribute("loginedMemberId") == null ) {
+			return "html:<script> alert('게시물 삭제는 로그인 후 가능합니다.'); history.back(); </script>"; 
+		}
+		else {
+			memberId = (int)session.getAttribute("loginedMemberId");
+		}
 
 		int id = 0;
 
@@ -221,6 +292,10 @@ public class ArticleController extends Controller {
 
 			id = Util.getInt(req, "id");
 
+		}
+		Article article = articleService.getForPrintArticle(id);
+		if ( article.getMemberId() != memberId ) {
+			return "html:<script> alert('게시물 삭제는 작성자 본인만 가능합니다.'); history.back(); </script>";
 		}
 
 		int deleteId = articleService.articleDelete(id);
@@ -265,10 +340,13 @@ public class ArticleController extends Controller {
 		}
 
 		articleService.increaseHit(id);
-
+		
+				
+		
 		// 이 article은 그냥(평범한) article이 아니다.
 		Article article = articleService.getForPrintArticle(id); // sql 쿼리에 작성해놓은 정보들만이 아닌 부가적으로 추가한 자잘한 (항목 추가한)작성자 등
 																	// 항목 모두 불러오는 메서드 네임
+		Member loginedMember = memberService.getForLogoutMember(article.getMemberId());
 		int beforeId = articleService.getForPageMoveBeforeArticle(id, cateItemId);
 		int afterId = articleService.getForPageMoveAfterArticle(id, cateItemId);
 		CateItem cateItem = articleService.getCateItem(article.getCateItemId());
@@ -277,8 +355,10 @@ public class ArticleController extends Controller {
 		req.setAttribute("article", article);
 		req.setAttribute("cateItem", cateItem);
 		req.setAttribute("cateItemId", cateItemId);
-
+		req.setAttribute("loginedMember", loginedMember);
+		
 		List<ArticleReply> articleReplies = articleService.getArticleRepliesForDetail(id);
+		System.out.println(articleReplies);
 		req.setAttribute("articleReplies", articleReplies);
 
 		// return "article/detail.jsp";

@@ -57,8 +57,8 @@ public class ArticleService extends Service  {
 		return articleDao.getCateItem(cateItemId);
 	}
 
-	public int write( int cateItemId, int displayStatus, String title, String body) {
-		return articleDao.write( cateItemId, displayStatus,  title,  body);
+	public int write( int cateItemId, int displayStatus, String title, String body, int loginedMemberId) {
+		return articleDao.write( cateItemId, displayStatus,  title,  body, loginedMemberId);
 		
 	}
 
@@ -93,8 +93,8 @@ public class ArticleService extends Service  {
 		
 	}
 
-	public int getArticleReply(String body, int articleId) {
-		return articleDao.getArticleReply(body, articleId);
+	public int getArticleReply(String body, int articleId, int memberId) {
+		return articleDao.getArticleReply(body, articleId, memberId);
 	}
 
 	public List<ArticleReply> getArticleRepliesForDetail(int articleId) {
@@ -112,6 +112,8 @@ public class ArticleService extends Service  {
 	public ArticleReply getArticleReplyForModify(int id) {
 		return articleDao.getArticleReplyForModify(id);
 	}
+
+	
 
 
 }

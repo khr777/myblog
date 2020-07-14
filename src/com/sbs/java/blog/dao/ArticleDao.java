@@ -122,7 +122,7 @@ public class ArticleDao extends Dao {
 		return new CateItem(DBUtil.selectRow(dbConn, sql));
 	}
 
-	public int write(int cateItemId, int displayStatus, String title, String body) {
+	public int write(int cateItemId, int displayStatus, String title, String body, int loginedMemberId) {
 		SecSql secSql = new SecSql();
 		
 		
@@ -132,7 +132,8 @@ public class ArticleDao extends Dao {
 		secSql.append(", title = ? ", title);
 		secSql.append(", body = ? ", body);
 		secSql.append(", displayStatus = ? ", displayStatus);
-		secSql.append(", cateItemId = ?", cateItemId); 
+		secSql.append(", cateItemId = ?", cateItemId);
+		secSql.append(", memberId = ?", loginedMemberId);
 
 
 		return DBUtil.insert(dbConn, secSql);
@@ -210,13 +211,13 @@ public class ArticleDao extends Dao {
 			return DBUtil.update(dbConn, sql);
 		}
 
-		public int getArticleReply(String body, int articleId) {
+		public int getArticleReply(String body, int articleId, int memberId) {
 			SecSql sql = SecSql.from("INSERT INTO articleReply");
 			sql.append("SET regDate = NOW()");
 			sql.append(", updateDate = NOW()");
 			sql.append(", articleId = ?", articleId);
 			sql.append(", `body` = ?",body );
-			sql.append(", memberId = 1");
+			sql.append(", memberId = ?", memberId );
 			
 			
 			return DBUtil.insert(dbConn, sql);
@@ -226,6 +227,7 @@ public class ArticleDao extends Dao {
 			SecSql sql = SecSql.from("SELECT * ");
 			sql.append("FROM articleReply");
 			sql.append("WHERE articleId = ?", articleId);
+			sql.append("ORDER BY id DESC ");
 			
 			List<Map<String, Object>> rows = DBUtil.selectRows(dbConn, sql);
 			List<ArticleReply> articleReplies = new ArrayList<>();
@@ -264,4 +266,5 @@ public class ArticleDao extends Dao {
 			return new ArticleReply(DBUtil.selectRow(dbConn, sql));
 		}
 
+		
 }

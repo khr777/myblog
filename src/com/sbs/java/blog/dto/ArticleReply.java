@@ -18,7 +18,7 @@ public class ArticleReply extends Dto {
 		this.articleId = (int)row.get("articleId");
 		this.body = (String)row.get("body");
 		this.memberId = (int)row.get("memberId");
-
+		
 	}
 
 	@Override

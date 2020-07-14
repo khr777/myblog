@@ -5,8 +5,28 @@
 	pageEncoding="UTF-8"%>
 <%List<Member> members = (List<Member>)request.getAttribute("members"); %>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/js-sha256/0.9.0/sha256.min.js"></script>
+
+
+<%-- <%="<style>.form1 .form=row:not(:first-child) { margin-top : 10px; }</style>" %> style 쪼개져버릴 때 임시방편. --%>
+
+
+<!-- 샘께서는 lib style 코드들을 common.css로 빼놓으셨음. 내 코드는... 좀 꼬아놔서ㅠㅠ.... 각 페이지에서 사용하려 함 -->
+
 <style>
-/* lib   (나중에 다른 곳으로 옮길 예정이라셨음) */
+
+.form1 .form-row:last-child {
+}
+
+.form1 .form-row:last-child .input:first-child input{
+	width:400px;
+	
+	
+}
+.form1 .form-row:last-child .input:nth-child(2) input  {
+	width:80px;
+	
+	
+}
 .form1 {
 	position: absolute;
 	display: block;
@@ -46,22 +66,7 @@
 	box-sizing: border-box;
 	padding: 10px;
 	
-}
-
-.form1 .form-row:last-child {
-}
-
-.form1 .form-row:last-child .input:first-child input{
-	width:400px;
-	
-	
-}
-.form1 .form-row:last-child .input:nth-child(2) input  {
-	width:80px;
-	
-	
-}
-
+}	
 
 /* cus */
 .write-form-box {
@@ -175,6 +180,12 @@
 			</div>
 		</div>
 		<div class="form-row">
+			<div class="label">이메일</div>
+			<div class="input">
+				<input name="email" type="email" placeholder="이메일을 입력해주세요." />
+			</div>
+		</div>
+		<div class="form-row">
 			<div class="input">
 				<input type="submit" value="회원가입 정보 제출" />
 				<!-- <a href="#" onclick="history.back();">취소</a>   샘 코드 -->
@@ -264,6 +275,12 @@ function submitJoinForm(form) {
 		form.loginPw.value = "";
 		form.loginPwConfirm.value = "";
 		form.loginPw.focus();
+		return;
+	}
+	form.email.value = form.email.value.trim();
+	if ( form.email.value.length == 0 ) {
+		alert('이메일을 입력해주세요.');
+		form.email.focus();
 		return;
 	}
 	form.loginPwReal.value = sha256(form.loginPw.value);  /* 암호화된 텍스트를 넘겨준다.*/

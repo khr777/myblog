@@ -1,6 +1,7 @@
 <%@ include file="/jsp/part/head.jspf"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/js-sha256/0.9.0/sha256.min.js"></script>	
 <style>
 /* lib   (나중에 다른 곳으로 옮길 예정이라셨음) */
 .form1 {
@@ -161,7 +162,7 @@
 </style>
 
 <div class="write-form-box">
-	<form name="form" action="doLogin" method="POST" class="write-form form1">	
+	<form name="form" action="doLogin" method="POST" class="write-form form1" onsubmit="submitLoginForm(this); return false;">	
 		<div class="form-row">
 			<div class="label">로그인 아이디</div>
 			<div class="input">
@@ -171,7 +172,7 @@
 		<div class="form-row">
 			<div class="label">로그인 비밀번호</div>
 			<div class="input">
-				<input name="loginPw" type="text" placeholder="로그인 비밀번호를 입력해주세요." />
+				<input name="loginPw" type="password" placeholder="로그인 비밀번호를 입력해주세요." />
 			</div>
 		</div>
 		<div class="form-row">
@@ -190,6 +191,30 @@
 	</form>
 	<div class="blog-name">harry.my.iu.gy</div>
 </div>
+
+<script>
+function submitLoginForm(form) {
+	form.loginId.value = form.loginId.value.trim();
+	if ( form.loginId.value.length == 0 ) {
+		alert('아이디를 입력해주세요.');
+		form.loginId.focus();
+		return;
+	}
+
+	form.loginPw.value = form.loginPw.value.trim();
+	if ( form.loginPw.value.length == 0 ) {
+		alert('비밀번호를 입력해주세요.');
+		form.loginPw.focus();
+		return;
+	}
+
+	form.loginPw.value = sha256(form.loginPw.value);  /* 암호화된 텍스트를 넘겨준다.*/
+	
+	form.submit();
+}
+</script>
+
+
 
 
 <%@ include file="/jsp/part/foot.jspf"%>

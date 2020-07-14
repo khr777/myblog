@@ -8,6 +8,7 @@ public class Article extends Dto {
 	private String title;
 	private String body;
 	private int hit;
+	private int memberId;
 
 	public Article() {
 
@@ -22,13 +23,24 @@ public class Article extends Dto {
 		this.title = (String) row.get("title");
 		this.body = (String) row.get("body");
 		this.hit = (int)row.get("hit");
+		this.memberId = (int)row.get("memberId");
 
 	}
 	
+	
+
+	public int getMemberId() {
+		return memberId;
+	}
+
+	public void setMemberId(int memberId) {
+		this.memberId = memberId;
+	}
+
 	@Override
 	public String toString() {
 		return "Article [updateDate=" + updateDate + ", cateItemId=" + cateItemId + ", title=" + title + ", body="
-				+ body + ", hit + " + hit + ", getId()=" + getId() + ", getRegDate()=" + getRegDate() + ", dto=" + super.toString() + "]";
+				+ body + ", hit=" + hit + ", memberId=" + memberId + ", dto=" + super.toString() + "]";
 	}
 
 	public int getHit() {
