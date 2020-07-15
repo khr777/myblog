@@ -1,11 +1,14 @@
 <%@page import="java.util.List"%>
 <%@page import="com.sbs.java.blog.dto.CateItem"%>
+<%@page import="com.sbs.java.blog.dto.Member" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"	pageEncoding="UTF-8"%>
 
 
 <% 
 List<CateItem> cateItems = (List)request.getAttribute("cateItems");
-
+Member loginedMember = (Member) request.getAttribute("loginedMember");
+int loginedMemberId = (int) request.getAttribute("loginedMemberId");
+boolean isLogined = (boolean) request.getAttribute("isLogined");
 %>	
 <!DOCTYPE html>
 <html lang="ko">
@@ -41,28 +44,63 @@ List<CateItem> cateItems = (List)request.getAttribute("cateItems");
 <script src="${pageContext.request.contextPath}/resource/js/common.js"></script>
 <script
 	src="${pageContext.request.contextPath}/resource/js/home/index.js"></script>
+<script>
+	var loginedMemberId = parseInt("${loginedMemberId}");
+	var isLogined = "${isLogined}" == "true";
+	var loginedMember = null;
+</script>
+
+<!--  서버 사이드, 클라리언트 사이드 양쪽에서 '로그인하지 않으면 사용 불가'를 양쪽에서 관리해야 한다. -->
+ 
+<% if ( isLogined ) {%>
+<script>	
+	loginedMember = {};
+	loginedMember["id"] = parseInt("${loginedMember.id}"); // el 표기법으로하면 loginedMember.getId()를 id로 축약 가능!
+	loginedMember["regDate"] = "${loginedMember.regDate}";
+	loginedMember["loginId"] = "${loginedMember.loginId}";
+	// loginedMember["loginPw"] password는 고객 웹브라우저에 공개되면 안되므로 절대 넣어주면 안된다고 하셨음!
+	loginedMember["name"] = "${loginedMember.name}";
+	loginedMember["email"] = "${loginedMember.email}";
+	loginedMember["nickname"] = "${loginedMember.nickname}";
+	
+</script>
+<% } %>
+
+
+<!-- <script>   "나중에 이런것도 가능하다" 고 설명해주셨음! -->
+<!-- // if ( isLogined ) { -->
+<!-- // 	alert(loginedMember.name + "님, 환영합니다."); -->
+<!-- // } -->
+<!-- </script>  -->
+
 
 </head>
 <body>
 	<div class="top-bar visible-on-md-up">
+	
 		<div class="height-100p flex flex-jc-sb">
 			<a href="${pageContext.request.contextPath}/s/home/main"
 				class="logo flex flex-ai-c"> <img
 				src="../../resource/img/white-logo.jpg" alt="" style="width: 100px;" />
 			</a>
+<%-- 			<% if ( loginedMember != null ) { %> --%>
+<%-- 			<div class="con" style="font-weight:bold;"><%=loginedMember.getName()%>님, 환영합니다.</div> --%>
+<%-- 			<%} %> --%>
 			<nav class="menu-box-1 flex">
 				<ul class="flex">
 					<li>
 						<a href="${pageContext.request.contextPath}/s/home/main" class="flex height-100p flex-ai-c">Home</a>
 					</li>
-					<% if (session.getAttribute("loginedMemberId") == null ) { %>
+					<% if ( isLogined == false ) { %>
 					<li>
 						<a href="${pageContext.request.contextPath}/s/member/login" class="flex height-100p flex-ai-c">Login</a>
 					</li>	
-					<%} %>
-					<% if (session.getAttribute("loginedMemberId") != null ) { %>
+					<%} else { %>
 					<li>
-						<a href="${pageContext.request.contextPath}/s/member/logout" class="flex height-100p flex-ai-c">Logout</a>
+						<a href="${pageContext.request.contextPath}/s/member/doLogout" class="flex height-100p flex-ai-c">
+						<div style="font-size:1rem;"><%=loginedMember.getName()%></div>/ Logout
+							
+						</a>
 					</li>	
 					<%} %>
 					
@@ -113,15 +151,14 @@ List<CateItem> cateItems = (List)request.getAttribute("cateItems");
 					<a href="${pageContext.request.contextPath}/s/home/main"
 					class="block">Home</a>
 				</li>
-				<% if (session.getAttribute("loginedMemberId") == null ) { %>
+				<% if ( isLogined == false ) { %>
 				<li>
 					<a href="${pageContext.request.contextPath}/s/member/login"
 					class="block">login</a>
 				</li>
-				<%} %>
-				<% if (session.getAttribute("loginedMemberId") != null ) { %>
+				<%} else  { %>
 				<li>
-					<a href="${pageContext.request.contextPath}/s/member/logout"
+					<a href="${pageContext.request.contextPath}/s/member/doLogout"
 					class="block">logout</a>
 				</li>
 				<%} %>

@@ -59,4 +59,9 @@ public class MemberService extends Service {
 	public int getMemberIdByLoginIdAndLoginPw(String loginId, String loginPw) {
 		return memberDao.getMemberIdByLoginIdAndLoginPw(loginId, loginPw);
 	}
+
+
+	public Member getMemberById(int id) {
+		return memberDao.getMemberById(id);
+	}
 }

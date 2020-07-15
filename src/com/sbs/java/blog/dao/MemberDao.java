@@ -104,6 +104,14 @@ public class MemberDao {
 		return DBUtil.selectRowIntValue(dbConn, sql);
 	}
 
+	public Member getMemberById(int id) {
+		SecSql sql = SecSql.from("SELECT *");
+		sql.append("FROM `member`");
+		sql.append("WHERE id = ?", id);
+		
+		return new Member(DBUtil.selectRow(dbConn, sql));
+	}
+
 	
 	
 }

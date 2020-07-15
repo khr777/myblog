@@ -95,6 +95,7 @@ String cateItemName = (String) request.getAttribute("cateItemName");
 						style="block" />
 					<%=article.getRegDate()%>
 				</div>
+				<div class="list-writer">작성자 : <%=article.getExtra().get("writer") %></div>
 			</div>
 			<div class="list-updateDate" style="display: none;"><%=article.getUpdateDate()%></div>
 		</a> <br>

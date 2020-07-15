@@ -41,8 +41,8 @@ public class ArticleService extends Service  {
 	}
 	
 	//articleService에서는 controller가 넘겨주는 값이 어떤 값인지(예시:loginedMemberId) 알지 못한다. dto에 선언된 변수명으로 통일해서 넘기는게 좋다!
-	public int write( int cateItemId, int displayStatus, String title, String body, int loginedMemberId) {
-		return articleDao.write( cateItemId, displayStatus,  title,  body, loginedMemberId);
+	public int write( int cateItemId, int displayStatus, String title, String body, int memberId) {
+		return articleDao.write( cateItemId, displayStatus,  title,  body, memberId);
 		
 	}
 
@@ -76,16 +76,16 @@ public class ArticleService extends Service  {
 		return articleDao.getArticleRepliesForDetail(articleId);
 	}
 
-	public void articleReplyDelete(int replyId) {
-		articleDao.articleReplyDelete(replyId);
+	public void articleReplyDelete(int id) {
+		articleDao.articleReplyDelete(id);
 	}
 
-	public void articleReplyModify(int replyId, String body) {
-		articleDao.articleReplyModify(replyId, body);
+	public void articleReplyModify(int id, String body) { 
+		articleDao.articleReplyModify(id, body);
 	}
 
-	public ArticleReply getArticleReplyForModify(int id) {
-		return articleDao.getArticleReplyForModify(id);
+	public ArticleReply getArticleReplyForModify(int id, int memberId) {
+		return articleDao.getArticleReplyForModify(id, memberId);
 	}
 
 	

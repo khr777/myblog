@@ -374,6 +374,9 @@ html {
     
   }
   
+  .top-bar .menu-box-1 ul .loginedMemberName {
+  	display:block;
+  }
   .top-bar .menu-box-1 > ul > li > a {
     padding:0 30px;
     font-weight:bold;
@@ -714,6 +717,7 @@ html {
 .article-list-box-1 .list-content .list-id {
 	position:relative;
 	width:100px;
+	
 }
 
 .article-list-box-1 .list-content .list-id-regDate-box .list-id > img {
@@ -724,17 +728,24 @@ html {
 .article-list-box-1 .list-content  .list-id-regDate-box .list-regDate {
 	position:relative;
 	width:260px;
+	
 }
+
+.article-list-box-1 .list-content  .list-id-regDate-box .list-writer {
+	margin-top:-3px;
+	font-weight:bold;	
+}
+
+
 
 .article-list-box-1 .list-content .list-id-regDate-box .list-regDate > img {
 	position:absolute;
 	left:-10px;
-	bottom:-5px;
+	bottom:-1px;
 }
 
 .article-list-box-1 .list-content .list-id-regDate-box {
 	justify-content:center;
-	
 }
 
 .article-list-box-1 .list-content {

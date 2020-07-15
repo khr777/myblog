@@ -22,15 +22,15 @@ public class ArticleDao extends Dao {
 
 	public List<Article> getForPrintListArticles(int page, int cateItemId, int itemsInAPage, String searchKeywordType,
 			String searchKeywordTypeBody, String searchKeyword) {
-		
-			SecSql sql = new SecSql();
 
-		int itemInAPage = 10; // 한 페이지에 담을 게시물 개수.    //샘 구조랑 조금 다른듯.. 내 구조에서는 이 3가지 코드 지우면 안됌.
+		int itemInAPage = 10; // 한 페이지에 담을 게시물 개수. //샘 구조랑 조금 다른듯.. 내 구조에서는 이 3가지 코드 지우면 안됌.
 		this.itemInAPage = itemInAPage;
 		int limitFrom = (page - 1) * itemInAPage;
-		sql.append("SELECT *");
-		sql.append("FROM article");
-		sql.append("WHERE displayStatus = 1");
+		SecSql sql = SecSql.from("SELECT A.*, M.nickname AS extra__writer");
+		sql.append("FROM article AS A");
+		sql.append("INNER JOIN `member` AS M");
+		sql.append("ON A.memberId = M.id");
+		sql.append("WHERE A.displayStatus = 1");
 		if (cateItemId != 0) {
 			sql.append("AND cateItemId = ?", cateItemId);
 		}
@@ -38,7 +38,7 @@ public class ArticleDao extends Dao {
 			sql.append("AND title LIKE CONCAT('%', ? , '%')", searchKeyword);
 			sql.append("OR body LIKE CONCAT('%', ? , '%')", searchKeyword);
 		}
-		sql.append("ORDER BY id DESC");
+		sql.append("ORDER BY A.id DESC");
 		sql.append("LIMIT ?, ? ", limitFrom, itemInAPage);
 
 		// 이 쿼리를 위의 문장으로 바꿨음.sql += String.format("LIMIT 0, 5 "); //최신 5개 가져와라. (1, 5):
@@ -59,16 +59,16 @@ public class ArticleDao extends Dao {
 		sql.append("SELECT *, '김혜련' AS extra__writer "); // 만들어놓은 쿼리에는 작성자명을 담을 수가 없다. 그래서 'extra__' 를 적은 것.
 		sql.append("FROM article ");
 		sql.append("WHERE 1 "); // 이유는 id 가 RPIMARY KEY라서 중복되는 값이 없기 때문이다. 그리고 순서를 바꿀 수 있는 이유는 WHERE 1을 걸어놨기
-											// 때문에 가능한 것이다.
+								// 때문에 가능한 것이다.
 		sql.append("AND id = ? ", id); // tip : displayStatus가 이 줄에 와도 상관없지만 검색 속도를 빠르게 하고 싶다면 id를 먼저 써주는 것이
-													// 좋다.
+										// 좋다.
 		sql.append("AND displayStatus = 1 ");
 
 		return new Article(DBUtil.selectRow(dbConn, sql));
 	}
 
-	
-	public int getForPrintListArticlesCount(int cateItemId, String searchKeywordType, String searchKeywordTypeBody, String searchKeyword) {
+	public int getForPrintListArticlesCount(int cateItemId, String searchKeywordType, String searchKeywordTypeBody,
+			String searchKeyword) {
 		SecSql sql = new SecSql();
 
 		sql.append("SELECT COUNT(*) AS cnt ");
@@ -82,16 +82,12 @@ public class ArticleDao extends Dao {
 			sql.append("AND title LIKE CONCAT('%', ?, '%')", searchKeyword);
 			sql.append("OR body LIKE CONCAT('%', ?, '%')", searchKeyword);
 		}
-		
-		
-		
 
 		int count = DBUtil.selectRowIntValue(dbConn, sql);
 
 		return count;
 
 	}
-
 
 	public List<CateItem> getForPrintCateItems() {
 		SecSql sql = new SecSql();
@@ -113,7 +109,7 @@ public class ArticleDao extends Dao {
 
 	public CateItem getCateItem(int cateItemId) {
 		SecSql sql = new SecSql();
-		
+
 		sql.append("SELECT * ");
 		sql.append("FROM cateItem ");
 		sql.append("WHERE 1 ");
@@ -122,10 +118,9 @@ public class ArticleDao extends Dao {
 		return new CateItem(DBUtil.selectRow(dbConn, sql));
 	}
 
-	public int write(int cateItemId, int displayStatus, String title, String body, int loginedMemberId) {
+	public int write(int cateItemId, int displayStatus, String title, String body, int memberId) {
 		SecSql secSql = new SecSql();
-		
-		
+
 		secSql.append("INSERT INTO article");
 		secSql.append("SET regDate = NOW()");
 		secSql.append(", updateDate = NOW()");
@@ -133,138 +128,137 @@ public class ArticleDao extends Dao {
 		secSql.append(", body = ? ", body);
 		secSql.append(", displayStatus = ? ", displayStatus);
 		secSql.append(", cateItemId = ?", cateItemId);
-		secSql.append(", memberId = ?", loginedMemberId);
-
+		secSql.append(", memberId = ?", memberId);
 
 		return DBUtil.insert(dbConn, secSql);
 	}
 
-	
+	public void articleModify(int id, int cateItemId, int displayStatus, String title, String body) {
 
-		public void articleModify(int id, int cateItemId, int displayStatus, String title, String body) {
-		
-			SecSql secSql = new SecSql();
-			
-			secSql.append("UPDATE article  "); 
-			secSql.append("SET updateDate = NOW()");
-			secSql.append(", cateItemId = ?", cateItemId);
-			secSql.append(", title = ?", title);
-			secSql.append(", body = ? ", body);
-			secSql.append(", displayStatus = ?", displayStatus);
-			secSql.append(" WHERE id = ?", id);
+		SecSql secSql = new SecSql();
 
-			DBUtil.update(dbConn, secSql);
-		
+		secSql.append("UPDATE article  ");
+		secSql.append("SET updateDate = NOW()");
+		secSql.append(", cateItemId = ?", cateItemId);
+		secSql.append(", title = ?", title);
+		secSql.append(", body = ? ", body);
+		secSql.append(", displayStatus = ?", displayStatus);
+		secSql.append(" WHERE id = ?", id);
+
+		DBUtil.update(dbConn, secSql);
+
 	}
 
-		public int articleDelete(int id) {
-			SecSql secSql = new SecSql();
-			
-			secSql.append("DELETE FROM article ");
-			secSql.append("WHERE id = ? ", id);
-			
-			return DBUtil.update(dbConn, secSql);
+	public int articleDelete(int id) {
+		SecSql secSql = new SecSql();
+
+		secSql.append("DELETE FROM article ");
+		secSql.append("WHERE id = ? ", id);
+
+		return DBUtil.update(dbConn, secSql);
+	}
+
+	public int getForPageMoveBeforeArticle(int id, int cateItemId) {
+		SecSql sql = new SecSql();
+
+		sql.append("SELECT id ");
+		sql.append("FROM article ");
+		sql.append("WHERE id < ? ", id);
+		sql.append("AND displayStatus = 1 ");
+		if (cateItemId != 0) {
+			sql.append("AND cateItemId = ? ", cateItemId);
 		}
+		sql.append("ORDER BY id DESC ");
+		sql.append("LIMIT 1");
+
+		int articleId = DBUtil.selectRowIntValue(dbConn, sql);
+
+		return articleId;
+	}
+
+	public int getForPageMoveAfterArticle(int id, int cateItemId) {
+		SecSql sql = new SecSql();
+		sql.append("SELECT id");
+		sql.append("FROM article");
+		sql.append("WHERE id > ?", id);
+		sql.append("AND displayStatus = 1");
+		if (cateItemId != 0) {
+			sql.append("AND cateItemId = ?", cateItemId);
+		}
+
+		sql.append("ORDER BY id DESC ");
+		sql.append("LIMIT 1");
+
+		int articleId = DBUtil.selectRowIntValue(dbConn, sql);
+
+		return articleId;
+	}
+
+	public int increaseHit(int id) {
+		SecSql sql = SecSql.from("UPDATE article");
+		sql.append("SET hit = hit + 1");
+		sql.append("WHERE id = ?", id);
+
+		return DBUtil.update(dbConn, sql);
+	}
+
+	public int getArticleReply(String body, int articleId, int memberId) {
+		SecSql sql = SecSql.from("INSERT INTO articleReply");
+		sql.append("SET regDate = NOW()");
+		sql.append(", updateDate = NOW()");
+		sql.append(", articleId = ?", articleId);
+		sql.append(", `body` = ?", body);
+		sql.append(", memberId = ?", memberId);
+
+		return DBUtil.insert(dbConn, sql);
+	}
+
+	public List<ArticleReply> getArticleRepliesForDetail(int articleId) {
 		
-
-		public int getForPageMoveBeforeArticle(int id, int cateItemId) {
-			SecSql sql = new SecSql();
-			
-			sql.append("SELECT id ");
-			sql.append("FROM article ");
-			sql.append("WHERE id < ? ", id);
-			sql.append("AND displayStatus = 1 ");
-			if ( cateItemId != 0 ) {
-				sql.append("AND cateItemId = ? ", cateItemId);
-			}
-			sql.append("ORDER BY id DESC ");
-			sql.append("LIMIT 1");
-			
-			int articleId = DBUtil.selectRowIntValue(dbConn, sql);
-			
-			return  articleId;
-		}
-
-		public int getForPageMoveAfterArticle(int id, int cateItemId) {
-			SecSql sql = new SecSql();
-			sql.append("SELECT id");
-			sql.append("FROM article");
-			sql.append("WHERE id > ?", id);
-			sql.append("AND displayStatus = 1");
-			if ( cateItemId != 0 ) {
-				sql.append("AND cateItemId = ?", cateItemId);
-			}
-			
-			sql.append("ORDER BY id DESC ");
-			sql.append("LIMIT 1");
-			
-			int articleId = DBUtil.selectRowIntValue(dbConn, sql);
-			
-			return  articleId;
-		}
-
-		public int increaseHit(int id) {
-			SecSql sql = SecSql.from("UPDATE article");
-			sql.append("SET hit = hit + 1");
-			sql.append("WHERE id = ?", id);
-			
-			return DBUtil.update(dbConn, sql);
-		}
-
-		public int getArticleReply(String body, int articleId, int memberId) {
-			SecSql sql = SecSql.from("INSERT INTO articleReply");
-			sql.append("SET regDate = NOW()");
-			sql.append(", updateDate = NOW()");
-			sql.append(", articleId = ?", articleId);
-			sql.append(", `body` = ?",body );
-			sql.append(", memberId = ?", memberId );
-			
-			
-			return DBUtil.insert(dbConn, sql);
-		}
-
-		public List<ArticleReply> getArticleRepliesForDetail(int articleId) {
-			SecSql sql = SecSql.from("SELECT * ");
-			sql.append("FROM articleReply");
-			sql.append("WHERE articleId = ?", articleId);
-			sql.append("ORDER BY id DESC ");
-			
-			List<Map<String, Object>> rows = DBUtil.selectRows(dbConn, sql);
-			List<ArticleReply> articleReplies = new ArrayList<>();
-
-			for (Map<String, Object> row : rows) {
-				articleReplies.add(new ArticleReply(row));
-			}
-			return articleReplies;
-		}
-
-		public int articleReplyDelete(int replyId) {
-			SecSql secSql = new SecSql();
-			
-			secSql.append("DELETE FROM articleReply ");
-			secSql.append("WHERE id = ? ", replyId);
-			
-			return DBUtil.update(dbConn, secSql);
-		}
-
-		public void articleReplyModify(int replyId, String body) {
-			SecSql sql = SecSql.from("UPDATE articleReply ");
-			sql.append("SET updateDate = NOW()");
-			sql.append(", body = ? ", body);
-			sql.append(" WHERE id = ?", replyId);
-			
 		
-			DBUtil.update(dbConn, sql);
-		
-		}
+		SecSql sql = SecSql.from("SELECT A.*, M.nickname AS extra__writer");
+		sql.append("FROM articleReply AS A");
+		sql.append("INNER JOIN `member` AS M");
+		sql.append("ON A.memberId = M.id");
+		sql.append("WHERE articleId = ?", articleId);
+		sql.append("ORDER BY A.id DESC");
 
-		public ArticleReply getArticleReplyForModify(int id) {
-			SecSql sql = SecSql.from("SELECT *");
-			sql.append("FROM articleReply");
-			sql.append("WHERE id = ?", id);
-			
-			return new ArticleReply(DBUtil.selectRow(dbConn, sql));
-		}
 
-		
+		List<Map<String, Object>> rows = DBUtil.selectRows(dbConn, sql);
+		List<ArticleReply> articleReplies = new ArrayList<>();
+
+		for (Map<String, Object> row : rows) {
+			articleReplies.add(new ArticleReply(row));
+		}
+		return articleReplies;
+	}
+
+	
+	public int articleReplyDelete(int id) {
+		SecSql secSql = new SecSql();
+
+		secSql.append("DELETE FROM articleReply ");
+		secSql.append("WHERE id = ? ", id);
+
+		return DBUtil.update(dbConn, secSql);
+	}
+
+	public void articleReplyModify(int id, String body) {
+		SecSql sql = SecSql.from("UPDATE articleReply ");
+		sql.append("SET updateDate = NOW()");
+		sql.append(", body = ? ", body);
+		sql.append(" WHERE id = ?", id);
+
+		DBUtil.update(dbConn, sql);
+
+	}
+
+	public ArticleReply getArticleReplyForModify(int id, int memberId) {
+		SecSql sql = SecSql.from("SELECT *");
+		sql.append("FROM articleReply");
+		sql.append("WHERE id = ?", id);
+
+		return new ArticleReply(DBUtil.selectRow(dbConn, sql));
+	}
+
 }

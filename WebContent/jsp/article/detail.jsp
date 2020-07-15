@@ -135,11 +135,13 @@
 			</div>
 			<div class="delete-button">
 				<button type="submit"
-					onclick="location.href='delete?id=${param.id}'"
-					style="position: absolute; left: 80%; top: 30%;">삭제</button>
+					onclick="location.href='doDelete?id=${param.id}'"
+					style="position: absolute; left:55%; top: 30%;">게시물 삭제</button>
 			</div>
 		</div>
-		<form name="replyForm" action="doArticleReply" method="POST"
+		
+		<br />
+		<form name="replyForm" action="replyWrite" method="POST"
 			class="form2" onsubmit="submitArticleReply(this); return false;">
 			<div class="replyWrite-box">
 				<div class="write">
@@ -153,6 +155,7 @@
 				</div>
 			</div>
 		</form>
+		<div class="border"></div>
 		<%
 			for (ArticleReply articleReply : articleReplies) {
 		%>  
@@ -161,7 +164,7 @@
 				<div class="writer-data">
 					<div class="writer1">
 						작성자 :
-						<%=articleReply.getMemberId()%></div>
+						<%=articleReply.getExtra().get("writer")%></div>
 					<div class="regDate1">
 						작성일 :
 						<%=articleReply.getRegDate()%>

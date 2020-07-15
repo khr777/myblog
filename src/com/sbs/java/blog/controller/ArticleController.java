@@ -33,94 +33,79 @@ public class ArticleController extends Controller {
 	public String doAction() {
 		switch (actionMethodName) {
 		case "list":
-			return doActionList(req, resp);
+			return doActionList();
 		case "detail":
-			return doActionDetail(req, resp);
+			return doActionDetail();
 		case "editor":
-			return doActionEditor(req, resp);
+			return doActionEditor();
 		case "aboutMe":
-			return doActionAboutMe(req, resp);
+			return doActionAboutMe();
 		case "modify":
-			return doActionModify(req, resp);
-		case "delete":
-			return doActionDelete(req, resp);
+			return doActionModify();
+		case "doDelete":
+			return doActionDoDelete();
 		case "write":
-			return doActionWrite(req, resp);
+			return doActionWrite();
 		case "doWrite":
-			return doActionDoWrite(req, resp);
+			return doActionDoWrite();
 		case "doModify":
-			return doModify(req, resp);
-		case "doArticleReply":  // 댓글 작성
- 			return doActionArticleReply(req, resp);  
+			return doModify();
+		case "replyWrite":  // 댓글 작성
+ 			return doActionReplyWrite();  
 		case "replyModify":    //댓글 수정 페이지 이동
-			return doActionReplyModify(req, resp);
+			return doActionReplyModify();
 		case "doReplyModify":  // 댓글 수정 후 저장하기 위한 페이지
-			return doActionDoReplyModify(req, resp);
+			return doActionDoReplyModify();
 		case "doReplyDelete":
-			return doActionDoReplyDelete(req, resp);
+			return doActionDoReplyDelete();
 		}
 		return "";
 	}
 
 	
 	
-	private String doActionReplyModify(HttpServletRequest req, HttpServletResponse resp) {
+	private String doActionReplyModify() {
 		
-		HttpSession session = req.getSession();
-		session.getAttribute("loginedMemberId");
-		int memberId = 0;
-		if ( session.getAttribute("loginedMemberId") == null ) {
-			return "html:<script> alert('댓글 수정은 로그인 후 가능합니다.'); history.back(); </script>"; 
-		} 
-		else {
-			memberId = (int)session.getAttribute("loginedMemberId");
-		}
+		int loginedMemberId = (int)req.getAttribute("loginedMemberId");
 		
 		
-		
-		int id = 0;
+		int id = 0;  // 댓글 번호 
 
 		if (!Util.empty(req, "id") && Util.isNum(req, "id")) { // 댓글 번호가 없지 않고 숫자가 맞으면
 			id = Util.getInt(req, "id");
 		}
 		
 		
-		//  ★★★★★ dto 작성자(extra_ 빈값으로 출력되고 있음. 로그인 성공하면 수정해야 할 것 같음!
-		ArticleReply articleReply = articleService.getArticleReplyForModify(id);
-		if ( memberId != articleReply.getMemberId() ) {
+		ArticleReply articleReply = articleService.getArticleReplyForModify(id, loginedMemberId);
+		Member member = memberService.getMemberById(loginedMemberId);
+		if ( loginedMemberId != articleReply.getMemberId() ) {
 			return "html:<script> alert('댓글 수정은 작성자 본인만 가능합니다.'); history.back(); </script>"; 
 		}
 		
 		
 		req.setAttribute("articleReply", articleReply);
+		req.setAttribute("member", member);
 		
 		return "article/replyModify.jsp";
 	}
 
 	
 	
-	private String doActionDoReplyDelete(HttpServletRequest req, HttpServletResponse resp) {
-		HttpSession session = req.getSession();
-		session.getAttribute("loginedMemberId");
-		int memberId = 0;
-		if ( session.getAttribute("loginedMemberId") == null ) {
-			return "html:<script> alert('댓글 삭제는 로그인 후 가능합니다.'); history.back(); </script>"; 
-		}
-		else {
-			memberId = (int)session.getAttribute("loginedMemberId");
-		}
+	private String doActionDoReplyDelete() {
+		
+		int loginedMemberId = (int)req.getAttribute("loginedMemberId");
 		int replyId = 0;
 
-		if (!Util.empty(req, "replyId") && Util.isNum(req, "replyId")) { // cateItemId가 없지 않고 숫자가 맞으면
+		if (!Util.empty(req, "replyId") && Util.isNum(req, "replyId")) { // 댓글 번호
 			replyId = Util.getInt(req, "replyId");
 		}
 		int id = 0;
 
-		if (!Util.empty(req, "id") && Util.isNum(req, "id")) { // cateItemId가 없지 않고 숫자가 맞으면
+		if (!Util.empty(req, "id") && Util.isNum(req, "id")) { // 게시물 번호 
 			id = Util.getInt(req, "id");
 		}
-		ArticleReply articleReply = articleService.getArticleReplyForModify(replyId);
-		if ( memberId != articleReply.getMemberId()) {
+		ArticleReply articleReply = articleService.getArticleReplyForModify(replyId, loginedMemberId);
+		if ( loginedMemberId != articleReply.getMemberId()) {
 			return "html:<script> alert('댓글 삭제는 작성자 본인만 가능합니다.'); history.back(); </script>";
 		}
 		
@@ -131,7 +116,7 @@ public class ArticleController extends Controller {
 
 	
 	
-	private String doActionDoReplyModify(HttpServletRequest req, HttpServletResponse resp) {
+	private String doActionDoReplyModify() {
 		int id = 0;   // 댓글 id
 
 		if (!Util.empty(req, "id") && Util.isNum(req, "id")) {  
@@ -156,17 +141,10 @@ public class ArticleController extends Controller {
 
 	
 	
-	private String doActionArticleReply(HttpServletRequest req, HttpServletResponse resp) {
-		HttpSession session = req.getSession();
-		session.getAttribute("loginedMemberId");
-		int memberId = 0;
-		if ( session.getAttribute("loginedMemberId") == null ) {
-			return "html:<script> alert('댓글 작성은 로그인 후 가능합니다.'); history.back(); </script>"; 
-		}
-		else {
-			memberId = (int)session.getAttribute("loginedMemberId");
-		}
-		Member member = memberService.getMemberFromMemberId(memberId);
+	private String doActionReplyWrite() {
+		
+		int loginedMemberId = (int)req.getAttribute("loginedMemberId");
+		System.out.println(loginedMemberId);
 		String body = req.getParameter("body");
 		
 		int articleId = 0;
@@ -174,10 +152,7 @@ public class ArticleController extends Controller {
 			articleId = Util.getInt(req, "articleId");
 		}
 		
-		int articleReplyId = articleService.getArticleReply(body, articleId, member.getId()); //댓글 저장하는 메서드
-		
-		
-		
+		int articleReplyId = articleService.getArticleReply(body, articleId, loginedMemberId); //댓글 저장하는 메서드
 		
 		
 		return "html:<script> alert('" + articleId + "번 게시물 댓글을 작성하셨습니다.'); location.replace('detail?id=" + articleId
@@ -186,7 +161,7 @@ public class ArticleController extends Controller {
 
 	
 	
-	private String doModify(HttpServletRequest req, HttpServletResponse resp) {
+	private String doModify() {
 		String title = req.getParameter("title");
 		String body = req.getParameter("body");
 
@@ -211,23 +186,17 @@ public class ArticleController extends Controller {
 		return "html:<script> alert('" + id + "번 게시물이 수정되었습니다.'); location.replace('detail?id=" + id + "'); </script>";
 
 	}
+	
+	
+	
+	private String doActionModify() {
 
-	private String doActionModify(HttpServletRequest req, HttpServletResponse resp) {
-		
-		HttpSession session = req.getSession();
-		session.getAttribute("loginedMemberId");
-		int memberId = 0;
-		if ( session.getAttribute("loginedMemberId") == null ) {
-			return "html:<script> alert('게시물 수정은 로그인 후 가능합니다.'); history.back(); </script>"; 
-		}
-		else {
-			memberId = (int)session.getAttribute("loginedMemberId");
-		}
+		int loginedMemberId = (int)req.getAttribute("loginedMemberId");
 		
 		
 		int id = 0;
 
-		if (!Util.empty(req, "id") && Util.isNum(req, "id")) { // cateItemId가 없지 않고 숫자가 맞으면
+		if (!Util.empty(req, "id") && Util.isNum(req, "id")) { // 게시물 번호 
 
 			id = Util.getInt(req, "id");
 
@@ -235,7 +204,7 @@ public class ArticleController extends Controller {
 
 		Article article = articleService.getForPrintArticle(id);
 		
-		if ( article.getMemberId() != memberId ) {
+		if ( article.getMemberId() != loginedMemberId ) {
 			return "html:<script> alert('게시물 수정은 작성자 본인만 가능합니다.'); history.back(); </script>";
 		}
 		
@@ -251,12 +220,15 @@ public class ArticleController extends Controller {
 		return "article/modify.jsp";
 	}
 
-	private String doActionDoWrite(HttpServletRequest req, HttpServletResponse resp) {
+	private String doActionDoWrite() {
 		String title = req.getParameter("title");
 		String body = req.getParameter("body");
-		int loginedMemberId = Util.getInt(req, "memberId");
+		//int loginedMemberId = Util.getInt(req, "memberId");
 		int cateItemId = Util.getInt(req, "cateItemId");
 		int displayStatus = Util.getInt(req, "displayStatus");
+		
+		
+		int loginedMemberId = (int)req.getAttribute("loginedMemberId");
 		
 		int id = articleService.write(cateItemId, displayStatus, title, body, loginedMemberId);
 
@@ -266,35 +238,25 @@ public class ArticleController extends Controller {
 	}
 
 	// 게시물 작성 신청 폼을 한번 보여주는 정도(용도)의 메서드.
-	private String doActionWrite(HttpServletRequest req, HttpServletResponse resp) {
-		HttpSession session = req.getSession();
-		session.getAttribute("loginedMemberId");
-		if ( session.getAttribute("loginedMemberId") == null ) {
-			return "html:<script> alert('게시물 작성은 로그인 후 가능합니다.'); history.back(); </script>"; 
-		}
+	private String doActionWrite() {
+		
 		return "article/write.jsp";
 	}
-
-	private String doActionDelete(HttpServletRequest req, HttpServletResponse resp) {
-		HttpSession session = req.getSession();
-		session.getAttribute("loginedMemberId");
-		int memberId = 0;
-		if ( session.getAttribute("loginedMemberId") == null ) {
-			return "html:<script> alert('게시물 삭제는 로그인 후 가능합니다.'); history.back(); </script>"; 
-		}
-		else {
-			memberId = (int)session.getAttribute("loginedMemberId");
-		}
+	
+	
+	// TODO : 코드 섞여 있음. 살펴보고 삭제할거 제거하고 정리하기.
+	private String doActionDoDelete() {
+		int loginedMemberId = (int)req.getAttribute("loginedMemberId");
 
 		int id = 0;
 
-		if (!Util.empty(req, "id") && Util.isNum(req, "id")) { // cateItemId가 없지 않고 숫자가 맞으면
+		if (!Util.empty(req, "id") && Util.isNum(req, "id")) { // 게시물 번호 
 
 			id = Util.getInt(req, "id");
 
 		}
 		Article article = articleService.getForPrintArticle(id);
-		if ( article.getMemberId() != memberId ) {
+		if ( article.getMemberId() != loginedMemberId ) {
 			return "html:<script> alert('게시물 삭제는 작성자 본인만 가능합니다.'); history.back(); </script>";
 		}
 
@@ -303,21 +265,18 @@ public class ArticleController extends Controller {
 		return "html:<script> alert('" + id + "번 게시물이 삭제되었습니다.'); location.replace('list'); </script>";
 	}
 
-	private String doActionListWrite(HttpServletRequest req, HttpServletResponse resp) {
 
-		return "article/listWrite.jsp";
-	}
 
-	private String doActionAboutMe(HttpServletRequest req, HttpServletResponse resp) {
+	private String doActionAboutMe() {
 		return "article/aboutMe.jsp";
 	}
 
-	private String doActionEditor(HttpServletRequest req, HttpServletResponse resp) {
+	private String doActionEditor() {
 
 		return "article/editor.jsp";
 	}
 
-	private String doActionDetail(HttpServletRequest req, HttpServletResponse resp) {
+	private String doActionDetail() {
 		if (Util.empty(req, "id")) {
 			return "html:id를 입력해주세요.";
 		}
@@ -369,7 +328,7 @@ public class ArticleController extends Controller {
 		// 다시 한번 설명! 자질구래한 것들을 모아놓는 것이 dto의 extra 변수이다.
 	}
 
-	private String doActionList(HttpServletRequest req, HttpServletResponse resp) {
+	private String doActionList() {
 
 		// 샘이 만들어주신 검색 기능
 
@@ -433,5 +392,10 @@ public class ArticleController extends Controller {
 		req.setAttribute("articles", articles);
 
 		return "article/list.jsp";
+	}
+
+	@Override  // 부모인 controller의 추상 메서드를 상속받아 controllerName을 임의로 정해서 return해준다.
+	public String getControllerName() {
+		return "article";
 	}
 }
