@@ -60,7 +60,7 @@ import com.sbs.java.blog.dto.Member;
 	private String doActionDoLogin(HttpServletRequest req, HttpServletResponse resp) {
 		
 		String loginId = req.getParameter("loginId");
-		String loginPw = req.getParameter("loginPw");
+		String loginPw = req.getParameter("loginPwReal");  
 		
 		boolean isJoinableLoginId = memberService.isJoinableLoginId(loginId);
 		
@@ -68,26 +68,20 @@ import com.sbs.java.blog.dto.Member;
 			return String.format("html:<script> alert('%s은(는) 존재하지 않는 아이디 입니다.'); history.back(); </script>", loginId);
 		}
 		
-		Member member = memberService.getForLoginMember(loginId);
-		if ( member.getLoginPw().equals(loginPw) == false ) {
-			return "html:<script> alert('비밀번호가 일치하지 않습니다.'); history.back(); </script>";
+		
+		int loginedMemberId = memberService.getMemberIdByLoginIdAndLoginPw(loginId, loginPw);
+		
+		if ( loginedMemberId == -1 ) {
+			return "html:<script> alert('일치하는 정보가 없습니다.'); history.back(); </script>";
 		}
 		
 		
 		HttpSession session = req.getSession();
-		session.setAttribute("loginedMemberId", member.getId());
+		session.setAttribute("loginedMemberId", loginedMemberId);
 		
 		
 		
-		
-		int loginedMemberId = 0;
-		if ( session.getAttribute("loginedMemberId") != null ) {
-		  loginedMemberId = (int)session.getAttribute("loginedMemberId");
-		}
-		
-		System.out.println("login_id : " + loginedMemberId);
-		
-		return String.format("html:<script> alert('%s님, 로그인되셨습니다.'); location.replace('../home/main'); </script>", member.getNickname());
+		return String.format("html:<script> alert('로그인되셨습니다.'); location.replace('../home/main'); </script>");
 	}
 
 	private String doActionDoJoin(HttpServletRequest req, HttpServletResponse resp) {
@@ -110,24 +104,16 @@ import com.sbs.java.blog.dto.Member;
 		}
 
 		
+		boolean isJoinableEmail= memberService.isJoinableEmail(email);
+		
+		if ( isJoinableEmail == false ) {
+			return String.format("html:<script> alert('%s은(는) 이미 사용중인 이메일 입니다.'); history.back(); </script>", email);
+		}
+		
 		
 		int id = memberService.join(loginId, name, nickName, loginPw, email);
 		
-		
-		
-		
-		/*  내가 작성했던 아이디 중복 체크와 회원가입 메서드 
-		 * List<Member> members = memberService.getForJoinMembers(); for ( Member member
-		 * : members ) { if ( member.getLoginId().equals(loginId)) { return
-		 * "html:<script> alert('" + loginId +
-		 * "는(은) 중복되는 아이디로 사용할 수 없습니다.'); history.back(); </script>"; } if (
-		 * member.getNickname().equals(nickName)) { return "html:<script> alert('" +
-		 * nickName + "는(은) 중복되는 닉네임으로 사용할 수 없습니다.'); history.back(); </script>"; } }
-		 * 
-		 * int id = memberService.getMemberJoin(loginId, name, nickName, loginPw,
-		 * email);
-		 */
-		
+	
 		
 		return String.format("html:<script> alert('%s님, 환영합니다.'); location.replace('../home/main'); </script>", name);
 	}

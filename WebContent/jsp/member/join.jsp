@@ -148,7 +148,7 @@
 
 <div class="write-form-box">
 	<form name="form" action="doJoin" method="POST"	class="write-form form1" onsubmit="submitJoinForm(this); return false">
-	<input type="hidden" name="loginPwReal"/>
+		<input type="hidden" name="loginPwReal" />
 		<div class="form-row">
 			<div class="label">로그인 아이디</div>
 			<div class="input">
@@ -285,6 +285,7 @@ function submitJoinForm(form) {
 	}
 	form.loginPwReal.value = sha256(form.loginPw.value);  /* 암호화된 텍스트를 넘겨준다.*/
 	form.loginPw.value = "";  /* 이 값은 비워준다. */
+	form.loginPwConfirm.value =""; // 로그인 비밀번호 확인도 함께 날려준다.  
 	
 	form.submit();
 	joinFormSubmitted = true;

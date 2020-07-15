@@ -41,8 +41,13 @@
 	border-radius:5px;
 }
 
+
+
+
+
+
 .form1 .form-row:nth-child(4) .input {
-	width:80px;
+	width:100%;
 	flex-grow:0;
 	margin-left:0;
 	
@@ -163,6 +168,7 @@
 
 <div class="write-form-box">
 	<form name="form" action="doLogin" method="POST" class="write-form form1" onsubmit="submitLoginForm(this); return false;">	
+		<input type="hidden" name="loginPwReal" />
 		<div class="form-row">
 			<div class="label">로그인 아이디</div>
 			<div class="input">
@@ -208,7 +214,8 @@ function submitLoginForm(form) {
 		return;
 	}
 
-	form.loginPw.value = sha256(form.loginPw.value);  /* 암호화된 텍스트를 넘겨준다.*/
+	form.loginPwReal.value = sha256(form.loginPw.value);  /* 암호화된 텍스트를 넘겨준다.*/
+	form.loginPw.value = "";
 	
 	form.submit();
 }

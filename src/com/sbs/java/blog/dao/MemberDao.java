@@ -66,6 +66,15 @@ public class MemberDao {
 		
 		return DBUtil.selectRowIntValue(dbConn, sql) == 0 ;
 	}
+	
+	public boolean isJoinableEmail(String email) {
+		SecSql sql = SecSql.from("SELECT COUNT(*) AS cnt");  // 여기서부터 시작하겠다는 의미.
+		sql.append("FROM `member`");
+		sql.append("WHERE email = ?", email);
+		
+		
+		return DBUtil.selectRowIntValue(dbConn, sql) == 0 ;
+	}
 
 	public boolean loginIdAndPwValid(String loginId, String loginPw) {
 		
@@ -79,11 +88,23 @@ public class MemberDao {
 		 return new Member(DBUtil.selectRow(dbConn, sql));
 	}
 
-	public Member getForLogoutMember(int loginedMemberId) {
+	public Member getMemberFromMemberId(int loginedMemberId) {
 		SecSql sql = SecSql.from("SELECT *");
 		sql.append("FROM `member`");
 		sql.append("WHERE id = ?", loginedMemberId);
 		 return new Member(DBUtil.selectRow(dbConn, sql));
 	}
+
+	public int getMemberIdByLoginIdAndLoginPw(String loginId, String loginPw) {
+		SecSql sql = SecSql.from("SELECT id");
+		sql.append("FROM `member`");
+		sql.append("WHERE loginId = ?", loginId);
+		sql.append("AND loginPw = ?", loginPw);
+		
+		return DBUtil.selectRowIntValue(dbConn, sql);
+	}
+
+	
 	
 }
+

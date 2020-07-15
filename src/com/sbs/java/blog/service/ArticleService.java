@@ -27,27 +27,10 @@ public class ArticleService extends Service  {
 		return articleDao.getForPrintArticle(id);
 	}
 
-	/*public void doWriteArticle(String title, String body) {
-		articleDao.doWriteArticle(title, body);
-	}*/
-	
-	
-	/*  없어도 되는 메서드 같음. 
-	public int doPaging(int cateItemId) {
-		return articleDao.doPaging(cateItemId);
-	}/*
-
-	/*public List<Article> getForPrintListNewArticles() {
-		return articleDao.getForPrintListNewArticles();
-	}*/
-
 	public int getForPrintListArticlesCount(int cateItemId, String searchKeywordType, String searchKeywordTypeBody,  String searchKeyword) {
 		return articleDao.getForPrintListArticlesCount(cateItemId, searchKeywordType, searchKeywordTypeBody, searchKeyword);
 	}
 
-	/*public List<Article> getSearchContents(String contents) {
-		return articleDao.getSearchContents(contents);
-	}*/
 
 	public List<CateItem> getForPrintCateItems() {
 		return articleDao.getForPrintCateItems(); // 나중에 복잡해지면 얘도 할 일이 생긴다. 
@@ -56,7 +39,8 @@ public class ArticleService extends Service  {
 	public CateItem getCateItem(int cateItemId) {
 		return articleDao.getCateItem(cateItemId);
 	}
-
+	
+	//articleService에서는 controller가 넘겨주는 값이 어떤 값인지(예시:loginedMemberId) 알지 못한다. dto에 선언된 변수명으로 통일해서 넘기는게 좋다!
 	public int write( int cateItemId, int displayStatus, String title, String body, int loginedMemberId) {
 		return articleDao.write( cateItemId, displayStatus,  title,  body, loginedMemberId);
 		
@@ -70,16 +54,7 @@ public class ArticleService extends Service  {
 	public int articleDelete(int id) {
 		return articleDao.articleDelete(id);
 	}
-	/*  없어도 되는 메서드 같음.
-	public Article articleDetailForModify(int id) {
-		return articleDao.articleDetailForModify(id);
-	}*/ 
 	
-	/* 없어도 되는 메서드 같음.
-	public Article getBeforIdForDetail(int id) {
-		return articleDao.getBeforIdForDetail(id);
-	} */
-
 	public int getForPageMoveBeforeArticle(int id, int cateItemId) {
 		return articleDao.getForPageMoveBeforeArticle(id, cateItemId);
 	}

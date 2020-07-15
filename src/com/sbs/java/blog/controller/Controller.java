@@ -47,12 +47,7 @@ public abstract class Controller {
 		List<Member> members = memberService.getForJoinMembers();
 		req.setAttribute("members", members);
 		
-		/*    안되넹... 
-		 * HttpSession session = req.getSession(); if ( session != null ) { int
-		 * loginedMemberId = (int)session.getAttribute("loginedMemberId"); Member member
-		 * = memberService.getForLogoutMember(loginedMemberId);
-		 * req.setAttribute("loginMember", member); }
-		 */
+	
 		
 	}
 	

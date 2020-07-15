@@ -46,7 +46,17 @@ public class MemberService extends Service {
 	}
 
 
-	public Member getForLogoutMember(int loginedMemberId) {
-		return memberDao.getForLogoutMember(loginedMemberId);
+	public Member getMemberFromMemberId(int loginedMemberId) {
+		return memberDao.getMemberFromMemberId(loginedMemberId);
+	}
+
+
+	public boolean isJoinableEmail(String email) {
+		return memberDao.isJoinableEmail(email);
+	}
+
+
+	public int getMemberIdByLoginIdAndLoginPw(String loginId, String loginPw) {
+		return memberDao.getMemberIdByLoginIdAndLoginPw(loginId, loginPw);
 	}
 }

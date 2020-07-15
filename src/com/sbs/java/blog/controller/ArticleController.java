@@ -166,7 +166,7 @@ public class ArticleController extends Controller {
 		else {
 			memberId = (int)session.getAttribute("loginedMemberId");
 		}
-		Member member = memberService.getForLogoutMember(memberId);
+		Member member = memberService.getMemberFromMemberId(memberId);
 		String body = req.getParameter("body");
 		
 		int articleId = 0;
@@ -346,7 +346,7 @@ public class ArticleController extends Controller {
 		// 이 article은 그냥(평범한) article이 아니다.
 		Article article = articleService.getForPrintArticle(id); // sql 쿼리에 작성해놓은 정보들만이 아닌 부가적으로 추가한 자잘한 (항목 추가한)작성자 등
 																	// 항목 모두 불러오는 메서드 네임
-		Member loginedMember = memberService.getForLogoutMember(article.getMemberId());
+		Member loginedMember = memberService.getMemberFromMemberId(article.getMemberId());
 		int beforeId = articleService.getForPageMoveBeforeArticle(id, cateItemId);
 		int afterId = articleService.getForPageMoveAfterArticle(id, cateItemId);
 		CateItem cateItem = articleService.getCateItem(article.getCateItemId());
