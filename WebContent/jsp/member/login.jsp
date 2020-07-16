@@ -24,8 +24,6 @@
 	
 }
 
-
-
 .form1 .form-row>.label {
 	width:30%;
 	
@@ -37,30 +35,29 @@
 	
 }
 
-.form1 .form-row .input > input {
+.form1 .form-row .input > input {   /* 맨 위에 hidden으로 input을 1개 넣어서 자식 순서가 1씩 밀려버림... */
 	border-radius:5px;
+	
+}
+
+.form1 .form-row:nth-child(5) {
+	display:flex;
+	justify-content:space-between;
+}
+
+.form1 .form-row:nth-child(5) .input {
+	width:90px;
+	flex-grow:0;
+	
+	
 }
 
 
 
-
-
-
-.form1 .form-row:nth-child(4) .input {
-	width:100%;
+.form1 .form-row:nth-child(5) .input:nth-child(2) {
+	width:60%;
 	flex-grow:0;
 	margin-left:0;
-	
-}
-
-
-
-.form1 .form-row:nth-child(4) .input:nth-child(2) {
-	width:160px;
-	flex-grow:0;
-	margin-left:auto;
-	margin-right:0;
-	
 }
 
 

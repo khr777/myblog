@@ -790,7 +790,7 @@ html {
 }	
 /* 총 게시물 수, cateItemName 글쓰기 끝 */
 
-/* 모바일 총 게시물 수, cateItemName 글쓰기 시작 */ 
+/* 모바일 총 게시물 수, 카테고리 선택(select), cateItemName 글쓰기 시작 */ 
 
 @media (max-width:799px) {
 	.cateItem-content .cateItemName {
@@ -819,6 +819,12 @@ html {
 		font-size:1.1rem;
 	}	
 	
+	.mobile-cateItem-move {
+	position:absolute;
+	top:160px;
+	left:5%;
+}
+	
 }
 
 
@@ -827,7 +833,7 @@ html {
 /* 모바일 articles 리스트 반응형 시작 */ 
 @media (max-width:799px) {
 	.article-list-box-1 {
-		margin-top:170px;
+		margin-top:220px;
 	}
 	
 	.article-list-box-1 .list-content {
@@ -861,6 +867,14 @@ html {
 		position: relative;
 		width: 150px;
 		margin-left:40px;
+	}
+	
+	.article-list-box-1 .list-content .list-writer {
+		font-weight:bold;
+		margin-left:auto;
+		margin-right:auto;
+		width: 240px;
+		
 	}
 	.article-list-box-1 .list-content .list-id-regDate-box .list-id>img {
 		position: absolute;

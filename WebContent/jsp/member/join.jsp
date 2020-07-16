@@ -14,19 +14,6 @@
 
 <style>
 
-.form1 .form-row:last-child {
-}
-
-.form1 .form-row:last-child .input:first-child input{
-	width:400px;
-	
-	
-}
-.form1 .form-row:last-child .input:nth-child(2) input  {
-	width:80px;
-	
-	
-}
 .form1 {
 	position: absolute;
 	display: block;
@@ -40,7 +27,6 @@
 	padding:6px;
 	align-items: center;
 	display:flex;
-	text-align:center;
 	
 	
 }
@@ -58,8 +44,30 @@
 	flex-grow: 1;
 	margin-left:20px;
 	
+	
 }
 
+
+.form1 .form-row:last-child  {
+	display:flex;
+	justify-content:space-between;
+	
+}
+
+.form1 .form-row:last-child .input {
+	margin:0;
+	
+}
+
+.form1 .form-row:last-child .input:first-child input {
+	width:80px;
+	
+	
+}
+.form1 .form-row:last-child .input:nth-child(2)   {
+	width:48%;
+	
+}
 .form1 .form-row>.input>input, .form1 .form-row>.input>textarea {
 	display: block;
 	width: 100%;
@@ -93,13 +101,13 @@
 
 @media ( max-width :799px) {
 	.form1 {
-		margin-top:200px;
+		margin-top:270px;
 		width:300px;
 		
 	}
 	.blog-name {
 		font-size:1.3rem;
-		top:700px;
+		top:840px;
 		left:50%;
 		transform:translateX(-50%);
 		letter-spacing:6px;
@@ -121,25 +129,36 @@
 		
 	}
 	
-	.form1 .form-row .label {
+	.form1 .form-row:last-child  {
+	display:flex;
+	flex-flow:column-reverse;
 	}
-	.form1 .form-row .input {
-		
-	}
+	
 	.form1 .form-row>.input>input, .form1 .form-row>.input>textarea {
 	height:40px;
 	
 	
 	}
-	.form1 .form-row:last-child .input:first-child input{
-		width:265px;
 	
-	}
-	.form1 .form-row:last-child .input:nth-child(2) input  {
-		width:100px;
-	
+	.form1 .form-row:last-child .input  {
+		margin-top:10px;		
 	}
 	
+	
+	
+	.form1 .form-row:last-child .input:first-child {  /* 회원가입 취소 버튼 */
+		width:100%;
+		justify-content:flex-start;
+		border:none;
+	}
+	.form1 .form-row:last-child .input:nth-child(2) {    /* 회원가입정보 버튼 */
+		width:100%;
+		border:none;
+	}
+	.form1 .form-row:last-child .input:nth-child(1) input {    /* 회원가입정보 버튼 */
+		width:100%;
+		
+	}
 	
 }
 	
@@ -187,13 +206,13 @@
 		</div>
 		<div class="form-row">
 			<div class="input">
+				<input type="button" value="취소" onclick="location.href='../home/main'" />
+			</div>
+			<div class="input">
 				<input type="submit" value="회원가입 정보 제출" />
 				<!-- <a href="#" onclick="history.back();">취소</a>   샘 코드 -->
 				<!-- 				<input type="button" value="취소" onclick="history.back();"/> -->
 
-			</div>
-			<div class="input">
-				<input type="button" value="취소" onclick="location.href='../home/main'" />
 			</div>
 		</div>
 	</form>

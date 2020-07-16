@@ -15,7 +15,7 @@ Member member = (Member)request.getAttribute("member");
 	<div class="replyModify-box">
 		<h2 class="heading"><%=articleReply.getArticleId()%>번 게시물의 <%=articleReply.getId()%>번 댓글 수정 </h2>
 		<div class="writer-data">
-			<div class="writer1">작성자 :<%=member.getNickname()%></div>
+			<div class="writer1">작성자 :<%=articleReply.getExtra().get("writer")%></div>
 			<div class="regDate1">작성일 :<%=articleReply.getRegDate()%></div>
 			<input type="hidden" value="<%=articleReply.getId()%>" name="id"/>
 			<input type="hidden" value="<%=articleReply.getArticleId()%>" name="articleId"/>

@@ -69,6 +69,9 @@ public class ArticleController extends Controller {
 		int loginedMemberId = (int)req.getAttribute("loginedMemberId");
 		
 		
+		
+		
+		
 		int id = 0;  // 댓글 번호 
 
 		if (!Util.empty(req, "id") && Util.isNum(req, "id")) { // 댓글 번호가 없지 않고 숫자가 맞으면
@@ -77,14 +80,14 @@ public class ArticleController extends Controller {
 		
 		
 		ArticleReply articleReply = articleService.getArticleReplyForModify(id, loginedMemberId);
-		Member member = memberService.getMemberById(loginedMemberId);
+		
 		if ( loginedMemberId != articleReply.getMemberId() ) {
 			return "html:<script> alert('댓글 수정은 작성자 본인만 가능합니다.'); history.back(); </script>"; 
 		}
 		
 		
 		req.setAttribute("articleReply", articleReply);
-		req.setAttribute("member", member);
+		
 		
 		return "article/replyModify.jsp";
 	}
@@ -244,7 +247,6 @@ public class ArticleController extends Controller {
 	}
 	
 	
-	// TODO : 코드 섞여 있음. 살펴보고 삭제할거 제거하고 정리하기.
 	private String doActionDoDelete() {
 		int loginedMemberId = (int)req.getAttribute("loginedMemberId");
 
@@ -305,7 +307,6 @@ public class ArticleController extends Controller {
 		// 이 article은 그냥(평범한) article이 아니다.
 		Article article = articleService.getForPrintArticle(id); // sql 쿼리에 작성해놓은 정보들만이 아닌 부가적으로 추가한 자잘한 (항목 추가한)작성자 등
 																	// 항목 모두 불러오는 메서드 네임
-		Member loginedMember = memberService.getMemberFromMemberId(article.getMemberId());
 		int beforeId = articleService.getForPageMoveBeforeArticle(id, cateItemId);
 		int afterId = articleService.getForPageMoveAfterArticle(id, cateItemId);
 		CateItem cateItem = articleService.getCateItem(article.getCateItemId());
@@ -314,7 +315,6 @@ public class ArticleController extends Controller {
 		req.setAttribute("article", article);
 		req.setAttribute("cateItem", cateItem);
 		req.setAttribute("cateItemId", cateItemId);
-		req.setAttribute("loginedMember", loginedMember);
 		
 		List<ArticleReply> articleReplies = articleService.getArticleRepliesForDetail(id);
 		System.out.println(articleReplies);
@@ -322,8 +322,7 @@ public class ArticleController extends Controller {
 
 		// return "article/detail.jsp";
 
-		// 작성자명이 게시물 상세보기에서 잠깐 필요한데 필드에까지 추가할 필요가 없다. 그래서 extra__를 이용해서 사용한다. sql에는 영향을
-		// 주지 않는 듯. 확인해보기.
+		// 작성자명이 게시물 상세보기에서 잠깐 필요한데 필드에까지 추가할 필요가 없다. 그래서 extra__를 이용해서 사용한다. sql에는 영향을 주지 않는 듯. 확인해보기.
 		return "article/detail.jsp";
 		// 다시 한번 설명! 자질구래한 것들을 모아놓는 것이 dto의 extra 변수이다.
 	}

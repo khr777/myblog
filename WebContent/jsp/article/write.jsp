@@ -186,7 +186,6 @@
 				<div id="editor1"></div>
 			</div>
 		</div>
-		<input type="hidden" name="memberId" value="<%=session.getAttribute("loginedMemberId")%>"/>
 		<div class="form-row">
 			<div class="label"></div>
 			<div class="input">

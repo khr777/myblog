@@ -1,6 +1,5 @@
 <%@ include file="/jsp/part/head.jspf"%>
 <%@ page import="com.sbs.java.blog.dto.Article"%>
-<%@ page import="com.sbs.java.blog.dto.Member"%>
 <%@ page import="com.sbs.java.blog.dto.ArticleReply"%>
 <%@ page import="java.util.List"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
@@ -58,7 +57,6 @@
 	int afterId = (int) request.getAttribute("afterId");
 	int cateItemId = (int) request.getAttribute("cateItemId");
 	List<ArticleReply> articleReplies = (List<ArticleReply>) request.getAttribute("articleReplies");
-	Member member = (Member)request.getAttribute("loginedMember");
 %>
 
 <div class="con">
@@ -81,7 +79,7 @@
 					<%=article.getHit()%></div>
 				<div class="writer">
 					작성자 :
-					<%=member.getNickname()%></div>
+					<%=article.getExtra().get("writer")%></div>
 				<div class="cateItemName">
 					카테고리 :
 					<%=cateItem.getName()%></div>

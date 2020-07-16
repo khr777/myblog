@@ -18,7 +18,7 @@ String cateItemName = (String) request.getAttribute("cateItemName");
 
 <!--  /s/article/list?cateItemId=1&page=1  -->
 
-<nav class="cateItem-menu-box-1">
+<nav class="cateItem-menu-box-1  visible-on-md-up ">
 	<ul class="cateItem-menu">
 		<li><a href="${pageContext.request.contextPath}/s/article/list">전체</a>
 		</li>
@@ -39,9 +39,23 @@ String cateItemName = (String) request.getAttribute("cateItemName");
 		<li><a
 			href="${pageContext.request.contextPath}/s/article/list?cateItemId=6&page=1">이거저거</a></li>
 	</ul>
-
 </nav>
 
+
+<select class="mobile-cateItem-move visible-on-sm-down " onchange="location.href=this.value">
+	<option>카테고리</option>
+	<option value="${pageContext.request.contextPath}/s/article/list">전체</option>
+	<option value="${pageContext.request.contextPath}/s/article/list?cateItemId=1&page=1">일상</option>
+	<option value="${pageContext.request.contextPath}/s/article/list?cateItemId=2&page=1">IT : java, jsp</option>
+	<option value="${pageContext.request.contextPath}/s/article/list?cateItemId=3&page=1">IT : html/css/js</option>
+	<option value="${pageContext.request.contextPath}/s/article/list?cateItemId=4&page=1">IT : sql</option>
+	<option value="${pageContext.request.contextPath}/s/article/list?cateItemId=5&page=1">IT : 기타</option>
+	<option value="${pageContext.request.contextPath}/s/article/list?cateItemId=6&page=1">이거저거</option>
+</select>
+
+<style>
+
+</style>
 
 
 
