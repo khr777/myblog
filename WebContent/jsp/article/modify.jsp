@@ -180,20 +180,33 @@ String cateItemName = (String) request.getAttribute("cateItemName");
 			<div class="input">
 				<input type="hidden" name="body" />
 				<script type="text/x-template" id="origin1" style="display: none;"  ><%=article.getBodyForXTemplate()%></script>
-			<div id="editor1"></div>
-			<script>
-				var editor1__initialValue = $('#origin1').html().trim(); // trim() 추가했음. 
-				var editor1 = new toastui.Editor({
-					el : document.querySelector("#editor1"),
-					previewStyle: "vertical",
-					height:"700px",
-					initialEditType: "markdown",
-					viewer : true,
-					initialValue : editor1__initialValue.replace(/<!--REPLACE:script-->/gi,'script'),
-					plugins : [ toastui.Editor.plugin.codeSyntaxHighlight,
-							youtubePlugin, replPlugin, codepenPlugin ]
-				});
-			</script>
+				<div id="editor1" class="visible-on-md-up"></div>     
+				<div id="editor2" class="visible-on-sm-down"></div>
+				<script>
+					var editor1__initialValue = $('#origin1').html().trim(); // trim() 추가했음. 
+					var editor1 = new toastui.Editor({
+						el : document.querySelector("#editor1"),
+						previewStyle: "vertical",
+						height:"700px",
+						initialEditType: "markdown",
+						viewer : true,
+						initialValue : editor1__initialValue.replace(/<!--REPLACE:script-->/gi,'script'),
+						plugins : [ toastui.Editor.plugin.codeSyntaxHighlight,
+								youtubePlugin, replPlugin, codepenPlugin ]
+					});
+				</script>
+				<script>
+					var editor2__initialValue = $('#origin1').html().trim(); // trim() 추가했음. 
+					var editor2 = new toastui.Editor({
+						el : document.querySelector("#editor2"),
+						height:"700px",
+						initialEditType: "markdown",
+						viewer : true,
+						initialValue : editor1__initialValue.replace(/<!--REPLACE:script-->/gi,'script'),
+						plugins : [ toastui.Editor.plugin.codeSyntaxHighlight,
+								youtubePlugin, replPlugin, codepenPlugin ]
+					});
+				</script>
 			</div>
 		</div>
 		<div class="form-row">
@@ -208,14 +221,6 @@ String cateItemName = (String) request.getAttribute("cateItemName");
 </div>
 <script>
 
-// var editor1 = new toastui.Editor({
-// 	el: document.querySelector("#editor1"),
-// 	height: "600px",
-// 	initialEditType: "markdown",
-// 	previewStyle: "vertical",
-// 	initialValue: document.querySelector("#body").value.replace(/<!--REPLACE:script-->/gi,'script'),
-// 	plugins: [toastui.Editor.plugin.codeSyntaxHighlight, youtubePlugin, replPlugin, codepenPlugin]
-// 	});
 
 function submitModifyForm(form) {
 	form.title.value = form.title.value.trim();
