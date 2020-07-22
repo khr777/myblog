@@ -8,6 +8,7 @@ import javax.servlet.http.HttpSession;
 
 import com.mysql.cj.Session;
 import com.sbs.java.blog.dto.Member;
+import com.sbs.java.blog.util.Util;
 
 public class MemberController extends Controller {
 
@@ -58,7 +59,6 @@ public class MemberController extends Controller {
 
 		String loginId = req.getParameter("loginId");
 		String loginPw = req.getParameter("loginPwReal");
-
 		boolean isJoinableLoginId = memberService.isJoinableLoginId(loginId);
 
 		if (isJoinableLoginId) {
@@ -72,8 +72,14 @@ public class MemberController extends Controller {
 		}
 
 		session.setAttribute("loginedMemberId", loginedMemberId); // 최초 키값을 설정하는 코드(개별 저장소 생성)
+		
+		String redirectUrl = Util.getString(req, "redirectUrl", "../home/main");
+		
+		
+		
+		
 
-		return String.format("html:<script> alert('로그인 되었습니다.'); location.replace('../home/main'); </script>");
+		return String.format("html:<script> alert('로그인 되었습니다.'); location.replace('" + redirectUrl + "'); </script>");
 	}
 
 	private String doActionDoJoin() {

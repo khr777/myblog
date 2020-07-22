@@ -1,7 +1,10 @@
 package com.sbs.java.blog.util;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.sql.SQLException;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -62,5 +65,27 @@ public class Util {
 	public static String getString(HttpServletRequest req, String paramName) {
 		
 		return req.getParameter(paramName);
+	}
+	public static String getUrlEncoded(String str) { // URL 인코딩을 해야할 때가 있기에 미리 해놓는 작업.(2020-07-22)
+		try { // 문제가 없으면 인코딩된 URL을 return 하고, 문제가 있으면 원문을 리턴한다.
+			return URLEncoder.encode(str, "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			return str;
+		}
+	}
+	public static String getString(HttpServletRequest req, String paramName, String elseValue) {
+		if ( req.getParameter(paramName) == null ) { // 아예 없거나
+			return elseValue;
+		}
+		
+		if ( req.getParameter(paramName).trim().length() == 0 ) { // 공백이 입력되었거나
+			return elseValue;
+		}
+		
+		return getString(req, paramName);
+	}
+	public static boolean isSuccess(Map<String, Object> rs) {
+		
+		return ((String)rs.get("resultCode")).startsWith("S-1");
 	}
 }

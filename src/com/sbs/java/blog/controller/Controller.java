@@ -11,6 +11,7 @@ import com.sbs.java.blog.dto.CateItem;
 import com.sbs.java.blog.dto.Member;
 import com.sbs.java.blog.service.ArticleService;
 import com.sbs.java.blog.service.MemberService;
+import com.sbs.java.blog.util.Util;
 
 public abstract class Controller {
 	// private으로 하고 getters, setters 를 만들어서 사용해왔지만 코드가 길어지면서 일손을 줄이기 위함으로 사용.
@@ -72,6 +73,36 @@ public abstract class Controller {
 		req.setAttribute("loginedMember", loginedMember);
 		req.setAttribute("isLogined", isLogined);
 		req.setAttribute("loginedMemberId", loginedMemberId);
+		
+		
+		// [현재 URL]
+		
+		String currentUrl = req.getRequestURI();
+		
+		if ( req.getQueryString() != null ) {
+			currentUrl += "?" +  req.getQueryString();
+		}
+		
+		String urlEncodedCurrentUrl = Util.getUrlEncoded(currentUrl);
+		
+		
+		
+		// 현재 접속된 페이지와 관련된 유용한 정보 담기
+		req.setAttribute("currentUrl", currentUrl);
+		req.setAttribute("urlEncodedCurrentUrl", urlEncodedCurrentUrl);
+		req.setAttribute("urlEncodedAfterLoginRedirectUrl", urlEncodedCurrentUrl);
+		
+		// [ 로그인 페이지에서 로그인 페이지로 이동하는 버튼을 또 누른 경우
+		// 기존 afterLoginRedirectUrl 정보를 유지시키기 위한 로직 ]
+		// 아래 로직이 의미하는 것 : login page에서 다시 login page로 돌아가는 것을 방지!
+		if ( currentUrl.contains("/s/member/login")) {
+			String urlEncodedOldAfterLoginRedirectUrl = Util.getString(req, "afterLoginRedirectUrl", "");
+			urlEncodedOldAfterLoginRedirectUrl = Util.getUrlEncoded(urlEncodedOldAfterLoginRedirectUrl);
+			req.setAttribute("urlEncodedAfterLoginRedirectUrl", urlEncodedOldAfterLoginRedirectUrl);
+		}
+		
+		
+		
 
 	}
 
@@ -137,10 +168,13 @@ public abstract class Controller {
 			break;
 		}
 		
+		String urlEncodedAfterLoginRedirectUrl = (String)req.getAttribute("urlEncodedAfterLoginRedirectUrl");
+		
+		
 		
 		// 로그인이 필요한 상태이고 로그인한 상태가 아니라면?
 		if ( needToLogin && isLogined == false ) { 
-			return "html:<script>alert('로그인 후 이용해주세요.'); location.href = '../member/login'; </script>"; 
+			return "html:<script>alert('로그인 후 이용해주세요.'); location.href = '../member/login?afterLoginRedirectUrl=" + urlEncodedAfterLoginRedirectUrl + "'; </script>"; 
 		}
 		// [ 로그인에 관련된 가드 끝 ]
 		

@@ -1,15 +1,15 @@
 package com.sbs.java.blog.service;
 
 import java.sql.Connection;
+import java.util.HashMap;
 import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import java.util.Map;
 
 import com.sbs.java.blog.dao.ArticleDao;
 import com.sbs.java.blog.dto.Article;
 import com.sbs.java.blog.dto.ArticleReply;
 import com.sbs.java.blog.dto.CateItem;
+import com.sbs.java.blog.util.Util;
 
 public class ArticleService extends Service  {
 	private ArticleDao articleDao;
@@ -19,12 +19,36 @@ public class ArticleService extends Service  {
 		articleDao = new ArticleDao(dbConn);
 	}
 
-	public List<Article> getForPrintListArticles(int page, int cateItemId, int itemsInAPage, String searchKeywordType, String searchKeywordTypeBody,  String searchKeyword) {
-		return articleDao.getForPrintListArticles(page, cateItemId, itemsInAPage, searchKeywordType, searchKeywordTypeBody, searchKeyword );
+	public List<Article> getForPrintListArticles(int actorId, int page, int cateItemId, int itemsInAPage,  String searchKeywordType, String searchKeywordTypeBody,  String searchKeyword) {
+		List<Article> articles = articleDao.getForPrintListArticles(page, cateItemId, itemsInAPage, searchKeywordType, searchKeywordTypeBody, searchKeyword );
+		
+		for ( Article article : articles ) { // 꼬리표를 달아준다. 이 게시물을 이 활동자가 삭제할 수 있는지에 대한.
+			updateArticleExtraDataForPrint(article, actorId);
+		}
+		
+		return articles;
 	}
 
-	public Article getForPrintArticle(int id) {
-		return articleDao.getForPrintArticle(id);
+	private void updateArticleExtraDataForPrint(Article article, int actorId) {
+		boolean deleteAvailable = Util.isSuccess(getCheckRsDeleteAvailable(article, actorId));
+		article.getExtra().put("deleteAvailable", deleteAvailable);
+		
+		
+		boolean modifyAvailable = Util.isSuccess(getCheckRsModifyAvailable(article, actorId));
+		article.getExtra().put("modifyAvailable", modifyAvailable);
+		
+		
+	}
+	
+	
+
+	
+
+	public Article getForPrintArticle(int id, int actorId) {
+		Article article = articleDao.getForPrintArticle(id); 
+		updateArticleExtraDataForPrint(article, actorId);
+		
+		return article;
 	}
 
 	public int getForPrintListArticlesCount(int cateItemId, String searchKeywordType, String searchKeywordTypeBody,  String searchKeyword) {
@@ -47,12 +71,12 @@ public class ArticleService extends Service  {
 	}
 
 
-	public void articleModify(int id, int cateItemId, int displayStatus, String title, String body) {
-		articleDao.articleModify(id, cateItemId, displayStatus, title, body);
+	public void modifyArticle(int id, int cateItemId, int displayStatus, String title, String body) {
+		articleDao.modifyArticle(id, cateItemId, displayStatus, title, body);
 	}
 
-	public int articleDelete(int id) {
-		return articleDao.articleDelete(id);
+	public void deleteArticle(int id) {
+		articleDao.deleteArticle(id);
 	}
 	
 	public int getForPageMoveBeforeArticle(int id, int cateItemId) {
@@ -89,6 +113,45 @@ public class ArticleService extends Service  {
 	}
 
 	
-
-
+	private Map<String, Object> getCheckRsModifyAvailable(Article article, int actorId) {
+		return getCheckRsDeleteAvailable(article, actorId);
+	}
+	
+	
+	private Map<String, Object> getCheckRsDeleteAvailable(Article article, int actorId) {
+		Map<String, Object> rs = new HashMap<>();
+		
+		
+		if ( article == null ) {
+			rs.put("resultCode", "F-1");
+			rs.put("msg", "존재하지 않는 게시물 입니다.");
+			
+			return rs;
+		}
+		
+		if ( article.getMemberId() != actorId ) {
+			rs.put("resultCode", "F-2");
+			rs.put("msg", "게시물 삭제 권한이 없습니다.");
+			
+			return rs;
+		}
+		
+		rs.put("resultCode", "S-1");
+		rs.put("msg", "작업이 가능합니다.");
+		
+		return rs;
+	}
+	
+	public Map<String, Object> getCheckRsDeleteAvailable(int id, int actorId) {
+		Article article = articleDao.getForPrintArticle(id);
+		
+		return getCheckRsDeleteAvailable(article, actorId);
+	}
+	
+	public Map<String, Object> getCheckRsModifyAvailable(int id, int actorId) {
+		
+		return getCheckRsDeleteAvailable(id, actorId);
+	}
+	
+	
 }

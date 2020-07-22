@@ -1,34 +1,9 @@
 <%@ include file="/jsp/part/head.jspf"%>
+<%@ include file="/jsp/part/toastUIEditor.jspf"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 
 
-	<script
-		src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/languages/css.min.js"></script>
-	<script
-		src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/languages/javascript.min.js"></script>
-	<script
-		src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/languages/java.min.js"></script>
-	<script
-		src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/languages/xml.min.js"></script>
-	<script
-		src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/languages/php.min.js"></script>
-	<script
-		src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/languages/php-template.min.js"></script>
-	<script
-		src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/languages/sql.min.js"></script>
-
-	<link rel="stylesheet"
-		href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.48.4/codemirror.min.css" />
-
-	<script
-		src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
-
-	<script
-		src="https://uicdn.toast.com/editor-plugin-code-syntax-highlight/latest/toastui-editor-plugin-code-syntax-highlight-all.min.js"></script>
-
-	<link rel="stylesheet"
-		href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css" />
 	
 	
 <style>
@@ -182,8 +157,8 @@
 			<div class="label">내용</div>
 			<div class="input">
 				<input type="hidden" name="body" /> 
-<!-- 				<textarea name="body" placeholder="내용을 입력해주세요."></textarea> -->
-				<div id="editor1"></div>
+				<script type="text/x-template"></script>
+				<div class="toast-editor"></div>
 			</div>
 		</div>
 		<div class="form-row">
@@ -200,18 +175,10 @@
 <script>
 
 
-var editor1 = new toastui.Editor({
-el: document.querySelector("#editor1"),
-height: "600px",
-initialEditType: "markdown",
-previewStyle: "vertical",
-initialValue: "# 내용을 입력해주세요.",
-plugins: [toastui.Editor.plugin.codeSyntaxHighlight, youtubePlugin, replPlugin, codepenPlugin]
-});
 
-var writeFormSubmitted = false;
+var submitWriteFormDone = false;
 function submitWriteForm(form) {
-	if ( writeFormSubmitted ) {
+	if ( submitWriteFormDone ) {
 		alert('처리중입니다.');
 		return;
 	}
@@ -221,15 +188,20 @@ function submitWriteForm(form) {
 		form.title.focus();
 		return;
 	}
-	var source = editor1.getMarkdown().trim();
-	if ( source.length == 0 ) {
+
+	var editor = $(form).find('.toast-editor').data('data-toast-editor'); 
+	var body = editor.getMarkdown();
+	body = body.trim();
+	
+	//var source = editor1.getMarkdown().trim();
+	if ( body.length == 0 ) {
 		alert('내용을 입력해주세요.');
-		editor1.focus();
+		editor.focus();
 		return;
 	}
-	form.body.value = source;
+	form.body.value = body;
 	form.submit();
-	writeFormSubmitted = true;
+	submitWriteFormDone = true;
 	
 }
 

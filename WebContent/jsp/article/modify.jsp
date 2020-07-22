@@ -1,39 +1,14 @@
 <%@ include file="/jsp/part/head.jspf"%>
+<%@ include file="/jsp/part/toastUIEditor.jspf"%>
 <%@ page import="com.sbs.java.blog.dto.Article"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 	
-	<script
-		src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/languages/css.min.js"></script>
-	<script
-		src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/languages/javascript.min.js"></script>
-	<script
-		src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/languages/java.min.js"></script>
-	<script
-		src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/languages/xml.min.js"></script>
-	<script
-		src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/languages/php.min.js"></script>
-	<script
-		src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/languages/php-template.min.js"></script>
-	<script
-		src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/languages/sql.min.js"></script>
-
-	<link rel="stylesheet"
-		href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.48.4/codemirror.min.css" />
-
-	<script
-		src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
-
-	<script
-		src="https://uicdn.toast.com/editor-plugin-code-syntax-highlight/latest/toastui-editor-plugin-code-syntax-highlight-all.min.js"></script>
-
-	<link rel="stylesheet"
-		href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css" />
+	
 	
 	
 <%
 	Article article = (Article) request.getAttribute("article");
-String cateItemName = (String) request.getAttribute("cateItemName");
 %>
 <style>
 /* lib   (나중에 다른 곳으로 옮길 예정이라셨음) */
@@ -145,11 +120,10 @@ String cateItemName = (String) request.getAttribute("cateItemName");
 			<div class="label">카테고리 선택</div>
 			<div class="input">
 				<select name="cateItemId">
-					<option value="<%=article.getCateItemId()%>"><%=cateItemName%></option>
 					<%
 						for (CateItem cateItem : cateItems) {
 					%>
-					<option value="<%=cateItem.getId()%>"><%=cateItem.getName()%></option>
+					<option <%=cateItem.getId() == article.getCateItemId() ? "selected" : "" %> value="<%=cateItem.getId()%>"><%=cateItem.getName()%></option>
 					<%
 						}
 					%>
@@ -163,12 +137,6 @@ String cateItemName = (String) request.getAttribute("cateItemName");
 			</div>
 		</div>
 		<div class="form-row">
-			<div class="label">현재 카테고리</div>
-			<div class="input">
-				<input  type="text" readonly="cateItemName" value="<%=cateItemName%>" />
-			</div>
-		</div>
-		<div class="form-row">
 			<div class="label">제목</div>
 			<div class="input">
 				<input name="title" type="text" value="<%=article.getTitle()%>" />
@@ -179,40 +147,14 @@ String cateItemName = (String) request.getAttribute("cateItemName");
 			<div class="label">내용</div>
 			<div class="input">
 				<input type="hidden" name="body" />
-				<script type="text/x-template" id="origin1" style="display: none;"  ><%=article.getBodyForXTemplate()%></script>
-				<div id="editor1" class="visible-on-md-up"></div>     
-				<div id="editor2" class="visible-on-sm-down"></div>
-				<script>
-					var editor1__initialValue = $('#origin1').html().trim(); // trim() 추가했음. 
-					var editor1 = new toastui.Editor({
-						el : document.querySelector("#editor1"),
-						previewStyle: "vertical",
-						height:"700px",
-						initialEditType: "markdown",
-						viewer : true,
-						initialValue : editor1__initialValue.replace(/<!--REPLACE:script-->/gi,'script'),
-						plugins : [ toastui.Editor.plugin.codeSyntaxHighlight,
-								youtubePlugin, replPlugin, codepenPlugin ]
-					});
-				</script>
-				<script>
-					var editor2__initialValue = $('#origin1').html().trim(); // trim() 추가했음. 
-					var editor2 = new toastui.Editor({
-						el : document.querySelector("#editor2"),
-						height:"700px",
-						initialEditType: "markdown",
-						viewer : true,
-						initialValue : editor1__initialValue.replace(/<!--REPLACE:script-->/gi,'script'),
-						plugins : [ toastui.Editor.plugin.codeSyntaxHighlight,
-								youtubePlugin, replPlugin, codepenPlugin ]
-					});
-				</script>
+				<script type="text/x-template"  ><%=article.getBodyForXTemplate()%></script>
+				<div class="toast-editor"></div>
 			</div>
 		</div>
 		<div class="form-row">
 			<div class="label"></div>
 			<div class="input">
-				<input type="submit" value="전송" /><a href="list">취소</a>
+				<input type="submit" value="수정" /><a href="list">취소</a>
 				
 
 			</div>
@@ -221,25 +163,35 @@ String cateItemName = (String) request.getAttribute("cateItemName");
 </div>
 <script>
 
-
+var submitModifyFormDone = false;
 function submitModifyForm(form) {
+	if ( submitModifyFormDone ) {
+		alert('처리중입니다.');
+		return;
+	}
 	form.title.value = form.title.value.trim();
 	if ( form.title.value.length == 0 ) {
 		alert('제목을 입력해주세요.');
 		form.title.focus();
 		return;
 	}
-	var source = editor1.getMarkdown().trim();
-	if ( source.length == 0 ) {
+	var editor = $(form).find('.toast-editor').data('data-toast-editor'); 
+	var body = editor.getMarkdown();
+	body = body.trim();
+	if ( body.length == 0 ) {
 		alert('내용을 입력해주세요.');
-		editor1.focus();
+		editor.focus();
 		return;
 	}
-	form.body.value = source;
-	
+	form.body.value = body;
 	form.submit();
+	submitModifyFormDone = true;
 	
 }
+
+
+
+
 </script>
 
 <%@ include file="/jsp/part/foot.jspf"%>

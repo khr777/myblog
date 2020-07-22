@@ -93,7 +93,7 @@ boolean isLogined = (boolean) request.getAttribute("isLogined");
 					</li>
 					<% if ( isLogined == false ) { %>
 					<li>
-						<a href="${pageContext.request.contextPath}/s/member/login" class="flex height-100p flex-ai-c">Login</a>
+						<a href="${pageContext.request.contextPath}/s/member/login?afterLoginRedirectUrl=${urlEncodedAfterLoginRedirectUrl}" class="flex height-100p flex-ai-c">Login</a>
 					</li>	
 					<%} else { %>
 					<li>

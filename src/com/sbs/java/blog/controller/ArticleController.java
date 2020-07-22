@@ -2,15 +2,14 @@ package com.sbs.java.blog.controller;
 
 import java.sql.Connection;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import com.sbs.java.blog.dto.Article;
 import com.sbs.java.blog.dto.ArticleReply;
 import com.sbs.java.blog.dto.CateItem;
-import com.sbs.java.blog.dto.Member;
 import com.sbs.java.blog.util.Util;
 
 public class ArticleController extends Controller {
@@ -49,7 +48,7 @@ public class ArticleController extends Controller {
 		case "doWrite":
 			return doActionDoWrite();
 		case "doModify":
-			return doModify();
+			return doActionDoModify();
 		case "replyWrite":  // 댓글 작성
  			return doActionReplyWrite();  
 		case "replyModify":    //댓글 수정 페이지 이동
@@ -164,27 +163,36 @@ public class ArticleController extends Controller {
 
 	
 	
-	private String doModify() {
+	private String doActionDoModify() {
+
+		if ( Util.empty(req,"id")) {
+			return "html:id를 입력해주세요.";
+		}
+		
+		if ( Util.isNum(req, "id") == false ) { // false라면. 정수가 아니라면. false를 빠트렸었음.
+			return "html:id를 정수로 입력해주세요.";
+		}
+		
+		int id = Util.getInt(req, "id");
+		
+		int loginedMemberId = (int)req.getAttribute("loginedMemberId");
+		
+		Map<String, Object> getCheckRsModifyAvailableRs = articleService.getCheckRsModifyAvailable(id, loginedMemberId); 
+		
+		if ( Util.isSuccess(getCheckRsModifyAvailableRs) == false) {
+			return "html:<script> alert('" + getCheckRsModifyAvailableRs.get("msg") + "'); history.back(); </script>";	
+		}
+		
+		
 		String title = req.getParameter("title");
 		String body = req.getParameter("body");
-
-		int id = 0;
-
-		if (!Util.empty(req, "id") && Util.isNum(req, "id")) { // cateItemId가 없지 않고 숫자가 맞으면
-
-			id = Util.getInt(req, "id");
-
-		}
-
-		
-		
 		int cateItemId = Util.getInt(req, "cateItemId");
 		int displayStatus = Util.getInt(req, "displayStatus");
 
 		
 		
 
-		articleService.articleModify(id, cateItemId, displayStatus, title, body);
+		articleService.modifyArticle(id, cateItemId, displayStatus, title, body);
 
 		return "html:<script> alert('" + id + "번 게시물이 수정되었습니다.'); location.replace('detail?id=" + id + "'); </script>";
 
@@ -193,11 +201,21 @@ public class ArticleController extends Controller {
 	
 	
 	private String doActionModify() {
+		
+		int id = 0;
+		
+		if (Util.empty(req, "id")) {
+			return "html:id를 입력해주세요.";
+		}
+		if (Util.isNum(req, "id") == false) {
+			return "html:id를 정수로 입력해주세요.";
+		}
+
+		id = Util.getInt(req, "id");
+
 
 		int loginedMemberId = (int)req.getAttribute("loginedMemberId");
 		
-		
-		int id = 0;
 
 		if (!Util.empty(req, "id") && Util.isNum(req, "id")) { // 게시물 번호 
 
@@ -205,20 +223,8 @@ public class ArticleController extends Controller {
 
 		}
 
-		Article article = articleService.getForPrintArticle(id);
+		Article article = articleService.getForPrintArticle(id, loginedMemberId);
 		
-		if ( article.getMemberId() != loginedMemberId ) {
-			return "html:<script> alert('게시물 수정은 작성자 본인만 가능합니다.'); history.back(); </script>";
-		}
-		
-		String cateItemName = "전체";
-
-		if (article.getCateItemId() != 0) {
-			CateItem cateItem = articleService.getCateItem(article.getCateItemId());
-			cateItemName = cateItem.getName();
-		}
-
-		req.setAttribute("cateItemName", cateItemName);
 		req.setAttribute("article", article);
 		return "article/modify.jsp";
 	}
@@ -248,21 +254,33 @@ public class ArticleController extends Controller {
 	
 	
 	private String doActionDoDelete() {
+		
+		if ( Util.empty(req,"id")) {
+			return "html:id를 입력해주세요.";
+		}
+		
+		if ( Util.isNum(req, "id") == false ) { // false라면. 정수가 아니라면. false를 빠트렸었음.
+			return "html:id를 정수로 입력해주세요.";
+		}
+		
+		int id = Util.getInt(req, "id");
+		
 		int loginedMemberId = (int)req.getAttribute("loginedMemberId");
-
-		int id = 0;
-
-		if (!Util.empty(req, "id") && Util.isNum(req, "id")) { // 게시물 번호 
-
-			id = Util.getInt(req, "id");
-
+		
+		/*
+		 * Article article = articleService.getForPrintArticle(id); if (
+		 * article.getMemberId() != loginedMemberId ) { return
+		 * "html:<script> alert('게시물 삭제는 작성자 본인만 가능합니다.'); history.back(); </script>"; }
+		 */
+		
+		Map<String, Object> getCheckRsDeleteAvailableRs = articleService.getCheckRsDeleteAvailable(id, loginedMemberId); 
+		
+		if ( Util.isSuccess(getCheckRsDeleteAvailableRs) == false) {
+			return "html:<script> alert('" + getCheckRsDeleteAvailableRs.get("msg") + "'); history.back(); </script>";	
 		}
-		Article article = articleService.getForPrintArticle(id);
-		if ( article.getMemberId() != loginedMemberId ) {
-			return "html:<script> alert('게시물 삭제는 작성자 본인만 가능합니다.'); history.back(); </script>";
-		}
-
-		int deleteId = articleService.articleDelete(id);
+		
+		
+		articleService.deleteArticle(id);
 
 		return "html:<script> alert('" + id + "번 게시물이 삭제되었습니다.'); location.replace('list'); </script>";
 	}
@@ -288,9 +306,7 @@ public class ArticleController extends Controller {
 
 		int id = Util.getInt(req, "id");
 
-		if (Util.empty(req, "id")) {
-			return "html:id를 입력해주세요.";
-		}
+	
 
 		int cateItemId = 0;
 
@@ -302,10 +318,12 @@ public class ArticleController extends Controller {
 
 		articleService.increaseHit(id);
 		
-				
+		//게시물 작성자만 삭제버튼 보이게 하기 위한 현재 접속자 확인용
+		int loginedMemberId = (int)req.getAttribute("loginedMemberId");
+		
 		
 		// 이 article은 그냥(평범한) article이 아니다.
-		Article article = articleService.getForPrintArticle(id); // sql 쿼리에 작성해놓은 정보들만이 아닌 부가적으로 추가한 자잘한 (항목 추가한)작성자 등
+		Article article = articleService.getForPrintArticle(id, loginedMemberId); // sql 쿼리에 작성해놓은 정보들만이 아닌 부가적으로 추가한 자잘한 (항목 추가한)작성자 등
 																	// 항목 모두 불러오는 메서드 네임
 		int beforeId = articleService.getForPageMoveBeforeArticle(id, cateItemId);
 		int afterId = articleService.getForPageMoveAfterArticle(id, cateItemId);
@@ -317,7 +335,6 @@ public class ArticleController extends Controller {
 		req.setAttribute("cateItemId", cateItemId);
 		
 		List<ArticleReply> articleReplies = articleService.getArticleRepliesForDetail(id);
-		System.out.println(articleReplies);
 		req.setAttribute("articleReplies", articleReplies);
 
 		// return "article/detail.jsp";
@@ -385,8 +402,10 @@ public class ArticleController extends Controller {
 		req.setAttribute("totalCount", totalCount);
 		req.setAttribute("totalPage", totalPage);
 		req.setAttribute("page", page);
-
-		List<Article> articles = articleService.getForPrintListArticles(page, cateItemId, itemsInAPage,
+		
+		int loginedMemberId = (int)req.getAttribute("loginedMemberId");
+		
+		List<Article> articles = articleService.getForPrintListArticles(loginedMemberId, page, cateItemId, itemsInAPage,
 				searchKeywordType, searchKeywordTypeBody, searchKeyword);
 		req.setAttribute("articles", articles);
 

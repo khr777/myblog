@@ -166,6 +166,7 @@
 <div class="write-form-box">
 	<form name="form" action="doLogin" method="POST" class="write-form form1" onsubmit="submitLoginForm(this); return false;">	
 		<input type="hidden" name="loginPwReal" />
+		
 		<div class="form-row">
 			<div class="label">로그인 아이디</div>
 			<div class="input">
@@ -191,6 +192,7 @@
 				<input type="button" value="회원가입" onclick="location.href='join'" />
 			</div>
 		</div>
+		<input type="hidden" name="redirectUrl" value="${param.afterLoginRedirectUrl}"/>
 	</form>
 	<div class="blog-name">harry.my.iu.gy</div>
 </div>

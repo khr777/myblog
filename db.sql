@@ -815,6 +815,7 @@ LIMIT 1
 
 # 조회수 칼럼 추가
 ALTER TABLE article ADD COLUMN hit INT(10) UNSIGNED NOT NULL AFTER `body`;
+# ALTER TABLE article ADD COLUMN hit INT(10) UNSIGNED NOT NULL DEFAULT 0 AFTER `body`;
 
 DESC article;
 
@@ -844,8 +845,11 @@ ALTER TABLE `member` CHANGE loginPwReal loginPw CHAR(255) NOT NULL;
 # level 칼럼 추가 
 ALTER TABLE `member` ADD COLUMN `level` INT(1) UNSIGNED NOT NULL AFTER email;
 
+# 기존 게시물의 작성자 번호를 1번으로 정리(통일)하는 쿼리 
+# 의미 : article 테이블의 memberId가 0인것만 1로 set한다. 
+UPDATE article
+SET memberId = 1
+WHERE memberId = 0;
 
 SELECT *
-FROM `article`;
-
-
+FROM article;

@@ -248,10 +248,24 @@ return params;
 }
 
 
+function jq_attr($el, attrName, elseValue) {
+		var value = $el.attr(attrName);
+
+		if (value === undefined || value === "") {
+			return elseValue;
+		}
+
+		return value;
+	}
+
+
+
 // lib 끝 
+
 function getBodyFromXTemplate(selector) {
 	return $(selector).html().trim().replace(/<!--REPLACE:script-->/gi, 'script');
 } 
+
 
 
 

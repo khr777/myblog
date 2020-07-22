@@ -147,29 +147,27 @@ public class ArticleDao extends Dao {
 		return DBUtil.insert(dbConn, secSql);
 	}
 
-	public void articleModify(int id, int cateItemId, int displayStatus, String title, String body) {
+	public void modifyArticle(int id, int cateItemId, int displayStatus, String title, String body) {
 
-		SecSql secSql = new SecSql();
+		SecSql sql = SecSql.from("UPDATE article");
 
-		secSql.append("UPDATE article  ");
-		secSql.append("SET updateDate = NOW()");
-		secSql.append(", cateItemId = ?", cateItemId);
-		secSql.append(", title = ?", title);
-		secSql.append(", body = ? ", body);
-		secSql.append(", displayStatus = ?", displayStatus);
-		secSql.append(" WHERE id = ?", id);
+		sql.append("SET updateDate = NOW()");
+		sql.append(", cateItemId = ?", cateItemId);
+		sql.append(", title = ?", title);
+		sql.append(", body = ? ", body);
+		sql.append(", displayStatus = ?", displayStatus);
+		sql.append(" WHERE id = ?", id);
 
-		DBUtil.update(dbConn, secSql);
+		DBUtil.update(dbConn, sql);
 
 	}
 
-	public int articleDelete(int id) {
-		SecSql secSql = new SecSql();
+	public int deleteArticle(int id) {
+		SecSql sql = SecSql.from("DELETE FROM article");
 
-		secSql.append("DELETE FROM article ");
-		secSql.append("WHERE id = ? ", id);
+		sql.append("WHERE id = ? ", id);
 
-		return DBUtil.update(dbConn, secSql);
+		return DBUtil.delete(dbConn, sql);
 	}
 
 	public int getForPageMoveBeforeArticle(int id, int cateItemId) {
