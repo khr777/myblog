@@ -50,24 +50,29 @@ public class MemberController extends Controller {
 		return "";
 	}
 
-	private String doActionDoLookForLoginId() {
+	private String doActionDoLookForLoginId() throws IOException {
 		
 		String name = req.getParameter("name");
 		String email = req.getParameter("email");
-		System.out.println("name : " + name);
-		System.out.println("email : " + email);
 		
-		Member member = memberService.getLookForLoginId(name, email);
-		if ( member.getName().equals(name) == false ) {
-			return "html:일치하지 않는다.";
+		String loginId = memberService.getLookForLoginId(name, email);
+		if ( loginId.length() == 0 ) {
+			return "html:<script> alert('일치하는 회원정보가 존재하지 않습니다.'); history.back(); </script>";
 		}
-		System.out.println("member : " + member.getId());
-		
-		System.out.println(member.getName());
-		System.out.println(member.getEmail());
 		
 		
-		return "html:작업중입니다.";
+
+		MailService mailService = new MailService(gmailId, gmailPw, gmailId, "관리자");
+		boolean sendMailDone = mailService.send(email, "가입하신 로그인 아이디를 확인바랍니다.",
+				"harry's life에 가입하신 로그인 아이디는 " + loginId + " 입니다. \n\n" + "로그인 바로 가기 https://harry.my.iu.gy/blog/s/member/login") == 1;
+		
+		
+		resp.getWriter().append(String.format("발송성공 : %b", sendMailDone));
+		
+		
+		
+		
+		return "html:<script> alert('가입하신 이메일로 로그인 아이디를 발송드렸습니다.'); location.replace('../home/main'); </script>";
 	}
 
 	private String doActionLookForLoginId() {

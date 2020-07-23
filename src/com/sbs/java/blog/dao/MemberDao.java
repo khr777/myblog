@@ -112,14 +112,14 @@ public class MemberDao {
 		return new Member(DBUtil.selectRow(dbConn, sql));
 	}
 
-	public Member getLookForLoginId(String name, String email) {
-		SecSql sql = SecSql.from("SELECT *");
+	public String getLookForLoginId(String name, String email) {
+		SecSql sql = SecSql.from("SELECT loginId");
 		sql.append("FROM `member`");
 		sql.append("WHERE name = ?", name);
 		sql.append("AND email = ?", email);
 		
-		
-		return new Member(DBUtil.selectRow(dbConn, sql));
+		return DBUtil.selectRowStringValue(dbConn, sql);
+		//return new Member(DBUtil.selectRow(dbConn, sql));
 	}
 
 	
