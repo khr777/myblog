@@ -69,4 +69,19 @@ public class MemberService extends Service {
 	public String getLookForLoginId(String name, String email) {
 		return memberDao.getLookForLoginId(name, email);
 	}
+
+
+	public int getLookForLoginPw(String name, String loginId, String email) {
+		return memberDao.getLookForLoginPw(name, loginId, email);
+	}
+
+
+	public void updateRandomPw(int memberId, String randomPw) {
+		memberDao.updateRandomPw(memberId, randomPw);
+	}
+
+
+	public void memberDataUpdate(String name, String nickname, String email, String loginPw, int id) {
+		memberDao.memberDataUpdate(name, nickname, email, loginPw, id);
+	}
 }

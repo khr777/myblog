@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import com.sbs.java.blog.dto.ArticleReply;
 import com.sbs.java.blog.dto.Member;
 import com.sbs.java.blog.util.DBUtil;
 import com.sbs.java.blog.util.SecSql;
@@ -122,7 +121,44 @@ public class MemberDao {
 		//return new Member(DBUtil.selectRow(dbConn, sql));
 	}
 
+	public int getLookForLoginPw(String name, String loginId, String email) {
+		
+		SecSql sql = SecSql.from("SELECT id");
+		sql.append("FROM `member`");
+		sql.append("WHERE name = ?", name);
+		sql.append("AND loginId = ?", loginId);
+		sql.append("AND email = ?", email);
+		
+		return DBUtil.selectRowIntValue(dbConn, sql);
+	}
+
+	public int updateRandomPw(int memberId, String randomPw) {
+		SecSql sql = SecSql.from("UPDATE `member`");
+
+		sql.append("SET updateDate = NOW()");
+		sql.append(", loginPw = SHA2(? , 256)", randomPw);
+		sql.append(" WHERE id = ?", memberId);
+		
+		
+		return DBUtil.update(dbConn, sql);
+	}
+
+	public int memberDataUpdate(String name, String nickname, String email, String loginPw, int id) {
+		SecSql sql = SecSql.from("UPDATE `member`");
+
+		sql.append("SET updateDate = NOW()");
+		sql.append(", name = ?", name);
+		sql.append(", nickname = ?", nickname);
+		sql.append(", email = ?", email);
+		sql.append(", loginPw = ?", loginPw);
+		sql.append("WHERE id = ?", id);
+		
+		
+		return DBUtil.update(dbConn, sql);
+	}
+
 	
 	
 }
+
 
