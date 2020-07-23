@@ -112,6 +112,16 @@ public class MemberDao {
 		return new Member(DBUtil.selectRow(dbConn, sql));
 	}
 
+	public Member getLookForLoginId(String name, String email) {
+		SecSql sql = SecSql.from("SELECT *");
+		sql.append("FROM `member`");
+		sql.append("WHERE name = ?", name);
+		sql.append("AND email = ?", email);
+		
+		
+		return new Member(DBUtil.selectRow(dbConn, sql));
+	}
+
 	
 	
 }

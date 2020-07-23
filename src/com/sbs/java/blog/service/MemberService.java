@@ -64,4 +64,9 @@ public class MemberService extends Service {
 	public Member getMemberById(int id) {
 		return memberDao.getMemberById(id);
 	}
+
+
+	public Member getLookForLoginId(String name, String email) {
+		return memberDao.getLookForLoginId(name, email);
+	}
 }

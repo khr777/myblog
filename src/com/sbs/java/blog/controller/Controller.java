@@ -1,5 +1,6 @@
 package com.sbs.java.blog.controller;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.util.List;
 
@@ -110,10 +111,10 @@ public abstract class Controller {
 		// [ 액션 후 실행 ]
 	}
 
-	public abstract String doAction();
+	public abstract String doAction() throws IOException;
 
 	// 템플릿 메소드 (객체 지향 패턴으로써 중요하다, 나중에 차장보기 )
-	public String executeAction() {
+	public String executeAction() throws IOException {
 		beforeAction();
 		
 		// 입구 컷 작업

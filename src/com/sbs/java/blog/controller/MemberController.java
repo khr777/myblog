@@ -1,20 +1,26 @@
 package com.sbs.java.blog.controller;
 
+import java.io.IOException;
 import java.sql.Connection;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import com.mysql.cj.Session;
 import com.sbs.java.blog.dto.Member;
 import com.sbs.java.blog.util.Util;
+import com.sbs.java.mail.service.MailService;
 
 public class MemberController extends Controller {
+	private String gmailId;
+	private String gmailPw;
 
 	public MemberController(Connection dbConn, String actionMethodName, HttpServletRequest req,
-			HttpServletResponse resp) {
+			HttpServletResponse resp, String gmailId, String gmailPw) {
 		super(dbConn, actionMethodName, req, resp);
+		this.gmailId = gmailId;
+		this.gmailPw = gmailPw;
+		
 	}
 
 	public void beforeAction() {
@@ -24,7 +30,7 @@ public class MemberController extends Controller {
 	}
 
 	@Override
-	public String doAction() {
+	public String doAction() throws IOException {
 		switch (actionMethodName) {
 		case "join":
 			return doActionJoin(); // controller req, resp 나중에 뺀다고 하셨음.
@@ -36,8 +42,36 @@ public class MemberController extends Controller {
 			return doActionDoLogin();
 		case "doLogout":   // 작업을 하는 jsp, 페이지가 아닌 잠깐 들렀다 이동하는 곳은 do를 붙인다! 
 			return doActionDoLogout(); 
+		case "lookForLoginId":
+			return doActionLookForLoginId();
+		case "doLookForLoginId":
+			return doActionDoLookForLoginId();
 		}
 		return "";
+	}
+
+	private String doActionDoLookForLoginId() {
+		
+		String name = req.getParameter("name");
+		String email = req.getParameter("email");
+		System.out.println("name : " + name);
+		System.out.println("email : " + email);
+		
+		Member member = memberService.getLookForLoginId(name, email);
+		if ( member.getName().equals(name) == false ) {
+			return "html:일치하지 않는다.";
+		}
+		System.out.println("member : " + member.getId());
+		
+		System.out.println(member.getName());
+		System.out.println(member.getEmail());
+		
+		
+		return "html:작업중입니다.";
+	}
+
+	private String doActionLookForLoginId() {
+		return "member/lookForLoginId.jsp";
 	}
 
 	private String doActionDoLogout() {
@@ -75,14 +109,14 @@ public class MemberController extends Controller {
 		
 		String redirectUrl = Util.getString(req, "redirectUrl", "../home/main");
 		
-		
+
 		
 		
 
 		return String.format("html:<script> alert('로그인 되었습니다.'); location.replace('" + redirectUrl + "'); </script>");
 	}
 
-	private String doActionDoJoin() {
+	private String doActionDoJoin() throws IOException {
 		String loginId = req.getParameter("loginId");
 		String name = req.getParameter("name");
 		String nickName = req.getParameter("nickname");
@@ -108,6 +142,18 @@ public class MemberController extends Controller {
 		}
 
 		int id = memberService.join(loginId, name, nickName, loginPw, email);
+		
+		
+
+		MailService mailService = new MailService(gmailId, gmailPw, gmailId, "관리자");
+		boolean sendMailDone = mailService.send(email, "harry's life 회원가입을 축하드립니다.", "환영합니다. 회원님 ^^") == 1;
+		
+		
+		resp.getWriter().append(String.format("발송성공 : %b", sendMailDone));
+		
+
+		
+		
 
 		return String.format("html:<script> alert('%s님, 환영합니다.'); location.replace('../home/main'); </script>", name);
 	}

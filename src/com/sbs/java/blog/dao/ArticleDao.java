@@ -54,17 +54,7 @@ public class ArticleDao extends Dao {
 		return articles;
 	}
 
-	/*
-	 * public Article getForPrintArticle(int id) { SecSql sql = new SecSql();
-	 * sql.append("SELECT *, '김혜련' AS extra__writer "); // 만들어놓은 쿼리에는 작성자명을 담을 수가
-	 * 없다. 그래서 'extra__' 를 적은 것. sql.append("FROM article ");
-	 * sql.append("WHERE 1 "); // 이유는 id 가 RPIMARY KEY라서 중복되는 값이 없기 때문이다. 그리고 순서를 바꿀
-	 * 수 있는 이유는 WHERE 1을 걸어놨기 // 때문에 가능한 것이다. sql.append("AND id = ? ", id); // tip
-	 * : displayStatus가 이 줄에 와도 상관없지만 검색 속도를 빠르게 하고 싶다면 id를 먼저 써주는 것이 // 좋다.
-	 * sql.append("AND displayStatus = 1 ");
-	 * 
-	 * return new Article(DBUtil.selectRow(dbConn, sql)); }
-	 */
+
 	public Article getForPrintArticle(int id) {
 		SecSql sql = SecSql.from("SELECT A.*");
 		sql.append(", M.name AS extra__writer");
@@ -265,15 +255,7 @@ public class ArticleDao extends Dao {
 
 	}
 	
-	
-	/*
-	 * public ArticleReply getArticleReplyForModify(int id, int memberId) { SecSql
-	 * sql = SecSql.from("SELECT *"); sql.append("FROM articleReply");
-	 * sql.append("WHERE id = ?", id);
-	 * 
-	 * return new ArticleReply(DBUtil.selectRow(dbConn, sql)); }
-	 */
-	
+
 	
 
 	public ArticleReply getArticleReplyForModify(int id, int memberId) {

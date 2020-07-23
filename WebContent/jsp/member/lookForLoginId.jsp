@@ -164,59 +164,51 @@
 </style>
 
 <div class="write-form-box">
-	<form name="form" action="doLogin" method="POST" class="write-form form1" onsubmit="submitLoginForm(this); return false;">	
+	<form name="form" action="doLookForLoginId" method="POST" class="write-form form1" onsubmit="submitLoginIdForm(this); return false;">	
 		<input type="hidden" name="loginPwReal" />
 		
 		<div class="form-row">
-			<div class="label">로그인 아이디</div>
+			<div class="label">가입 성명</div>
 			<div class="input">
-				<input name="loginId" type="text" placeholder="로그인 아이디를 입력해주세요." />
+				<input name="name" type="text" placeholder="가입 성명을 입력해주세요." />
 			</div>
 		</div>
 		<div class="form-row">
-			<div class="label">로그인 비밀번호</div>
+			<div class="label">가입 이메일</div>
 			<div class="input">
-				<input name="loginPw" type="password" placeholder="로그인 비밀번호를 입력해주세요." />
+				<input name="email" type="email" placeholder="가입 이메일을 입력해주세요." />
 			</div>
 		</div>
 		<div class="form-row">
 			<div class="input">
-				<input type="submit" value="로그인" />
+				<input type="submit" value="로그인 아이디 찾기" />
 			</div>
 		</div>
 		<div class="form-row">
 			<div class="input">
 				<input type="button" value="취소" onclick="history.back();" />
 			</div>
-			<div class="input">
-				<input type="button" value="회원가입" onclick="location.href='join'" />
-			</div>
 		</div>
-		<input type="hidden" name="redirectUrl" value="${param.afterLoginRedirectUrl}"/>
-		<input type="button" value="아이디 찾기" onclick="location.href='lookForLoginId'">
-		<input type="button" value="비밀번호 찾기" onclick="location.href='lookForLoginPw'">
 	</form>
 	<div class="blog-name">harry.my.iu.gy</div>
 </div>
 
 <script>
-function submitLoginForm(form) {
-	form.loginId.value = form.loginId.value.trim();
-	if ( form.loginId.value.length == 0 ) {
-		alert('아이디를 입력해주세요.');
-		form.loginId.focus();
+function submitLoginIdForm(form) {
+	form.name.value = form.name.value.trim();
+	if ( form.name.value.length == 0 ) {
+		alert('가입 성명을 입력해주세요.');
+		form.name.focus();
 		return;
 	}
 
-	form.loginPw.value = form.loginPw.value.trim();
-	if ( form.loginPw.value.length == 0 ) {
-		alert('비밀번호를 입력해주세요.');
-		form.loginPw.focus();
+	form.email.value = form.email.value.trim();
+	if ( form.email.value.length == 0 ) {
+		alert('가입하신 이메일을 입력해주세요.');
+		form.email.focus();
 		return;
 	}
-
-	form.loginPwReal.value = sha256(form.loginPw.value);  /* 암호화된 텍스트를 넘겨준다.*/
-	form.loginPw.value = "";
+	
 	
 	form.submit();
 }
