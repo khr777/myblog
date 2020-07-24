@@ -35,7 +35,11 @@ public class Util {
 			msg.setRecipient(Message.RecipientType.TO, new InternetAddress(to));
 			msg.setSubject(title, "UTF-8");
 			msg.setText(body, "UTF-8");
-
+			msg.setContent(body, "text/html; charset=UTF-8");  // 혜련 추가 한 것.  "text/html; 은 html을 인식하겠다라는 의미. char~~는 한글깨짐 방지! 
+			
+			
+			
+			
 			Transport.send(msg);
 
 		} catch (AddressException ae) {

@@ -95,7 +95,7 @@ public abstract class Controller {
 		
 		// [ 로그인 페이지에서 로그인 페이지로 이동하는 버튼을 또 누른 경우
 		// 기존 afterLoginRedirectUrl 정보를 유지시키기 위한 로직 ]
-		// 아래 로직이 의미하는 것 : login page에서 다시 login page로 돌아가는 것을 방지!
+		// 아래 로직이 의미하는 것 : login page에서 다시 login page로 돌아가는 것을 방지! 그리고 url이 길어지는 것을 방지! 
 		if ( currentUrl.contains("/s/member/login")) {
 			String urlEncodedOldAfterLoginRedirectUrl = Util.getString(req, "afterLoginRedirectUrl", "");
 			urlEncodedOldAfterLoginRedirectUrl = Util.getUrlEncoded(urlEncodedOldAfterLoginRedirectUrl);

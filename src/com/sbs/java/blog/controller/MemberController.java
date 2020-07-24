@@ -253,7 +253,13 @@ public class MemberController extends Controller {
 		
 
 		MailService mailService = new MailService(gmailId, gmailPw, gmailId, "관리자");
-		boolean sendMailDone = mailService.send(email, "harry's life 회원가입을 축하드립니다.", "환영합니다. 회원님 ^^") == 1;
+		String emailTitle = "harry's life 회원가입을 축하드립니다. 이메일 인증 후 활동해주세요.";
+		String emailBody = "";
+		emailBody += "환영합니다. 회원님 ^^\n";
+		emailBody += "테스트 중입니다. 회원님????";
+		emailBody += "<html><body>< a href=\"https://harry.my.iu.gy/blog/s/member/doAuthMail?code=인증코드\">인증하기</a></body></html>";
+		
+		boolean sendMailDone = mailService.send(email, emailTitle, emailBody) == 1;
 		
 		
 		resp.getWriter().append(String.format("발송성공 : %b", sendMailDone));

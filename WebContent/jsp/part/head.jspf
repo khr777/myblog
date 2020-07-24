@@ -130,7 +130,7 @@ boolean isLogined = (boolean) request.getAttribute("isLogined");
 						</li>
 					<% if ( loginedMember != null ) { %>	
 					<li>
-						<a href="${pageContext.request.contextPath}/s/member/myPage" class="flex height-100p flex-ai-c" style="white-space:nowrap;"><%=loginedMember.getName()%></a>
+						<a href="${pageContext.request.contextPath}/s/member/myPage" class="flex height-100p flex-ai-c" style="white-space:nowrap;"><%=loginedMember.getName()%> 님</a>
 					</li>
 					<%} %> 
 				</ul>
