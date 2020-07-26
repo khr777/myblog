@@ -92,20 +92,72 @@ public class ArticleService extends Service  {
 		
 	}
 
-	public int getArticleReply(String body, int articleId, int memberId) {
-		return articleDao.getArticleReply(body, articleId, memberId);
+	public int writeArticleReply(String body, int articleId, int memberId) {
+		return articleDao.writeArticleReply(body, articleId, memberId);
 	}
 
-	public List<ArticleReply> getArticleRepliesForDetail(int articleId) {
-		return articleDao.getArticleRepliesForDetail(articleId);
+	public List<ArticleReply> getForPrintArticleReplies(int articleId, int actorId) {
+		List<ArticleReply> articleReplies = articleDao.getForPrintArticleReplies(articleId, actorId);
+		
+		for ( ArticleReply articleReply : articleReplies ) {
+			updateArticleReplyExtraDataForPrint(articleReply, actorId);
+		}
+		
+		return articleReplies;
 	}
 
-	public void articleReplyDelete(int id) {
-		articleDao.articleReplyDelete(id);
+	private void updateArticleReplyExtraDataForPrint(ArticleReply articleReply, int actorId) {
+		boolean deleteAvailable = Util.isSuccess(getReplyCheckRsDeleteAvailable(articleReply, actorId));
+		articleReply.getExtra().put("deleteAvailable", deleteAvailable);
+		
+		
+		boolean modifyAvailable = Util.isSuccess(getReplyCheckRsModifyAvailable(articleReply, actorId));
+		articleReply.getExtra().put("modifyAvailable", modifyAvailable);
 	}
 
-	public void articleReplyModify(int id, String body) { 
-		articleDao.articleReplyModify(id, body);
+	private Map<String, Object> getReplyCheckRsModifyAvailable(ArticleReply articleReply, int actorId) {
+		return getReplyCheckRsDeleteAvailable(articleReply, actorId);
+	}
+	
+	public Map<String, Object> getReplyCheckRsModifyAvailable(int id, int actorId) {
+		ArticleReply articleReply = getArticleReply(id);
+		System.out.println(articleReply);
+		
+		return getReplyCheckRsModifyAvailable(articleReply, actorId);
+	}
+	
+	
+	
+	private Map<String, Object> getReplyCheckRsDeleteAvailable(ArticleReply articleReply, int actorId) {
+	Map<String, Object> rs = new HashMap<>();
+		
+		
+		if ( articleReply == null ) {
+			rs.put("resultCode", "F-1");
+			rs.put("msg", "존재하지 않는 댓글 입니다.");
+			
+			return rs;
+		}
+		
+		if ( articleReply.getMemberId() != actorId ) {
+			rs.put("resultCode", "F-2");
+			rs.put("msg", "댓글 삭제 권한이 없습니다.");
+			
+			return rs;
+		}
+		
+		rs.put("resultCode", "S-1");
+		rs.put("msg", "작업이 가능합니다.");
+		
+		return rs;
+	}
+
+	public int deleteArticleReply(int id) {
+		return articleDao.deleteArticleReply(id);
+	}
+
+	public int modifyArticleReply(int id, String body) { 
+		return articleDao.modifyArticleReply(id, body);
 	}
 
 	public ArticleReply getArticleReplyForModify(int id, int memberId) {
@@ -116,6 +168,7 @@ public class ArticleService extends Service  {
 	private Map<String, Object> getCheckRsModifyAvailable(Article article, int actorId) {
 		return getCheckRsDeleteAvailable(article, actorId);
 	}
+	
 	
 	
 	private Map<String, Object> getCheckRsDeleteAvailable(Article article, int actorId) {
@@ -151,6 +204,16 @@ public class ArticleService extends Service  {
 	public Map<String, Object> getCheckRsModifyAvailable(int id, int actorId) {
 		
 		return getCheckRsDeleteAvailable(id, actorId);
+	}
+
+	public Map<String, Object> getReplyCheckRsDeleteAvailable(int id, int actorId) { // 댓글 id
+		ArticleReply articleReply = this.getArticleReply(id);
+		return getReplyCheckRsDeleteAvailable(articleReply, actorId);
+	}
+	
+	//댓글 번호로 댓글 1개 가져오는 메서드
+	public ArticleReply getArticleReply(int id) {
+		return articleDao.getArticleReply(id);
 	}
 	
 	

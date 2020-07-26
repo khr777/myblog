@@ -1,3 +1,5 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<c:set var="pageTitle" value="개인정보 유출 방지"></c:set>
 <%@ include file="/jsp/part/head.jspf"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
@@ -6,11 +8,15 @@
 <div class="loginPwConfirm-box">
 	<div>현재 비밀번호 입력</div>
 	<input type="password" id="loginPw" />
-	<input id="originLoginPw" type="hidden" value="<%=loginedMember.getLoginPw()%>"/>
+	<input id="originLoginPw" type="hidden" value="${loginedMember.loginPw}"/>
 	<input type="button" value="확인" onclick="checkBox();"/>	
 </div>
 
 <style>
+.page-title {
+	top:0;	
+}
+
 .loginPwConfirm-box {
 	margin-top:130px;
 	margin-left:300px;

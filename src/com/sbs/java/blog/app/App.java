@@ -41,9 +41,9 @@ public class App { //loadDriver()를 접고 다음 메서드를 보면 편하다
 		}
 		// DB 커넥터 로딩 성공
 	}
-	private String getDbUrl() {  //이렇게 하는 이유 : 나중에 개발, 운영하는 sql정보를 달리해야 한다. 개발할 때는 다른 접속 정보로 로그인해서 테스트하면 된다. 데이터를 지우고 삭제하고 등등을 반복하기 때문인 듯
+	private String getDbUri() {  //이렇게 하는 이유 : 나중에 개발, 운영하는 sql정보를 달리해야 한다. 개발할 때는 다른 접속 정보로 로그인해서 테스트하면 된다. 데이터를 지우고 삭제하고 등등을 반복하기 때문인 듯
 		return "jdbc:mysql://site24.iu.gy:3306/site24?serverTimezone=Asia/Seoul&useOldAliasMetadataBehavior=true&zeroDateTimeBehavior=convertToNull";
-		//&zeroDateTimeBehavior=convertToNull (String url 에 추가해준 이 코드가 입력되지 않은 쿼리 값을 오류 발생시키지 않고 null 값으로 처리해준다.
+		//&zeroDateTimeBehavior=convertToNull (String Uri 에 추가해준 이 코드가 입력되지 않은 쿼리 값을 오류 발생시키지 않고 null 값으로 처리해준다.
 	}
 	
 	private String getId() {
@@ -60,8 +60,8 @@ public class App { //loadDriver()를 접고 다음 메서드를 보면 편하다
 		
 		
 		// [ DB 접속정보 세팅 ]   ★ 거대한 프로그램 하나가 있다?? 그것은 잘못된 것이다. (테스트, 개발용을 구분해서 프로그램 관리를 해야 한다!)
-		// 그래서 필요한 프로그램에 대한 정보들을 아래 url, user, password에 딸깍 끼워서 편리하게 구분해서 활용할 수 있다.
-		String url = getDbUrl(); 
+		// 그래서 필요한 프로그램에 대한 정보들을 아래 Uri, user, password에 딸깍 끼워서 편리하게 구분해서 활용할 수 있다.
+		String Uri = getDbUri(); 
 		String user = getId();
 		String password = getDbPassword();
 		
@@ -71,7 +71,7 @@ public class App { //loadDriver()를 접고 다음 메서드를 보면 편하다
 		// try/catch 문에서 올바른 접속을 하고 route 메서드를 통해서 일을 한다. route 안에 원래 일을 노나줌. 보기 쉽다.
 		try  {
 			// = DB 접속 성공 =
-			dbConn = DriverManager.getConnection(url, user, password);
+			dbConn = DriverManager.getConnection(Uri, user, password);
 			
 			// [ 올바른 컨트롤러로 라우팅 ] : 올바른 길로 인도한다
 			route(dbConn, req, resp, gmailId, gmailPw); //1. (한 곳에서 다른 곳으로 가기 위해 따라가는) 길, 노선 

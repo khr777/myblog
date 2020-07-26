@@ -1,28 +1,30 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<c:set var="pageTitle" value="게시물 수정"></c:set>
 <%@ include file="/jsp/part/head.jspf"%>
 <%@ include file="/jsp/part/toastUIEditor.jspf"%>
 <%@ page import="com.sbs.java.blog.dto.Article"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-	
-	
-	
-	
-<%
-	Article article = (Article) request.getAttribute("article");
-%>
+
 <style>
+
+.page-title {
+	top:0;
+	
+}
+
+
 /* lib   (나중에 다른 곳으로 옮길 예정이라셨음) */
 .form1 {
 	display: block;
 	width: 95%;
-	margin-left:2%;
-	margin-right:2%;
+	margin-left: 2%;
+	margin-right: 2%;
 }
 
 .form1 .form-row {
 	align-items: center;
-	display:flex;
-	
+	display: flex;
 }
 
 .form1 .form-row:not(:first-child) {
@@ -30,12 +32,11 @@
 }
 
 .form1 .form-row>.label {
-	width:100px;
-	
+	width: 100px;
 }
 
 .form1 .form-row>.input {
-	flex-grow:1;
+	flex-grow: 1;
 }
 
 .form1 .form-row>.input>input, .form1 .form-row>.input>textarea {
@@ -61,19 +62,19 @@
 
 /* cus */
 .write-form-box {
-	margin-top: 170px;
-	border:1px solid black;
-	padding-top:20px;
-	margin-left:100px;
-	margin-right:100px;
+	margin-top: 180px;
+	border: 1px solid black;
+	padding-top: 20px;
+	margin-left: 100px;
+	margin-right: 100px;
 }
 
 .write-form-box .blank-box {
-	position:absolute;
-	top:200px;
-	right:5%;
-	
+	position: absolute;
+	top: 200px;
+	right: 5%;
 }
+
 .emoji, .pixabay, .github, .write-editor {
 	width: 200px;
 }
@@ -81,11 +82,11 @@
 .emoji, .pixabay, .github, .write-editor a {
 	display: block;
 }
+
 @media ( max-width :799px) {
 	.write-form-box .blank-box {
-	top:240px;
-	right:-8%;
-	
+		top: 240px;
+		right: -8%;
 	}
 }
 </style>
@@ -106,7 +107,9 @@
 		</div>
 	</div>
 
-	<form name="form" action="doModify" method="POST" class="write-form form1" onsubmit="submitModifyForm(this); return false;">
+	<form name="form" action="doModify" method="POST"
+		class="write-form form1"
+		onsubmit="submitModifyForm(this); return false;">
 		<div class="form-row">
 			<div class="label">공개여부</div>
 			<div class="input">
@@ -120,34 +123,31 @@
 			<div class="label">카테고리 선택</div>
 			<div class="input">
 				<select name="cateItemId">
-					<%
-						for (CateItem cateItem : cateItems) {
-					%>
-					<option <%=cateItem.getId() == article.getCateItemId() ? "selected" : "" %> value="<%=cateItem.getId()%>"><%=cateItem.getName()%></option>
-					<%
-						}
-					%>
+					<c:forEach items="${cateItems}" var="cateItem">
+						<option	${article.cateItemId == cateItem.id ? 'selected' : '' }	value="${cateItem.id}">${cateItem.name}</option>
+					</c:forEach>
 				</select>
 			</div>
 		</div>
 		<div class="form-row">
 			<div class="label">번호</div>
 			<div class="input">
-				<input type="text" name="id" readonly="id" value="<%=article.getId()%>" />
+				<input type="text" name="id" readonly="id"
+					value="${article.id}" />
 			</div>
 		</div>
 		<div class="form-row">
 			<div class="label">제목</div>
 			<div class="input">
-				<input name="title" type="text" value="<%=article.getTitle()%>" />
-				
+				<input name="title" type="text" value="${article.title}" />
+
 			</div>
 		</div>
 		<div class="form-row">
 			<div class="label">내용</div>
 			<div class="input">
 				<input type="hidden" name="body" />
-				<script type="text/x-template"  ><%=article.getBodyForXTemplate()%></script>
+				<script type="text/x-template">${article.bodyForXTemplate}</script>
 				<div class="toast-editor"></div>
 			</div>
 		</div>
@@ -155,43 +155,38 @@
 			<div class="label"></div>
 			<div class="input">
 				<input type="submit" value="수정" /><a href="list">취소</a>
-				
+
 
 			</div>
 		</div>
 	</form>
 </div>
 <script>
+	var submitModifyFormDone = false;
+	function submitModifyForm(form) {
+		if (submitModifyFormDone) {
+			alert('처리중입니다.');
+			return;
+		}
+		form.title.value = form.title.value.trim();
+		if (form.title.value.length == 0) {
+			alert('제목을 입력해주세요.');
+			form.title.focus();
+			return;
+		}
+		var editor = $(form).find('.toast-editor').data('data-toast-editor');
+		var body = editor.getMarkdown();
+		body = body.trim();
+		if (body.length == 0) {
+			alert('내용을 입력해주세요.');
+			editor.focus();
+			return;
+		}
+		form.body.value = body;
+		form.submit();
+		submitModifyFormDone = true;
 
-var submitModifyFormDone = false;
-function submitModifyForm(form) {
-	if ( submitModifyFormDone ) {
-		alert('처리중입니다.');
-		return;
 	}
-	form.title.value = form.title.value.trim();
-	if ( form.title.value.length == 0 ) {
-		alert('제목을 입력해주세요.');
-		form.title.focus();
-		return;
-	}
-	var editor = $(form).find('.toast-editor').data('data-toast-editor'); 
-	var body = editor.getMarkdown();
-	body = body.trim();
-	if ( body.length == 0 ) {
-		alert('내용을 입력해주세요.');
-		editor.focus();
-		return;
-	}
-	form.body.value = body;
-	form.submit();
-	submitModifyFormDone = true;
-	
-}
-
-
-
-
 </script>
 
 <%@ include file="/jsp/part/foot.jspf"%>

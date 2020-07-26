@@ -558,7 +558,9 @@ html {
 	position:absolute;
 	width:70%;
 	height:70%;
-	top:20%;
+	top:60%;
+	left:50%;
+	transform:translate(-50%, -50%);
 }
 .detail-box-1 .writeData > .date, .updateDate, .writer, .id, .cateItemName, .hit{
 	position:absolute;
@@ -689,6 +691,7 @@ html {
 .article-list-box-1 {
 	text-align:center;
 	margin-top:130px;
+	
 }
 
 
@@ -1092,6 +1095,31 @@ html {
 /* editor 끝 */
 
 
-/* aboutMe 시작 */
+/* 페이지 타이틀 시작 */
+.page-title {
+	margin-top:100px;
+	width:99.9%;
+	position:absolute;
+	
+}
+
+.page-title > div {
+	width:18%;
+	text-align:left;
+	margin-right:0;
+	margin-left:auto;
+	font-weight:bold;
+	font-size:1.3rem;
+	color:orange;
+	opacity: 0.6;
+	padding:20px 0 20px 10px;
+	background-color:#dfdfdf;
+	border-radius:6px;
+	
+}
+
+
+
+/* 페이지 타이틀 끝 */
 
 

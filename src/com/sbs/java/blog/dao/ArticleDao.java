@@ -204,18 +204,19 @@ public class ArticleDao extends Dao {
 		return DBUtil.update(dbConn, sql);
 	}
 
-	public int getArticleReply(String body, int articleId, int memberId) {
+	public int writeArticleReply(String body, int articleId, int memberId) {
 		SecSql sql = SecSql.from("INSERT INTO articleReply");
 		sql.append("SET regDate = NOW()");
 		sql.append(", updateDate = NOW()");
 		sql.append(", articleId = ?", articleId);
 		sql.append(", `body` = ?", body);
+		sql.append(", displayStatus = 1 ");
 		sql.append(", memberId = ?", memberId);
 
 		return DBUtil.insert(dbConn, sql);
 	}
 
-	public List<ArticleReply> getArticleRepliesForDetail(int articleId) {
+	public List<ArticleReply> getForPrintArticleReplies(int articleId, int actorId) {
 		
 		
 		SecSql sql = SecSql.from("SELECT A.*, M.nickname AS extra__writer");
@@ -236,22 +237,20 @@ public class ArticleDao extends Dao {
 	}
 
 	
-	public int articleReplyDelete(int id) {
-		SecSql secSql = new SecSql();
+	public int deleteArticleReply(int id) {
+		SecSql sql = SecSql.from("DELETE FROM articleReply ");
+		sql.append("WHERE id = ? ", id);
 
-		secSql.append("DELETE FROM articleReply ");
-		secSql.append("WHERE id = ? ", id);
-
-		return DBUtil.update(dbConn, secSql);
+		return DBUtil.update(dbConn, sql);
 	}
 
-	public void articleReplyModify(int id, String body) {
+	public int modifyArticleReply(int id, String body) {
 		SecSql sql = SecSql.from("UPDATE articleReply ");
 		sql.append("SET updateDate = NOW()");
 		sql.append(", body = ? ", body);
 		sql.append(" WHERE id = ?", id);
 
-		DBUtil.update(dbConn, sql);
+		return DBUtil.update(dbConn, sql);
 
 	}
 	
@@ -268,6 +267,21 @@ public class ArticleDao extends Dao {
 		sql.append("WHERE A.id = ?", id);
 		
 		return new ArticleReply(DBUtil.selectRow(dbConn, sql));
+	}
+
+	public ArticleReply getArticleReply(int id) {
+		SecSql sql = SecSql.from("SELECT *");
+		sql.append("FROM articleReply");
+		sql.append("WHERE displayStatus = 1");
+		sql.append("AND id = ?", id);
+		
+		Map<String, Object> row = DBUtil.selectRow(dbConn, sql);
+		
+		if ( row.isEmpty()) {
+			return null;
+		}
+		
+		return new ArticleReply(row);
 	}
 
 }

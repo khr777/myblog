@@ -97,41 +97,41 @@ toastui.Editor.codeBlockManager.setReplacer("youtube", function (youtubeId) {
 function renderYoutube(wrapperId, youtubeId) {
 const el = document.querySelector('#' + wrapperId);
 
-var urlParams = getUrlParams(youtubeId);
+var UriParams = getUriParams(youtubeId);
 
 var width = '100%';
 var height = '100%';
 
-if ( urlParams.width ) {
- width = urlParams.width;
+if ( UriParams.width ) {
+ width = UriParams.width;
 }
 
-if ( urlParams.height ) {
- height = urlParams.height;
+if ( UriParams.height ) {
+ height = UriParams.height;
 }
 
 var maxWidth = 500;
 
-if ( urlParams['max-width'] ) {
- maxWidth = urlParams['max-width'];
+if ( UriParams['max-width'] ) {
+ maxWidth = UriParams['max-width'];
 }
 
 var ratio = '16-9';
 
-if ( urlParams['ratio'] ) {
- ratio = urlParams['ratio'];
+if ( UriParams['ratio'] ) {
+ ratio = UriParams['ratio'];
 }
 
 var marginLeft = 'auto';
 
-if ( urlParams['margin-left'] ) {
- marginLeft = urlParams['margin-left'];
+if ( UriParams['margin-left'] ) {
+ marginLeft = UriParams['margin-left'];
 }
 
 var marginRight = 'auto';
 
-if ( urlParams['margin-right'] ) {
- marginRight = urlParams['margin-right'];
+if ( UriParams['margin-right'] ) {
+ marginRight = UriParams['margin-right'];
 }
 
 if ( youtubeId.indexOf('?') !== -1 ) {
@@ -145,86 +145,86 @@ el.innerHTML = '<div style="max-width:' + maxWidth + 'px; margin-left:' + margin
 
 //repl 플러그인 시작
 function replPlugin() {
-toastui.Editor.codeBlockManager.setReplacer("repl", function (replUrl) {
+toastui.Editor.codeBlockManager.setReplacer("repl", function (replUri) {
  var postSharp = "";
- if ( replUrl.indexOf('#') !== -1 ) {
-   var pos = replUrl.indexOf('#');
-   postSharp = replUrl.substr(pos);
-   replUrl = replUrl.substr(0, pos);
+ if ( replUri.indexOf('#') !== -1 ) {
+   var pos = replUri.indexOf('#');
+   postSharp = replUri.substr(pos);
+   replUri = replUri.substr(0, pos);
  }
 
- if ( replUrl.indexOf('?') === -1 ) {
-   replUrl += "?dummy=1";
+ if ( replUri.indexOf('?') === -1 ) {
+   replUri += "?dummy=1";
  }
 
- replUrl += "&lite=true";
- replUrl += postSharp;
+ replUri += "&lite=true";
+ replUri += postSharp;
 
  // Indentify multiple code blocks
  const wrapperId = `yt${Math.random().toString(36).substr(2, 10)}`;
 
  // Avoid sanitizing iframe tag
- setTimeout(renderRepl.bind(null, wrapperId, replUrl), 0);
+ setTimeout(renderRepl.bind(null, wrapperId, replUri), 0);
 
  return "<div id=\"" + wrapperId + "\"></div>";
 });
 }
 
-function renderRepl(wrapperId, replUrl) {
+function renderRepl(wrapperId, replUri) {
 const el = document.querySelector(`#${wrapperId}`);
 
-var urlParams = getUrlParams(replUrl);
+var UriParams = getUriParams(replUri);
 
 var height = 400;
 
-if ( urlParams.height ) {
- height = urlParams.height;
+if ( UriParams.height ) {
+ height = UriParams.height;
 }
 
-el.innerHTML = '<iframe height="' + height + 'px" width="100%" src="' + replUrl + '" scrolling="no" frameborder="no" allowtransparency="true" allowfullscreen="true" sandbox="allow-forms allow-pointer-lock allow-popups allow-same-origin allow-scripts allow-modals"></iframe>';
+el.innerHTML = '<iframe height="' + height + 'px" width="100%" src="' + replUri + '" scrolling="no" frameborder="no" allowtransparency="true" allowfullscreen="true" sandbox="allow-forms allow-pointer-lock allow-popups allow-same-origin allow-scripts allow-modals"></iframe>';
 }
 //repl 플러그인 끝
 
 //codepen 플러그인 시작
 function codepenPlugin() {
-toastui.Editor.codeBlockManager.setReplacer("codepen", function (codepenUrl) {
+toastui.Editor.codeBlockManager.setReplacer("codepen", function (codepenUri) {
  // Indentify multiple code blocks
  const wrapperId = `yt${Math.random().toString(36).substr(2, 10)}`;
 
  // Avoid sanitizing iframe tag
- setTimeout(renderCodepen.bind(null, wrapperId, codepenUrl), 0);
+ setTimeout(renderCodepen.bind(null, wrapperId, codepenUri), 0);
 
  return '<div id="' + wrapperId + '"></div>';
 });
 }
 
-function renderCodepen(wrapperId, codepenUrl) {
+function renderCodepen(wrapperId, codepenUri) {
 const el = document.querySelector(`#${wrapperId}`);
 
-var urlParams = getUrlParams(codepenUrl);
+var UriParams = getUriParams(codepenUri);
 
 var height = 400;
 
-if ( urlParams.height ) {
- height = urlParams.height;
+if ( UriParams.height ) {
+ height = UriParams.height;
 }
 
 var width = '100%';
 
-if ( urlParams.width ) {
- width = urlParams.width;
+if ( UriParams.width ) {
+ width = UriParams.width;
 }
 
 if ( !isNaN(width) ) {
  width += 'px';
 }
 
-if ( codepenUrl.indexOf('#') !== -1 ) {
- var pos = codepenUrl.indexOf('#');
- codepenUrl = codepenUrl.substr(0, pos);
+if ( codepenUri.indexOf('#') !== -1 ) {
+ var pos = codepenUri.indexOf('#');
+ codepenUri = codepenUri.substr(0, pos);
 }
 
-el.innerHTML = '<iframe height="' + height + '" style="width: ' + width + ';" scrolling="no" title="" src="' + codepenUrl + '" frameborder="no" allowtransparency="true" allowfullscreen="true"></iframe>';
+el.innerHTML = '<iframe height="' + height + '" style="width: ' + width + ';" scrolling="no" title="" src="' + codepenUri + '" frameborder="no" allowtransparency="true" allowfullscreen="true"></iframe>';
 }
 //repl 플러그인 끝
 
@@ -233,17 +233,17 @@ String.prototype.replaceAll = function(org, dest) {
 return this.split(org).join(dest);
 }
 
-function getUrlParams(url) {
-url = url.trim();
-url = url.replaceAll('&amp;', '&');
-if ( url.indexOf('#') !== -1 ) {
- var pos = url.indexOf('#');
- url = url.substr(0, pos);
+function getUriParams(Uri) {
+Uri = Uri.trim();
+Uri = Uri.replaceAll('&amp;', '&');
+if ( Uri.indexOf('#') !== -1 ) {
+ var pos = Uri.indexOf('#');
+ Uri = Uri.substr(0, pos);
 }
 
 var params = {};
 
-url.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(str, key, value) { params[key] = value; });
+Uri.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(str, key, value) { params[key] = value; });
 return params;
 }
 

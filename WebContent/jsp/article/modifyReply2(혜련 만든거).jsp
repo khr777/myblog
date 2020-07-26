@@ -1,26 +1,19 @@
 <%@ include file="/jsp/part/head.jspf"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@ page import="com.sbs.java.blog.dto.ArticleReply" %>
-
-<%
-ArticleReply articleReply = (ArticleReply)request.getAttribute("articleReply");
-Member member = (Member)request.getAttribute("member");
-%>
-
 
 
 
 <form action="doReplyModify"  name="replyModifyForm" method="POST" class="modifyForm" onsubmit="submitReplyModify(this); return false;">
 	<div class="replyModify-box">
-		<h2 class="heading"><%=articleReply.getArticleId()%>번 게시물의 <%=articleReply.getId()%>번 댓글 수정 </h2>
+		<h2 class="heading">${articleReply.articleId}번 게시물의 ${articleReply.id}번 댓글 수정 </h2>
 		<div class="writer-data">
-			<div class="writer1">작성자 :<%=articleReply.getExtra().get("writer")%></div>
-			<div class="regDate1">작성일 :<%=articleReply.getRegDate()%></div>
-			<input type="hidden" value="<%=articleReply.getId()%>" name="id"/>
-			<input type="hidden" value="<%=articleReply.getArticleId()%>" name="articleId"/>
+			<div class="writer1">작성자 :${articleReply.extra.writer}</div>
+			<div class="regDate1">작성일 :${articleReply.regDate}</div>
+			<input type="hidden" value="${articleReply.id}" name="id"/>
+			<input type="hidden" value="${articleReply.articleId}" name="articleId"/>
 		</div>
-		<textarea class="body" name="body" ><%=articleReply.getBody()%></textarea>
+		<textarea class="body" name="body" >${articleReply.body}</textarea>
 		<div class="button">	
 			<button type="button" onclick=" history.back(); ">취소</button>
 			<input type="submit"  value="등록" /> 

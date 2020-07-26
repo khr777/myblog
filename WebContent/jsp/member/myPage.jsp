@@ -1,12 +1,13 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<c:set var="pageTitle" value="마이 페이지"></c:set>
 <%@ include file="/jsp/part/head.jspf"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/js-sha256/0.9.0/sha256.min.js"></script>	
 
-<h1>마이페이지로 이동 성공!</h1>
 
 <div class="memberData-box">
-	<div class="memberData joinData ">회원정보</div>
+	<div class="memberData joinData "></div>
 		<table>
 			<colgroup>
 				<col width="180">
@@ -19,23 +20,23 @@
 				</tr>
 				<tr>
 					<th>이름</th>
-					<td><%=loginedMember.getName()%></td>
+					<td>${loginedMember.name}</td>
 				</tr>
 				<tr>
 					<th>가입일</th>
-					<td><%=loginedMember.getRegDate()%></td>
+					<td>${loginedMember.regDate}</td>
 				</tr>
 				<tr>
 					<th>아이디</th>
-					<td><%=loginedMember.getLoginId()%></td>
+					<td>${loginedMember.loginId}</td>
 				</tr>
 				<tr>
 					<th>닉네임</th>
-					<td><%=loginedMember.getNickname()%></td>
+					<td>${loginedMember.nickname}</td>
 				</tr>
 				<tr>
 					<th>Email</th>
-					<td><%=loginedMember.getEmail()%></td>
+					<td>${loginedMember.email}</td>
 				</tr>
 				<input type="button" onclick="location.href='memberDataModifyConfirm'" value="회원정보 변경"  />
 			</tbody>
@@ -44,13 +45,14 @@
 </div>
 
 <style>
-h1 {
-	margin-top:130px;
-	margin-left:100px;
+
+.page-title {
+	top:0;
+	
 }
 .memberData-box {
 	position:absolute;
-	top:50%;
+	top:45%;
 	left:50%;
 	transform:translate(-50%, -50%);
 }

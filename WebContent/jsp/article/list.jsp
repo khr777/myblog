@@ -1,22 +1,9 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<c:set var="pageTitle" value="${cateItemName}"></c:set>
 <%@ include file="/jsp/part/head.jspf"%>
-<%@ page import="com.sbs.java.blog.dto.Article"%>
-<%@ page import="java.util.List"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<!-- 카테고리별 게시물들 -->
-<%
-	List<Article> articles = (List<Article>) request.getAttribute("articles");
-int totalPage = (int) request.getAttribute("totalPage"); //getAttribute는 Object 타입을 return 한다.
-int paramPage = (int) request.getAttribute("page");
-//int cateItemId = (int)request.getAttribute("cateItemId");
-int totalCount = (int) request.getAttribute("totalCount");
-String cateItemName = (String) request.getAttribute("cateItemName");
-//String search = (String)request.getAttribute("search");
-%>
 
-
-
-<!--  /s/article/list?cateItemId=1&page=1  -->
 
 <nav class="cateItem-menu-box-1  visible-on-md-up ">
 	<ul class="cateItem-menu">
@@ -42,19 +29,29 @@ String cateItemName = (String) request.getAttribute("cateItemName");
 </nav>
 
 
-<select class="mobile-cateItem-move visible-on-sm-down " onchange="location.href=this.value">
+<select class="mobile-cateItem-move visible-on-sm-down "
+	onchange="location.href=this.value">
 	<option>카테고리</option>
 	<option value="${pageContext.request.contextPath}/s/article/list">전체</option>
-	<option value="${pageContext.request.contextPath}/s/article/list?cateItemId=1&page=1">일상</option>
-	<option value="${pageContext.request.contextPath}/s/article/list?cateItemId=2&page=1">IT : java, jsp</option>
-	<option value="${pageContext.request.contextPath}/s/article/list?cateItemId=3&page=1">IT : html/css/js</option>
-	<option value="${pageContext.request.contextPath}/s/article/list?cateItemId=4&page=1">IT : sql</option>
-	<option value="${pageContext.request.contextPath}/s/article/list?cateItemId=5&page=1">IT : 기타</option>
-	<option value="${pageContext.request.contextPath}/s/article/list?cateItemId=6&page=1">이거저거</option>
+	<option
+		value="${pageContext.request.contextPath}/s/article/list?cateItemId=1&page=1">일상</option>
+	<option
+		value="${pageContext.request.contextPath}/s/article/list?cateItemId=2&page=1">IT
+		: java, jsp</option>
+	<option
+		value="${pageContext.request.contextPath}/s/article/list?cateItemId=3&page=1">IT
+		: html/css/js</option>
+	<option
+		value="${pageContext.request.contextPath}/s/article/list?cateItemId=4&page=1">IT
+		: sql</option>
+	<option
+		value="${pageContext.request.contextPath}/s/article/list?cateItemId=5&page=1">IT
+		: 기타</option>
+	<option
+		value="${pageContext.request.contextPath}/s/article/list?cateItemId=6&page=1">이거저거</option>
 </select>
 
 <style>
-
 </style>
 
 
@@ -64,60 +61,41 @@ String cateItemName = (String) request.getAttribute("cateItemName");
 
 <div class="con article-list-box-1 ">
 
-	<%
-		//if ( cateItemId == 0 && search == null) {
-	%>
-	<!--<div class="new-article">NEW 게시물</div> -->
-	<%
-		// }
-	%>
-	<%
-		//if ( search != null ) {
-	%>
-	<!-- <div class="new-article">검색 결과</div>	 -->
-	<%
-		//}
-	%>
-
-
-
-	<%
-		for (Article article : articles) {
-	%>
-
-
-	
-	<div class="list-content">
-		<a href="./detail?id=<%=article.getId()%>&cateItemId=${param.cateItemId}&page=${param.page}"  class="">
-			<div class="list-title">
-				<%=article.getTitle()%>
-			</div>
-			<div class="list-body-box">
-				<div class="list-body" >
-					<%=article.getSummary()%>
+	<c:forEach items="${articles}" var="article">
+		<div class="list-content">
+			<a
+				href="./detail?id=${article.id}&cateItemId=${param.cateItemId}&page=${param.page}"
+				class="">
+				<div class="list-title">
+					${article.title}
 				</div>
-			</div> 
-			<br>
-			<div class="list-id-regDate-box flex">
-				<div class="list-id">
-					<img src="../../resource/img/no.PNG" alt="" style="width: 30px;"
-						style="block" />
-					<%=article.getId()%>
+				<div class="list-body-box">
+					<div class="list-body">
+<%-- 						<%=article.getSummary()%> --%>
+						${article.getSummary()}
+					</div>
+				</div> <br>
+				<div class="list-id-regDate-box flex">
+					<div class="list-id">
+						<img src="../../resource/img/no.PNG" alt="" style="width: 30px;"
+							style="block" />
+						${article.id}
+					</div>
+					<div class="list-regDate">
+						<img src="../../resource/img/date.PNG" alt="" style="width: 50px;"
+							style="block" />
+						${article.regDate}
+					</div>
+					<div class="list-writer">
+						작성자 :
+<%-- 						<%=article.getExtra().get("writer") %> --%>
+						${article.extra.writer}
+					</div>
 				</div>
-				<div class="list-regDate">
-					<img src="../../resource/img/date.PNG" alt="" style="width: 50px;"
-						style="block" />
-					<%=article.getRegDate()%>
-				</div>
-				<div class="list-writer">작성자 : <%=article.getExtra().get("writer") %></div>
-			</div>
-			<div class="list-updateDate" style="display: none;"><%=article.getUpdateDate()%></div>
-		</a> <br>
-	</div>
-
-	<%
-		}
-	%>
+				<div class="list-updateDate" style="display: none;">${article.updateDate}</div>
+			</a> <br>
+		</div>
+	</c:forEach>
 	<div class="search-box ">
 		<!-- method="get"은 생략 가능하다. 무엇인지 찾아보기. method="get"-->
 		<form action=" ${pageContext.request.contextPath}/s/article/list">
@@ -139,38 +117,26 @@ String cateItemName = (String) request.getAttribute("cateItemName");
 
 	<div class="cateItem-content">
 		<div class="con total-count">총 게시물 수 : ${totalCount}</div>
-		<div class="cateItemName "><%=cateItemName%></div>
-
-<!-- 		<div class="con doWrite"> -->
-<%-- 			<a	href="${pageContext.request.contextPath}/s/article/listWrite?cateItemId=${param.cateItemId}&page=${page}">글쓰기</a> --%>
-<!-- 		</div> -->
-		<!-- 	</div> -->
-
 	</div>
 
 
-<div class="paging-box">
-	<%
-		for (int i = 1; i <= totalPage; i++) {
-	%>
-	<!-- 현재 페이지current 이면 빨강. 삼항연산자?? -->
-	<div class="paging-num-box <%=i == paramPage ? "current" : ""%>">
-		<%
-			//if ( cateItemId != 0 ) {
-		%>
-		<a
-			href="?cateItemId=${param.cateItemId}&searchKeywordType=${param.searchKeywordType}&searchKeywordTypeBody=${param.searchKeywordTypeBody}&searchKeyword=${param.searchKeyword}&page=<%=i%>"><%=i%></a>
+	<div class="paging-box">
+		<c:forEach var="i" begin="1" end="${totalPage}" step="1">
+			<!-- 현재 페이지current 이면 빨강. 삼항연산자?? -->
+			<div class="paging-num-box ${i == cPage ? 'current' : ''}">
+				<a
+					href="?cateItemId=${param.cateItemId}&searchKeywordType=${param.searchKeywordType}&searchKeywordTypeBody=${param.searchKeywordTypeBody}&searchKeyword=${param.searchKeyword}&page=${i}">${i}</a>
+			</div>
+			<!-- ${pageContext.request.contextPath}/s/article/list 여기까지 생략해도 작동된다. -->
+		</c:forEach>
 	</div>
-	<!-- ${pageContext.request.contextPath}/s/article/list 여기까지 생략해도 작동된다. -->
-	<%
-		}
-	%>
-	<%
-		//}
-	%>
-</div>
 
+<style>
+.page-title {
+	margin-top:-30px;
+	
+}
 
+</style>
 
-
-<%@ include file="/jsp/part/foot.jspf"%>
+	<%@ include file="/jsp/part/foot.jspf"%>

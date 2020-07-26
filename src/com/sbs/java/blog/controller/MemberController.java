@@ -189,23 +189,20 @@ public class MemberController extends Controller {
 			loginedMemberId = (int) session.getAttribute("loginedMemberId");
 		}
 
-		System.out.println("logout_id : " + loginedMemberId);
-
+		
 		session.removeAttribute("loginedMemberId");
+		
+		String redirectUri = Util.getString(req, "redirectUri", "../home/main");
 
-		return "html:<script> alert('로그아웃 되었습니다.'); location.replace('../home/main'); </script>";
+		return String.format("html:<script> alert('로그아웃 되었습니다.'); location.replace('" + redirectUri + "'); </script>");
 	}
 
 	private String doActionDoLogin() {
 
 		String loginId = req.getParameter("loginId");
 		String loginPw = req.getParameter("loginPwReal");
-		boolean isJoinableLoginId = memberService.isJoinableLoginId(loginId);
-
-		if (isJoinableLoginId) {
-			return String.format("html:<script> alert('%s은(는) 존재하지 않는 아이디 입니다.'); history.back(); </script>", loginId);
-		}
-
+		
+		
 		int loginedMemberId = memberService.getMemberIdByLoginIdAndLoginPw(loginId, loginPw);
 
 		if (loginedMemberId == -1) {
@@ -214,13 +211,13 @@ public class MemberController extends Controller {
 
 		session.setAttribute("loginedMemberId", loginedMemberId); // 최초 키값을 설정하는 코드(개별 저장소 생성)
 		
-		String redirectUrl = Util.getString(req, "redirectUrl", "../home/main");
+		String redirectUri = Util.getString(req, "redirectUri", "../home/main");
 		
 
 		
 		
 
-		return String.format("html:<script> alert('로그인 되었습니다.'); location.replace('" + redirectUrl + "'); </script>");
+		return String.format("html:<script> alert('로그인 되었습니다.'); location.replace('" + redirectUri + "'); </script>");
 	}
 
 	private String doActionDoJoin() throws IOException {

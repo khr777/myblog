@@ -7,6 +7,7 @@ public class ArticleReply extends Dto {
 	private int articleId;
 	private String body;
 	private int memberId;
+	private int displayStatus;
 	
 	public ArticleReply() {
 
@@ -18,13 +19,14 @@ public class ArticleReply extends Dto {
 		this.articleId = (int)row.get("articleId");
 		this.body = (String)row.get("body");
 		this.memberId = (int)row.get("memberId");
+		this.displayStatus = (int)row.get("displayStatus");
 		
 	}
 
 	@Override
 	public String toString() {
 		return "articleReply [updateDate=" + updateDate + ", articleId=" + articleId + ", body=" + body + ", memberId="
-				+ memberId + ", dto=" + super.toString() + "]";
+				+ memberId + ", displayStatus=" + displayStatus +", dto=" + super.toString() + "]";
 	}
 
 	public String getUpdateDate() {
@@ -58,8 +60,17 @@ public class ArticleReply extends Dto {
 	public void setMemberId(int memberId) {
 		this.memberId = memberId;
 	}
+
+	public int getDisplayStatus() {
+		return displayStatus;
+	}
+
+	public void setDisplayStatus(int displayStatus) {
+		this.displayStatus = displayStatus;
+	}
 	
-	
-	
+	public String getBodyForXTemplate() {
+		return body.replaceAll("(?i)script", "<!--REPLACE:script-->").trim();
+	}
 	
 }

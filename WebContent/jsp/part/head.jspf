@@ -1,15 +1,9 @@
 <%@page import="java.util.List"%>
-<%@page import="com.sbs.java.blog.dto.CateItem"%>
-<%@page import="com.sbs.java.blog.dto.Member" %>
-<%@ page language="java" contentType="text/html; charset=UTF-8"	pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
 
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
-<% 
-List<CateItem> cateItems = (List)request.getAttribute("cateItems");
-Member loginedMember = (Member) request.getAttribute("loginedMember");
-int loginedMemberId = (int) request.getAttribute("loginedMemberId");
-boolean isLogined = (boolean) request.getAttribute("isLogined");
-%>	
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -51,20 +45,57 @@ boolean isLogined = (boolean) request.getAttribute("isLogined");
 </script>
 
 <!--  서버 사이드, 클라리언트 사이드 양쪽에서 '로그인하지 않으면 사용 불가'를 양쪽에서 관리해야 한다. -->
- 
-<% if ( isLogined ) {%>
-<script>	
-	loginedMember = {};
-	loginedMember["id"] = parseInt("${loginedMember.id}"); // el 표기법으로하면 loginedMember.getId()를 id로 축약 가능!
-	loginedMember["regDate"] = "${loginedMember.regDate}";
-	loginedMember["loginId"] = "${loginedMember.loginId}";
-	// loginedMember["loginPw"] password는 고객 웹브라우저에 공개되면 안되므로 절대 넣어주면 안된다고 하셨음!
-	loginedMember["name"] = "${loginedMember.name}";
-	loginedMember["email"] = "${loginedMember.email}";
-	loginedMember["nickname"] = "${loginedMember.nickname}";
-	
+
+<script>
+	var param = {};
 </script>
-<% } %>
+<c:forEach var="pageParameter" items="${param}">
+	<script>
+		param["${pageParameter.key}"] = "${pageParameter.value}";
+	</script>
+</c:forEach>
+
+<script>
+if ( !param.jsAction ) {
+	param.jsAction = '';
+}
+
+var jsActions = param.jsAction.split(',');
+
+for ( var key in jsActions ) {
+	var jsActionFuncName = jsActions[key];
+
+	$(function() {
+		setTimeout(function() {
+			if ( window[jsActionFuncName] ) {
+				window[jsActionFuncName]();	
+			}
+			 else {
+				console.error("jsAction으로 요청받은, " + jsActionFuncName + " 함수는 존재하지 않아서 실행하지 못했습니다.");
+			} 
+			
+		}, 100); // 바로 실행되는게 아닌 html 로딩이 끝난 후 마지막에 그 이후로 0.1초 후에 실행되는 것.
+	});
+}
+
+</script>
+
+
+
+
+<c:if test="${isLogined}">
+	<script>
+		loginedMember = {};
+		loginedMember["id"] = parseInt("${loginedMember.id}"); // el 표기법으로하면 loginedMember.getId()를 id로 축약 가능!
+		loginedMember["regDate"] = "${loginedMember.regDate}";
+		loginedMember["loginId"] = "${loginedMember.loginId}";
+		// loginedMember["loginPw"] password는 고객 웹브라우저에 공개되면 안되므로 절대 넣어주면 안된다고 하셨음!
+		loginedMember["name"] = "${loginedMember.name}";
+		loginedMember["email"] = "${loginedMember.email}";
+		loginedMember["nickname"] = "${loginedMember.nickname}";
+	</script>
+</c:if>
+
 
 
 <!-- <script>   "나중에 이런것도 가능하다" 고 설명해주셨음! -->
@@ -77,46 +108,47 @@ boolean isLogined = (boolean) request.getAttribute("isLogined");
 </head>
 <body>
 	<div class="top-bar visible-on-md-up">
-	
+
 		<div class="height-100p flex flex-jc-sb">
 			<a href="${pageContext.request.contextPath}/s/home/main"
 				class="logo flex flex-ai-c"> <img
 				src="../../resource/img/white-logo.jpg" alt="" style="width: 100px;" />
 			</a>
-<%-- 			<% if ( loginedMember != null ) { %> --%>
-<%-- 			<div class="con" style="font-weight:bold;"><%=loginedMember.getName()%>님, 환영합니다.</div> --%>
-<%-- 			<%} %> --%>
+			<%-- 			<% if ( loginedMember != null ) { %> --%>
+			<%-- 			<div class="con" style="font-weight:bold;"><%=loginedMember.getName()%>님, 환영합니다.</div> --%>
+			<%-- 			<%} %> --%>
 			<nav class="menu-box-1 flex">
 				<ul class="flex">
-					<li>
-						<a href="${pageContext.request.contextPath}/s/home/main" class="flex height-100p flex-ai-c">Home</a>
-					</li>
-					<% if ( isLogined == false ) { %>
-					<li>
-						<a href="${pageContext.request.contextPath}/s/member/login?afterLoginRedirectUrl=${urlEncodedAfterLoginRedirectUrl}" class="flex height-100p flex-ai-c">Login</a>
-					</li>	
-					<%} else { %>
-					<li>
-						<a href="${pageContext.request.contextPath}/s/member/doLogout" class="flex height-100p flex-ai-c">
-						Logout</a>
-					</li>	
-					<%} %>
-					
-					<li>
-					<a href="${pageContext.request.contextPath}/s/article/write"
-						class="flex height-100p flex-ai-c">Write</a>
-					</li>
+					<li><a href="${pageContext.request.contextPath}/s/home/main"
+						class="flex height-100p flex-ai-c">Home</a></li>
+					<c:if test="${isLogined == false }">
+						<li><a
+							href="${pageContext.request.contextPath}/s/member/login?afterLoginRedirectUri=${encodedAfterLoginRedirectUri}"
+							class="flex height-100p flex-ai-c">Login</a></li>
+
+					</c:if>
+					<c:if test="${isLogined}">
+						<li><a
+							href="${pageContext.request.contextPath}/s/member/doLogout?redirectUri=${encodedAfterLogoutRedirectUri}"
+							class="flex height-100p flex-ai-c"> Logout</a></li>
+					</c:if>
+					<li><a
+						href="${pageContext.request.contextPath}/s/article/write"
+						class="flex height-100p flex-ai-c">Write</a></li>
 					<li><a
 						href="${pageContext.request.contextPath}/s/home/aboutMe"
-						class="flex height-100p flex-ai-c">About Me</a></li>
-					<li><a href="${pageContext.request.contextPath}/s/article/list"	class="flex height-100p flex-ai-c">Articles</a>
+						class="flex height-100p flex-ai-c" style="white-space: nowrap;">About Me</a></li>
+					<li><a
+						href="${pageContext.request.contextPath}/s/article/list"
+						class="flex height-100p flex-ai-c">Articles</a>
 						<ul>
-							<%for ( CateItem cateItem : cateItems ) { %>
-							<li><a href="${pageContext.request.contextPath}/s/article/list?cateItemId=<%=cateItem.getId() %>"  class="block"><%=cateItem.getName()%></a></li>
-							<%} %>
-						</ul>
-					</li>
-					
+							<c:forEach items="${cateItems}" var="cateItem">
+								<li><a
+									href="${pageContext.request.contextPath}/s/article/list?cateItemId=${cateItem.id}"
+									class="block">${cateItem.name}</a></li>
+							</c:forEach>
+						</ul></li>
+
 					<li><a href="#" class="flex height-100p flex-ai-c">SNS</a>
 						<ul>
 							<li><a href="https://github.com/hyeryeonkim" target="_black"
@@ -126,13 +158,13 @@ boolean isLogined = (boolean) request.getAttribute("isLogined");
 							<li><a
 								href="https://www.youtube.com/channel/UCBEioSP02dSVuFDpyBexl8w?view_as=subscriber"
 								target="_black" class="block">YOUTUBE</a></li>
-						</ul>
-						</li>
-					<% if ( loginedMember != null ) { %>	
-					<li>
-						<a href="${pageContext.request.contextPath}/s/member/myPage" class="flex height-100p flex-ai-c" style="white-space:nowrap;"><%=loginedMember.getName()%> 님</a>
-					</li>
-					<%} %> 
+						</ul></li>
+					<c:if test="${loginedMember != null }">
+						<li><a
+							href="${pageContext.request.contextPath}/s/member/myPage"
+							class="flex height-100p flex-ai-c" style="white-space: nowrap;">${loginedMember.name}
+								님</a></li>
+					</c:if>
 				</ul>
 			</nav>
 		</div>
@@ -150,35 +182,32 @@ boolean isLogined = (boolean) request.getAttribute("isLogined");
 	<div class="mobile-side-bar visible-on-sm-down flex flex-ai-c">
 		<nav class="menu-box-1 flex-grow-1">
 			<ul>
-				<li>
-					<a href="${pageContext.request.contextPath}/s/home/main"
-					class="block">Home</a>
-				</li>
-				<% if ( isLogined == false ) { %>
-				<li>
-					<a href="${pageContext.request.contextPath}/s/member/login"
-					class="block">login</a>
-				</li>
-				<%} else  { %>
-				<li>
-					<a href="${pageContext.request.contextPath}/s/member/doLogout"
-					class="block">logout</a>
-				</li>
-				<%} %>
-				<li>
-					<a href="${pageContext.request.contextPath}/s/article/write"
-					class="block">Write</a>
-				</li>
+				<li><a href="${pageContext.request.contextPath}/s/home/main"
+					class="block">Home</a></li>
+				<c:if test="${isLogined == false }">
+					<%-- 				<c:if test="${!isLogined}"></c:if> 도 가능  --%>
+					<li><a
+						href="${pageContext.request.contextPath}/s/member/login?afterLoginRedirectUri=${encodedAfterLoginRedirectUri}" class="block">login</a></li>
+				</c:if>
+				<c:if test="${isLogined}">
+					<li><a
+						href="${pageContext.request.contextPath}/s/member/doLogout?afterLoginRedirectUri=${encodedAfterLogoutRedirectUri}"
+						class="block">logout</a></li>
+				</c:if>
+				<li><a
+					href="${pageContext.request.contextPath}/s/article/write"
+					class="block">Write</a></li>
 				<li><a href="${pageContext.request.contextPath}/s/home/aboutMe"
 					class="block">About Me</a></li>
 				<li><a href="${pageContext.request.contextPath}/s/article/list"
 					class="block">Articles</a>
 					<ul>
-							<%for ( CateItem cateItem : cateItems ) { %>
-							<li><a href="${pageContext.request.contextPath}/s/article/list?cateItemId=<%=cateItem.getId() %>"  class="block"><%=cateItem.getName()%></a></li>
-							<%} %>
-						</ul>
-					</li>
+						<c:forEach items="${cateItems}" var="cateItem">
+							<li><a
+								href="${pageContext.request.contextPath}/s/article/list?cateItemId=${cateItem.id}"
+								class="block">${cateItem.name}</a></li>
+						</c:forEach>
+					</ul></li>
 				<li><a href="#" class="block">SNS</a>
 					<ul>
 						<li><a href="https://github.com/hyeryeonkim" target="_black"
@@ -191,4 +220,7 @@ boolean isLogined = (boolean) request.getAttribute("isLogined");
 					</ul></li>
 			</ul>
 		</nav>
+	</div>
+	<div class="page-title">
+		<div>${pageTitle}</div>
 	</div>

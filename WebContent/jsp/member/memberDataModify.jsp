@@ -1,9 +1,10 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<c:set var="pageTitle" value="개인정보 변경"></c:set>
 <%@ include file="/jsp/part/head.jspf"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/js-sha256/0.9.0/sha256.min.js"></script>	
 
-<h1>회원정보 수정페이지 이동 성공!</h1>
 
 <div class="write-form-box">
 	<form name="form" action="doMemberDataModify" method="POST" class="write-form form1" onsubmit="submitMemberModifyForm(this); return false;">
@@ -11,25 +12,25 @@
 		<div class="form-row">
 			<div class="label">로그인 아이디</div>
 			<div class="input">
-				<%=loginedMember.getLoginId()%>
+				${loginedMember.loginId}
 			</div>
 		</div>
 		<div class="form-row">
 			<div class="label">이름</div>
 			<div class="input">
-				<input name="name" type="text"  value="<%=loginedMember.getName()%>"/>
+				<input name="name" type="text"  value="${loginedMember.name}"/>
 			</div>
 		</div>
 		<div class="form-row">
 			<div class="label">닉네임</div>
 			<div class="input">
-				<input name="nickname" type="text"  value="<%=loginedMember.getNickname()%>"/>
+				<input name="nickname" type="text"  value="${loginedMember.nickname}"/>
 			</div>
 		</div>
 		<div class="form-row">
 			<div class="label">이메일</div>
 			<div class="input">
-				<input name="email" type="text"  value="<%=loginedMember.getEmail()%>"/>
+				<input name="email" type="text"  value="${loginedMember.email}"/>
 			</div>
 		</div>
 		<div class="form-row">
