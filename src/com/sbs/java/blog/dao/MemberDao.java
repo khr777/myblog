@@ -16,7 +16,7 @@ public class MemberDao {
 		this.dbConn = dbConn;
 	}
 
-	public int join(String loginId, String name, String nickName, String loginPw, String email) {
+	public int join(String loginId, String name, String nickName, String loginPw, String email, String authCode) {
 		SecSql secSql = new SecSql();
 		
 		secSql.append("INSERT INTO `member` ");
@@ -27,6 +27,8 @@ public class MemberDao {
 		secSql.append(", nickname = ?", nickName);
 		secSql.append(", loginPw = ?", loginPw);
 		secSql.append(", email = ?", email);
+		secSql.append(", mailAuthCode =?", authCode);
+		secSql.append(", mailAuthStatus = 0");
 		return DBUtil.insert(dbConn, secSql);
 
 	}
@@ -152,6 +154,16 @@ public class MemberDao {
 		sql.append(", email = ?", email);
 		sql.append(", loginPw = ?", loginPw);
 		sql.append("WHERE id = ?", id);
+		
+		
+		return DBUtil.update(dbConn, sql);
+	}
+
+	public int setAuthCodeForJoin(String authCode) {
+		SecSql sql = SecSql.from("UPDATE `member`");
+		sql.append("SET mailAuthStatus = 1");
+		sql.append("WHERE mailAuthCode = ?", authCode);
+		
 		
 		
 		return DBUtil.update(dbConn, sql);

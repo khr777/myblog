@@ -9,6 +9,8 @@ public class Member extends Dto {
 	private String nickname;
 	private String loginPw;
 	private String email;
+	private String mailAuthCode;
+	private int mailAuthStatus;
 	
 	public Member() {
 		
@@ -24,15 +26,33 @@ public class Member extends Dto {
 		this.nickname = (String)row.get("nickname");
 		this.loginPw = (String)row.get("loginPw");
 		this.email = (String)row.get("email");
+		this.mailAuthCode = (String)row.get("mailAuthCode");
+		this.mailAuthStatus = (int)row.get("mailAuthStatus");
 		
 	}
 	
 	
 
+	public String getMailAuthCode() {
+		return mailAuthCode;
+	}
+
+	public void setMailAuthCode(String mailAuthCode) {
+		this.mailAuthCode = mailAuthCode;
+	}
+
+	public int getMailAuthStatus() {
+		return mailAuthStatus;
+	}
+
+	public void setMailAuthStatus(int mailAuthStatus) {
+		this.mailAuthStatus = mailAuthStatus;
+	}
+
 	@Override
 	public String toString() {
 		return "Member [updateDate=" + updateDate + ", loginId=" + loginId + ", name=" + name + ", nickname=" + nickname
-				+ ", loginPw=" + loginPw + ", email=" + email + ", dto=" + super.toString() + "]";
+				+ ", loginPw=" + loginPw + ", email=" + email + ", mailAuthCode=" + mailAuthCode + ", mailAuthStatus=" + mailAuthStatus + ", dto=" + super.toString() + "]";
 	}
 
 	public String getUpdateDate() {
@@ -82,10 +102,5 @@ public class Member extends Dto {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-	
-	
-
-
-	
 	
 }

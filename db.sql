@@ -853,3 +853,9 @@ WHERE memberId = 0;
 
 SELECT *
 FROM article;
+
+# 회원가입시 발송할 인증번호 필드 추가
+ALTER TABLE `member` ADD COLUMN mailAuthCode CHAR(100) NOT NULL AFTER email;
+
+# 회원가입 후 인증 여부 필드 추가
+ALTER TABLE `member` ADD COLUMN mailAuthStatus TINYINT(1) UNSIGNED NOT NULL AFTER mailAuthCode;

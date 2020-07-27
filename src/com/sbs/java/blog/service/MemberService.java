@@ -14,9 +14,9 @@ public class MemberService extends Service {
 	}
 
 
-	public int join(String loginId, String name, String nickName, String loginPw, String email) {
+	public int join(String loginId, String name, String nickName, String loginPw, String email, String authCode) {
 		
-		return memberDao.join(loginId, name, nickName, loginPw, email);
+		return memberDao.join(loginId, name, nickName, loginPw, email, authCode);
 	}
 
 
@@ -83,5 +83,10 @@ public class MemberService extends Service {
 
 	public void memberDataUpdate(String name, String nickname, String email, String loginPw, int id) {
 		memberDao.memberDataUpdate(name, nickname, email, loginPw, id);
+	}
+
+
+	public int setAuthCodeForJoin(String authCode) {
+		return memberDao.setAuthCodeForJoin(authCode);
 	}
 }

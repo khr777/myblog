@@ -18,7 +18,7 @@
 				<div class="updateDate visible-on-md-up">수정일 :
 					${article.updateDate}</div>
 				<div class="hit">조회수 : ${article.hit}</div>
-				<div class="writer">작성자 : ${article.extra.writer}</div>
+				<div class="writer">작성자 : ${member.nickname}</div>
 				<div class="cateItemName">카테고리 : ${cateItem.name}</div>
 			</div>
 			<!-- 카테고리 게시물 접속했을 때, 목록 클릭하면 최신 게시물을 불러왔음. 카테고리 게시물로 이동하게 수정한 코드 -->

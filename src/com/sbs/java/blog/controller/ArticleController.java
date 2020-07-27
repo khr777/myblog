@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.sbs.java.blog.dto.Article;
 import com.sbs.java.blog.dto.ArticleReply;
 import com.sbs.java.blog.dto.CateItem;
+import com.sbs.java.blog.dto.Member;
 import com.sbs.java.blog.util.Util;
 
 public class ArticleController extends Controller {
@@ -331,6 +332,8 @@ public class ArticleController extends Controller {
 		int beforeId = articleService.getForPageMoveBeforeArticle(id, cateItemId);
 		int afterId = articleService.getForPageMoveAfterArticle(id, cateItemId);
 		CateItem cateItem = articleService.getCateItem(article.getCateItemId());
+		Member member = memberService.getMemberFromMemberId(article.getMemberId());
+		req.setAttribute("member", member);
 		req.setAttribute("beforeId", beforeId);
 		req.setAttribute("afterId", afterId);
 		req.setAttribute("article", article);
@@ -349,6 +352,8 @@ public class ArticleController extends Controller {
 	}
 
 	private String doActionList() {
+		
+		long startTime = System.nanoTime();   // 최초에 한번 
 
 		// 샘이 만들어주신 검색 기능
 
@@ -412,7 +417,15 @@ public class ArticleController extends Controller {
 		List<Article> articles = articleService.getForPrintListArticles(loginedMemberId, page, cateItemId, itemsInAPage,
 				searchKeywordType, searchKeywordTypeBody, searchKeyword);
 		req.setAttribute("articles", articles);
-
+		
+		
+		long endTime = System.nanoTime();
+		long estimatedTime = endTime - startTime;
+		// nano seconds to seconds 
+		double seconds = estimatedTime / 1000000000.0;
+		System.out.println("seconds : " + seconds );
+		
+		
 		return "article/list.jsp";
 	}
 
