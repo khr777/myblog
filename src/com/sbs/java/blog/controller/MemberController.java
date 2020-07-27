@@ -9,18 +9,18 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.sbs.java.blog.dto.Member;
+import com.sbs.java.blog.service.MailService;
 import com.sbs.java.blog.util.Util;
-import com.sbs.java.mail.service.MailService;
 
 public class MemberController extends Controller {
-	private String gmailId;
-	private String gmailPw;
+	//private String gmailId;
+	//private String gmailPw;
 
 	public MemberController(Connection dbConn, String actionMethodName, HttpServletRequest req,
-			HttpServletResponse resp, String gmailId, String gmailPw) {
+			HttpServletResponse resp) {
 		super(dbConn, actionMethodName, req, resp);
-		this.gmailId = gmailId;
-		this.gmailPw = gmailPw;
+		//this.gmailId = gmailId;
+		//this.gmailPw = gmailPw;
 
 	}
 
@@ -31,7 +31,7 @@ public class MemberController extends Controller {
 	}
 
 	@Override
-	public String doAction() throws IOException {
+	public String doAction()  {
 		switch (actionMethodName) {
 		case "join":
 			return doActionJoin(); // controller req, resp 나중에 뺀다고 하셨음.
@@ -66,16 +66,16 @@ public class MemberController extends Controller {
 	}
 
 	private String doActionDoAuthMail() {
-		String authCode = ""; 
+		String authCode = "";
 
 		if (!Util.empty(req, "code")) { // cateItemId가 없지 않고 숫자가 맞으면
 
 			authCode = Util.getString(req, "code");
 
-		}				
-		
+		}
+
 		memberService.setAuthCodeForJoin(authCode);
-				
+
 		return "html:<script> alert('이메일 인증이 완료되었습니다. 로그인 후 이용해주세요.'); location.replace('../member/login'); </script>";
 	}
 
@@ -120,7 +120,7 @@ public class MemberController extends Controller {
 		return sb.toString();
 	}
 
-	private String doActionDoLookForLoginPw() throws IOException {
+	private String doActionDoLookForLoginPw()  {
 		String name = req.getParameter("name");
 		String loginId = req.getParameter("loginId");
 		String email = req.getParameter("email");
@@ -144,14 +144,19 @@ public class MemberController extends Controller {
 
 		String randomPw = generate(DATA_FOR_RANDOM_STRING, random_string_length);
 
-		memberService.updateRandomPw(memberId, randomPw);
 
-		MailService mailService = new MailService(gmailId, gmailPw, gmailId, "관리자");
-		boolean sendMailDone = mailService.send(email, "임시 비밀번호를 확인바랍니다.", "발송드린 암호는 임시 비밀번호 입니다. 로그인 후 변경하여 사용바랍니다. \n"
-				+ "임시 비밀번호 : " + randomPw + "\n로그인 바로 가기 https://harry.my.iu.gy/blog/s/member/login") == 1;
-
-		resp.getWriter().append(String.format("발송성공 : %b", sendMailDone));
-
+		String emailTitle = "임시 비밀번호를 확인바랍니다.";
+		String emailBody = "발송드린 암호는 임시 비밀번호 입니다. 로그인 후 변경하여 사용바랍니다. \n";
+		emailBody += "임시 비밀번호 : " + randomPw + "\n로그인 바로 가기 https://harry.my.iu.gy/blog/s/member/login";
+		memberService.updateRandomPw(email, memberId, randomPw, emailTitle, emailBody);		
+		/*
+		 * MailService mailService = new MailService(gmailId, gmailPw, gmailId, "관리자");
+		 * boolean sendMailDone = mailService.send(email, "임시 비밀번호를 확인바랍니다.",
+		 * "발송드린 암호는 임시 비밀번호 입니다. 로그인 후 변경하여 사용바랍니다. \n" + "임시 비밀번호 : " + randomPw +
+		 * "\n로그인 바로 가기 https://harry.my.iu.gy/blog/s/member/login") == 1;
+		 * 
+		 * resp.getWriter().append(String.format("발송성공 : %b", sendMailDone));
+		 */
 		return "html:<script> alert('가입하신 이메일로 임시 비밀번호를 발송드렸습니다.'); location.replace('../home/main'); </script>";
 	}
 
@@ -159,7 +164,7 @@ public class MemberController extends Controller {
 		return "member/lookForLoginPw.jsp";
 	}
 
-	private String doActionDoLookForLoginId() throws IOException {
+	private String doActionDoLookForLoginId() {
 
 		String name = req.getParameter("name");
 		String email = req.getParameter("email");
@@ -168,12 +173,16 @@ public class MemberController extends Controller {
 		if (loginId.length() == 0) {
 			return "html:<script> alert('일치하는 회원정보가 존재하지 않습니다.'); history.back(); </script>";
 		}
+		String emailTitle = "가입하신 로그인 아이디를 확인바랍니다.";
+		String emailBody = "harry's life에 가입하신 로그인 아이디는 " + loginId
+				+ " 입니다. \n\n" + "로그인 바로 가기 https://harry.my.iu.gy/blog/s/member/login";
+		memberService.getLookForLoginId(name, email, emailTitle, emailBody);
+		
+		
+		/* boolean sendMailDone = mailService.send(email, "가입하신 로그인 아이디를 확인바랍니다.", "harry's life에 가입하신 로그인 아이디는 " + loginId
+				+ " 입니다. \n\n" + "로그인 바로 가기 https://harry.my.iu.gy/blog/s/member/login") == 1; */
 
-		MailService mailService = new MailService(gmailId, gmailPw, gmailId, "관리자");
-		boolean sendMailDone = mailService.send(email, "가입하신 로그인 아이디를 확인바랍니다.", "harry's life에 가입하신 로그인 아이디는 " + loginId
-				+ " 입니다. \n\n" + "로그인 바로 가기 https://harry.my.iu.gy/blog/s/member/login") == 1;
-
-		resp.getWriter().append(String.format("발송성공 : %b", sendMailDone));
+		//resp.getWriter().append(String.format("발송성공 : %b", sendMailDone));
 
 		return "html:<script> alert('가입하신 이메일로 로그인 아이디를 발송드렸습니다.'); location.replace('../home/main'); </script>";
 	}
@@ -204,18 +213,19 @@ public class MemberController extends Controller {
 
 		int loginedMemberId = memberService.getMemberIdByLoginIdAndLoginPw(loginId, loginPw);
 		
-		Member member = memberService.getMemberById(loginedMemberId);
-		if ( member.getMailAuthStatus() == 0 ) {
-			return "html:<script> alert('이메일 미인증 회원으로 인증 후 이용해주세요.'); history.back(); </script>";
-		}
-		
-		
-		
-
 		if (loginedMemberId == -1) {
 			return "html:<script> alert('일치하는 정보가 없습니다.'); history.back(); </script>";
 		}
 
+		
+
+		Member member = memberService.getMemberById(loginedMemberId);
+		
+		if (member.getMailAuthStatus() == 0) {
+			return "html:<script> alert('이메일 미인증 회원으로 인증 후 이용해주세요.'); history.back(); </script>";
+		}
+
+		
 		session.setAttribute("loginedMemberId", loginedMemberId); // 최초 키값을 설정하는 코드(개별 저장소 생성)
 
 		String redirectUri = Util.getString(req, "redirectUri", "../home/main");
@@ -223,7 +233,7 @@ public class MemberController extends Controller {
 		return String.format("html:<script> alert('로그인 되었습니다.'); location.replace('" + redirectUri + "'); </script>");
 	}
 
-	private String doActionDoJoin() throws IOException {
+	private String doActionDoJoin()  {
 		String loginId = req.getParameter("loginId");
 		String name = req.getParameter("name");
 		String nickName = req.getParameter("nickname");
@@ -259,24 +269,24 @@ public class MemberController extends Controller {
 		int random_string_length = 10;
 
 		String authCode = generate(DATA_FOR_RANDOM_STRING, random_string_length);
+
 		
 
-		int id = memberService.join(loginId, name, nickName, loginPw, email, authCode);
-		System.out.println("회원가입할 때 부여 받은 authCode: " + authCode);
-
-		MailService mailService = new MailService(gmailId, gmailPw, gmailId, "관리자");
+		// MailService mailService = new MailService(gmailId, gmailPw, gmailId, "관리자");
 		String emailTitle = "harry's life 회원가입을 축하드립니다. 이메일 인증 후 활동해주세요.";
 		String emailBody = "";
 		emailBody += "<h1>🙌환영합니다. 회원님 ^^</h1><br>";
 		emailBody += "<h2>테스트 중입니다. 회원님????</h2><br>";
 		emailBody += "<h3>아래 '인증하기' 버튼을 클릭한 후 회원활동을 하실 수 있습니다.</h3><br>";
-		emailBody += "<html><body><h4><a href=" + "http://localhost:8081/blog/s/member/doAuthMail?code=" + authCode + ">📣인증하기</a></h4></body></html>";
-		
-		
-		boolean sendMailDone = mailService.send("kim5638yw@gmail.com", emailTitle, emailBody) == 1;
-		
+		emailBody += "<html><body><h4><a href=" + "http://localhost:8081/blog/s/member/doAuthMail?code=" + authCode
+				+ ">📣인증하기</a></h4></body></html>";
 
-		resp.getWriter().append(String.format("발송성공 : %b", sendMailDone));
+		//boolean sendMailDone = mailService.send("kim5638yw@gmail.com", emailTitle, emailBody) == 1;
+
+		//resp.getWriter().append(String.format("발송성공 : %b", sendMailDone));
+		
+		int id = memberService.join(loginId, name, nickName, loginPw, email, authCode, emailTitle, emailBody);
+		
 		return String.format("html:<script> alert('%s님, 환영합니다.'); location.replace('../home/main'); </script>", name);
 	}
 

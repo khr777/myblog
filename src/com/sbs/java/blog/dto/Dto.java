@@ -6,6 +6,7 @@ import java.util.Map;
 public class Dto {
 	private int id;
 	private String regDate;
+	private String updateDate;
 	private Map<String, Object> extra;  // db에 담지 못하는 자잘한 것들을 담기 위한 변수. (예시: 작성자 '김혜련')
 	
 	public Dto() {
@@ -16,6 +17,7 @@ public class Dto {
 	public Dto(Map<String, Object> row) {
 		this.id = (int)row.get("id");
 		this.regDate = (String)row.get("regDate");
+		this.updateDate = (String)row.get("updateDate");
 		this.extra = new HashMap<>();
 		for ( String key : row.keySet()) {
 			if ( key.startsWith("extra__")) {
@@ -45,11 +47,14 @@ public class Dto {
 	public void setExtra(Map<String, Object> extra) {
 		this.extra = extra;
 	}
+	
+	public String getUpdateDate() {
+		return updateDate;
+	}
 
 
-	@Override
-	public String toString() {
-		return "dto [id=" + id + ", regDate=" + regDate + ", extra=" + extra + "]";
+	public void setUpdateDate(String updateDate) {
+		this.updateDate = updateDate;
 	}
 	
 }

@@ -9,6 +9,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.sbs.java.blog.config.Config;
 import com.sbs.java.blog.controller.ArticleController;
 import com.sbs.java.blog.controller.Controller;
 import com.sbs.java.blog.controller.HomeController;
@@ -54,7 +55,22 @@ public class App { //loadDriver()를 접고 다음 메서드를 보면 편하다
 		return "sbs123414";
 	}
 	
-	public void start(String gmailId, String gmailPw) throws ServletException, IOException  {
+	public void start() throws ServletException, IOException  {
+		
+		//Config 구성
+		if (req.getServletContext().getInitParameter("gmailId") != null ) {
+			Config.gmailId = (String)req.getServletContext().getInitParameter("gmailId");
+		}
+		
+		
+		if ( req.getServletContext().getInitParameter("gmailPw") != null ) {
+			Config.gmailPw = (String)req.getServletContext().getInitParameter("gmailPw");
+		}
+		
+		
+		
+		
+		
 		// [ DB드라이버 로딩 ]
 		loadDriver(req, resp);
 		
@@ -74,7 +90,7 @@ public class App { //loadDriver()를 접고 다음 메서드를 보면 편하다
 			dbConn = DriverManager.getConnection(Uri, user, password);
 			
 			// [ 올바른 컨트롤러로 라우팅 ] : 올바른 길로 인도한다
-			route(dbConn, req, resp, gmailId, gmailPw); //1. (한 곳에서 다른 곳으로 가기 위해 따라가는) 길, 노선 
+			route(dbConn, req, resp); //1. (한 곳에서 다른 곳으로 가기 위해 따라가는) 길, 노선 
 			
 		} catch (SQLException e) {
 			Util.printEx("SQL 예외(커넥션 열기)", resp, e);
@@ -97,7 +113,7 @@ public class App { //loadDriver()를 접고 다음 메서드를 보면 편하다
 		}
 
 	}																			// 선임 믿고 가는 것. 처리해달라고 넘기는 것.
-	private void route(Connection dbConn, HttpServletRequest req, HttpServletResponse resp, String gmailId, String gmailPw) throws IOException, ServletException {
+	private void route(Connection dbConn, HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
 		resp.setContentType("text/html; charset=UTF-8");
 		req.setCharacterEncoding("UTF-8"); // 클라이언트 요청 받을 때에는 이 코드를 꼭 써줘야행 흐어ㅠㅠㅠㅠㅠ
 		
@@ -115,7 +131,7 @@ public class App { //loadDriver()를 접고 다음 메서드를 보면 편하다
 			controller = new ArticleController(dbConn, actionMethodName, req, resp);
 			break;
 		case "member":
-			controller = new MemberController(dbConn, actionMethodName, req, resp, gmailId, gmailPw);
+			controller = new MemberController(dbConn, actionMethodName, req, resp);
 			break;
 		case "home":
 			controller = new HomeController(dbConn, actionMethodName, req, resp);

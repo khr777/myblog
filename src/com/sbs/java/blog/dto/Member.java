@@ -3,7 +3,6 @@ package com.sbs.java.blog.dto;
 import java.util.Map;
 
 public class Member extends Dto {
-	private String updateDate;
 	private String loginId;
 	private String name;
 	private String nickname;
@@ -20,7 +19,6 @@ public class Member extends Dto {
 	//필요한, 맞는 타입으로 꼭 형변환을 해주어야 한다! 
 	public Member(Map<String, Object> row) {
 		super(row);
-		this.updateDate = (String)row.get("updateDate");
 		this.loginId = (String)row.get("loginId");
 		this.name = (String)row.get("name");
 		this.nickname = (String)row.get("nickname");
@@ -30,37 +28,13 @@ public class Member extends Dto {
 		this.mailAuthStatus = (int)row.get("mailAuthStatus");
 		
 	}
-	
-	
-
-	public String getMailAuthCode() {
-		return mailAuthCode;
-	}
-
-	public void setMailAuthCode(String mailAuthCode) {
-		this.mailAuthCode = mailAuthCode;
-	}
-
-	public int getMailAuthStatus() {
-		return mailAuthStatus;
-	}
-
-	public void setMailAuthStatus(int mailAuthStatus) {
-		this.mailAuthStatus = mailAuthStatus;
-	}
 
 	@Override
 	public String toString() {
-		return "Member [updateDate=" + updateDate + ", loginId=" + loginId + ", name=" + name + ", nickname=" + nickname
-				+ ", loginPw=" + loginPw + ", email=" + email + ", mailAuthCode=" + mailAuthCode + ", mailAuthStatus=" + mailAuthStatus + ", dto=" + super.toString() + "]";
-	}
-
-	public String getUpdateDate() {
-		return updateDate;
-	}
-
-	public void setUpdateDate(String updateDate) {
-		this.updateDate = updateDate;
+		return "Member [loginId=" + loginId + ", name=" + name + ", nickname=" + nickname + ", loginPw=" + loginPw
+				+ ", email=" + email + ", mailAuthCode=" + mailAuthCode + ", mailAuthStatus=" + mailAuthStatus
+				+ ", getId()=" + getId() + ", getRegDate()=" + getRegDate() + ", getExtra()=" + getExtra()
+				+ ", getUpdateDate()=" + getUpdateDate() + "]";
 	}
 
 	public String getLoginId() {
@@ -102,5 +76,21 @@ public class Member extends Dto {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-	
+
+	public String getMailAuthCode() {
+		return mailAuthCode;
+	}
+
+	public void setMailAuthCode(String mailAuthCode) {
+		this.mailAuthCode = mailAuthCode;
+	}
+
+	public int getMailAuthStatus() {
+		return mailAuthStatus;
+	}
+
+	public void setMailAuthStatus(int mailAuthStatus) {
+		this.mailAuthStatus = mailAuthStatus;
+	}
+
 }

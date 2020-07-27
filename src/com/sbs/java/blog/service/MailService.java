@@ -1,6 +1,6 @@
-package com.sbs.java.mail.service;
+package com.sbs.java.blog.service;
 
-import com.sbs.java.mail.servlet.util.Util;
+import com.sbs.java.blog.util.Util;
 
 public class MailService {
 	private String gmailId;
@@ -13,6 +13,10 @@ public class MailService {
 		this.gmailPw = gmailPw;
 		this.from = from;
 		this.fromName = fromName;
+	}
+
+	public MailService() {
+		// TODO Auto-generated constructor stub
 	}
 
 	public int send(String to, String title, String body) {

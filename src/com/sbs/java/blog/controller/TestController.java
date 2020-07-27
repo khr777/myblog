@@ -9,6 +9,8 @@ import java.sql.Statement;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.sbs.java.blog.dto.Attr;
+
 public class TestController extends Controller {
 // 테스트 기능을 위한 클래스 
 	public TestController(Connection dbConn, String actionMethodName, HttpServletRequest req, HttpServletResponse resp) {
@@ -21,11 +23,35 @@ public class TestController extends Controller {
 			return doActionDbInsert();
 		case "dbSelect":
 			return doActionDbSelect();
+		case "sendMail":
+			return doActionSendMail();
+		case "attr":
+			return doActionAttr();
+		case "attr2":
+			return doActionAttr2();
 		}
+
 		return "";
-		
 	}
 
+	private String doActionAttr() {
+		attrService.setValue("member__1__tempPasswordExpireDate", "2020-07-02 12:12:12");
+		String tempPasswordExpireDate = attrService.getValue("member__1__tempPasswordExpireDate");
+		attrService.remove("member__1__tempPasswordExpireDate");
+		return "html:" + tempPasswordExpireDate;
+	}
+
+	private String doActionAttr2() {
+		attrService.setValue("member__1__tempPasswordExpireDate", "2020-07-02 12:12:12");
+		Attr tempPasswordExpireDateAttr = attrService.get("member__1__tempPasswordExpireDate");
+		attrService.remove("member__1__tempPasswordExpireDate");
+		return "html:" + tempPasswordExpireDateAttr.getId();
+	}
+
+	private String doActionSendMail() {
+		mailService.send("kim5638yw@gmail.com", "안녕하세요.", "반가워요^^");
+		return "html:성공";
+	}
 	private String doActionDbInsert() {
 		PreparedStatement stmt = null;
 		ResultSet rs = null;

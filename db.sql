@@ -859,3 +859,19 @@ ALTER TABLE `member` ADD COLUMN mailAuthCode CHAR(100) NOT NULL AFTER email;
 
 # 회원가입 후 인증 여부 필드 추가
 ALTER TABLE `member` ADD COLUMN mailAuthStatus TINYINT(1) UNSIGNED NOT NULL AFTER mailAuthCode;
+
+
+# 부가정보 테이블 (UNIQUE 위치는 NOT NULL 뒤)
+DROP TABLE IF EXISTS attr;
+CREATE TABLE attr(
+id INT(10) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
+regDate DATETIME NOT NULL,
+updateDate DATETIME NOT NULL,
+`name` CHAR(100) NOT NULL UNIQUE,
+`value` TEXT NOT NULL
+);
+
+DESC attr;
+
+# updateDate 칼럼 추가
+ALTER TABLE `cateItem` ADD COLUMN `updateDate` DATETIME NOT NULL AFTER `regDate`; 
