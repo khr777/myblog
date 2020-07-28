@@ -384,14 +384,16 @@ html {
 	transition:font-size 0.7s;
   }
   .top-bar .menu-box-1 > ul > li:hover > a {
-      background-color:white;
+/*       background-color:white; */
       color:black;
       font-weight:bold;
       text-decoration:underline;
       font-size:2rem;
+      
   }
   .top-bar .menu-box-1 > ul > li:hover > ul {
       display:block;
+      border:6px solid black;
   }
   .top-bar .menu-box-1 > ul  ul > li:hover > a {
       background-color:black;
@@ -400,10 +402,12 @@ html {
       text-decoration:underline;
   }
   .top-bar .menu-box-1> ul ul > li > a {
-      font-size:1.4rem;
+      font-size:1rem;
+      font-weight:bold;
       color:black;
-      padding:30px 0;
+      padding:10px 0;
       text-align:center;
+      
       
   }
   .top-bar .menu-box-1 > ul ul {
@@ -779,7 +783,7 @@ html {
 
 .total-count {
 	position:fixed;
-	top:430px;
+	top:475px;
 	right:82%;
 	font-size:0.9rem;
 	
@@ -908,7 +912,7 @@ html {
 
 .search-box {
 	position:fixed;
-	top:455px;
+	top:500px;
 	right:79.6%;
 	
 }
@@ -922,7 +926,7 @@ html {
 
 .search-box .search-button {
 	position:fixed;
-	top:485px;
+	top:530px;
 	right:80%;
 }
 

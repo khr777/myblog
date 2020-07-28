@@ -8,7 +8,7 @@
 
 	<context-param>
 		<param-name>gmailPw</param-name>
-		<param-value>icandoit91!!</param-value>
+		<param-value>비밀번호</param-value>
 	</context-param>
 
 

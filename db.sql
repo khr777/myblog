@@ -875,3 +875,8 @@ DESC attr;
 
 # updateDate 칼럼 추가
 ALTER TABLE `cateItem` ADD COLUMN `updateDate` DATETIME NOT NULL AFTER `regDate`; 
+
+INSERT INTO cateItem
+SET regDate = NOW(),
+updateDate = NOW(),
+`name` = '공부 계획';

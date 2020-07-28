@@ -145,9 +145,11 @@ public class MemberController extends Controller {
 		String randomPw = generate(DATA_FOR_RANDOM_STRING, random_string_length);
 
 
-		String emailTitle = "임시 비밀번호를 확인바랍니다.";
-		String emailBody = "발송드린 암호는 임시 비밀번호 입니다. 로그인 후 변경하여 사용바랍니다. \n";
-		emailBody += "임시 비밀번호 : " + randomPw + "\n로그인 바로 가기 https://harry.my.iu.gy/blog/s/member/login";
+		String emailTitle = "harry's life 임시 비밀번호를 확인바랍니다.";
+		String emailBody = "<h3>발송드린 암호는 임시 비밀번호 입니다.</h3><br>";
+		emailBody +=  "<h3>로그인 후 비밀번호 변경하여 사용바랍니다.</h3><br><br>";
+		emailBody += "<h1>임시 비밀번호 : " + randomPw + "</h1>";
+		emailBody += "<html><body><h4><a href=" + "http://localhost:8081/blog/s/member/login>📣로그인 바로 가기 </a></h4></body></html>";
 		memberService.updateRandomPw(email, memberId, randomPw, emailTitle, emailBody);		
 		/*
 		 * MailService mailService = new MailService(gmailId, gmailPw, gmailId, "관리자");
@@ -173,9 +175,11 @@ public class MemberController extends Controller {
 		if (loginId.length() == 0) {
 			return "html:<script> alert('일치하는 회원정보가 존재하지 않습니다.'); history.back(); </script>";
 		}
-		String emailTitle = "가입하신 로그인 아이디를 확인바랍니다.";
-		String emailBody = "harry's life에 가입하신 로그인 아이디는 " + loginId
-				+ " 입니다. \n\n" + "로그인 바로 가기 https://harry.my.iu.gy/blog/s/member/login";
+		String emailTitle = "요청하신 harry's life 회원가입 아이디를 발송해드립니다.";
+		String emailBody = "";
+		emailBody += "<h3>harry's life에 가입하신 로그인 아이디는</h3><br>";
+		emailBody += "<h1>" + loginId +  "</h1><br>입니다. <br><br>"; 
+		emailBody += "<html><body><h4><a href=" + "http://localhost:8081/blog/s/member/login\">📣로그인 바로 가기 </a></h4></body></html>";
 		memberService.getLookForLoginId(name, email, emailTitle, emailBody);
 		
 		
