@@ -153,6 +153,10 @@ public class App { //loadDriver()를 접고 다음 메서드를 보면 편하다
 			else if ( actionResult.startsWith("html:")) { // html에서 지정한 방법?으로 입력하지 않으면 문제 해결을 위해 화면에 출력하기 위한 용도
 				resp.getWriter().append(actionResult.substring(5));
 			}
+			else if ( actionResult.startsWith("json:")) {
+				resp.setContentType("application/json; charset=UTF-8");
+				resp.getWriter().append(actionResult.substring(5));
+			}
 			else {
 				resp.getWriter().append("처리할 수 없는 액션 결과입니다.");
 			}

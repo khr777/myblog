@@ -14,18 +14,43 @@ public class AttrService extends Service  {
 
 
 	public Attr get(String name) {
-		return attrDao.get(name);
+		String[] nameBits = name.split("__");
+		String relTypeCode = nameBits[0];
+		int relId = Integer.parseInt(nameBits[1]);
+		String typeCode = nameBits[2];
+		String type2Code = nameBits[3];
+		 
+		return attrDao.get(relTypeCode, relId, typeCode, type2Code);
 	}
 	
+	// dao에서 split을 해야하지 않냐는 사람들도 있지만 dao는 창고관리자이므로 그런것을 몰라야 한다.
 	public int setValue(String name, String value) {
-		return attrDao.setValue(name, value);
+		String[] nameBits = name.split("__");
+		String relTypeCode = nameBits[0];
+		int relId = Integer.parseInt(nameBits[1]);
+		String typeCode = nameBits[2];
+		String type2Code = nameBits[3];
+		
+		return attrDao.setValue(relTypeCode, relId, typeCode, type2Code, value);
 	}
 	
 	public String getValue(String name) {
-		return attrDao.getValue(name);
+		String[] nameBits = name.split("__");
+		String relTypeCode = nameBits[0];
+		int relId = Integer.parseInt(nameBits[1]);
+		String typeCode = nameBits[2];
+		String type2Code = nameBits[3];
+		
+		return attrDao.getValue(relTypeCode, relId, typeCode, type2Code);
 	}
 	
 	public int remove(String name) {
-		return attrDao.remove(name);
+		String[] nameBits = name.split("__");
+		String relTypeCode = nameBits[0];
+		int relId = Integer.parseInt(nameBits[1]);
+		String typeCode = nameBits[2];
+		String type2Code = nameBits[3];
+		
+		return attrDao.remove(relTypeCode, relId, typeCode, type2Code);
 	}
 }

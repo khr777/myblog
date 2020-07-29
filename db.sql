@@ -860,14 +860,16 @@ ALTER TABLE `member` ADD COLUMN mailAuthCode CHAR(100) NOT NULL AFTER email;
 # 회원가입 후 인증 여부 필드 추가
 ALTER TABLE `member` ADD COLUMN mailAuthStatus TINYINT(1) UNSIGNED NOT NULL AFTER mailAuthCode;
 
-
 # 부가정보 테이블 (UNIQUE 위치는 NOT NULL 뒤)
 DROP TABLE IF EXISTS attr;
 CREATE TABLE attr(
 id INT(10) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
 regDate DATETIME NOT NULL,
 updateDate DATETIME NOT NULL,
-`name` CHAR(100) NOT NULL UNIQUE,
+# relTypeCode char(20) not null, # 대분류. member, article 등 어떤 것과 관련이 있는지 의미
+# relId int(10) unsigned not null, #  member 또는 article 의 번호를 의미. 어떤 번호와 연관되어 있다. 
+# typeCode char(20) not null,
+`name` CHAR(100) NOT NULL UNIQUE, 
 `value` TEXT NOT NULL
 );
 
@@ -880,3 +882,20 @@ INSERT INTO cateItem
 SET regDate = NOW(),
 updateDate = NOW(),
 `name` = '공부 계획';
+
+# attr 테이블에서 name을 4가지 칼럼으로 나누기
+ALTER TABLE `attr` DROP COLUMN `name`, 
+ADD COLUMN `relTypeCode` CHAR(20) NOT NULL AFTER `updateDate`, 
+ADD COLUMN `relId` INT(10) UNSIGNED NOT NULL AFTER `relTypeCode`, 
+ADD COLUMN `typeCode` CHAR(30) NOT NULL AFTER `relId`, 
+ADD COLUMN `type2Code` CHAR(30) NOT NULL AFTER `typeCode`, 
+CHANGE `value` `value` TEXT CHARSET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL AFTER `type2Code`, 
+DROP INDEX `name`; 
+
+# attr 유니크 인덱스 걸기
+## 중복변수 생성 금지
+## 변수찾는 속도 최적화
+ALTER TABLE `attr` ADD UNIQUE INDEX (`relTypeCode`, `relId`, `typeCode`, `type2Code`);
+
+## 특정 조건을 만족하는 회원 또는 게시물(기타 데이터)를 빠르게 찾기 위해서
+ALTER TABLE `attr` ADD INDEX (`relTypeCode`, `typeCode`, `type2Code`);

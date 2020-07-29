@@ -13,22 +13,22 @@ public class HomeController extends Controller {
 		super(dbConn, actionMethodName, req, resp);
 	}
 	@Override //는 붙여주는게 좋다. 
-	public String doAction() {
+	public String action() {
 		switch ( actionMethodName ) {
 		case "main":
-			return doActionMain();
+			return actionMain();
 		case "aboutMe":
-			return doActionAboutMe();
+			return actionAboutMe();
 		}
 		return "";
 		
 	}
 
-	private String doActionAboutMe() {
+	private String actionAboutMe() {
 		return "home/aboutMe.jsp";
 	}
 
-	private String doActionMain() {
+	private String actionMain() {
 			
 		return "home/main.jsp";
 	}

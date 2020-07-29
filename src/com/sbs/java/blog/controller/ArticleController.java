@@ -33,36 +33,36 @@ public class ArticleController extends Controller {
 	public String doAction() {
 		switch (actionMethodName) {
 		case "list":
-			return doActionList();
+			return actionList();
 		case "detail":
-			return doActionDetail();
+			return actionDetail();
 		case "editor":
-			return doActionEditor();
+			return actionEditor();
 		case "aboutMe":
-			return doActionAboutMe();
+			return actionAboutMe();
 		case "modify":
-			return doActionModify();
+			return actionModify();
 		case "doDelete":
-			return doActionDoDelete();
+			return actionDoDelete();
 		case "write":
-			return doActionWrite();
+			return actionWrite();
 		case "doWrite":
-			return doActionDoWrite();
+			return actionDoWrite();
 		case "doModify":
-			return doActionDoModify();
+			return actionDoModify();
 		case "doWriteReply": // 댓글 작성
-			return doActionDoWriteReply();
+			return actionDoWriteReply();
 		case "modifyReply": // 댓글 수정 페이지 이동
-			return doActionModifyReply();
+			return actionModifyReply();
 		case "doModifyReply": // 댓글 수정 후 저장하기 위한 페이지
-			return doActionDoModifyReply();
+			return actionDoModifyReply();
 		case "doDeleteReply":
-			return doActionDoDeleteReply();
+			return actionDoDeleteReply();
 		}
 		return "";
 	}
 
-	private String doActionModifyReply() {
+	private String actionModifyReply() {
 
 		if (Util.empty(req, "id")) {
 			return "html:id를 입력해주세요.";
@@ -85,7 +85,7 @@ public class ArticleController extends Controller {
 		return "article/modifyReply.jsp";
 	}
 
-	private String doActionDoDeleteReply() {
+	private String actionDoDeleteReply() {
 
 		int loginedMemberId = (int) req.getAttribute("loginedMemberId");
 		int replyId = 0;
@@ -114,7 +114,7 @@ public class ArticleController extends Controller {
 		return "html:<script> alert('댓글이 삭제되었습니다.'); location.replace('" + redirectUri + "'); </script>";
 	}
 
-	private String doActionDoModifyReply() {
+	private String actionDoModifyReply() {
 		
 		if (Util.empty(req, "id")) {
 			return "html:id를 입력해주세요.";
@@ -160,7 +160,7 @@ public class ArticleController extends Controller {
 	}
 
 	
-	private String doActionDoWriteReply() {
+	private String actionDoWriteReply() {
 
 		if (Util.empty(req, "articleId")) {
 			return "html:articleId를 입력해주세요.";
@@ -186,7 +186,7 @@ public class ArticleController extends Controller {
 				+ "'); </script>";
 	}
 
-	private String doActionDoModify() {
+	private String actionDoModify() {
 
 		if (Util.empty(req, "id")) {
 			return "html:id를 입력해주세요.";
@@ -217,7 +217,7 @@ public class ArticleController extends Controller {
 
 	}
 
-	private String doActionModify() {
+	private String actionModify() {
 
 		int id = 0;
 
@@ -244,7 +244,7 @@ public class ArticleController extends Controller {
 		return "article/modify.jsp";
 	}
 
-	private String doActionDoWrite() {
+	private String actionDoWrite() {
 		String title = req.getParameter("title");
 		String body = req.getParameter("body");
 		// int loginedMemberId = Util.getInt(req, "memberId");
@@ -261,12 +261,12 @@ public class ArticleController extends Controller {
 	}
 
 	// 게시물 작성 신청 폼을 한번 보여주는 정도(용도)의 메서드.
-	private String doActionWrite() {
+	private String actionWrite() {
 
 		return "article/write.jsp";
 	}
 
-	private String doActionDoDelete() {
+	private String actionDoDelete() {
 
 		if (Util.empty(req, "id")) {
 			return "html:id를 입력해주세요.";
@@ -293,16 +293,16 @@ public class ArticleController extends Controller {
 		return "html:<script> alert('" + id + "번 게시물이 삭제되었습니다.'); location.replace('" + redirectUri + "'); </script>";
 	}
 
-	private String doActionAboutMe() {
+	private String actionAboutMe() {
 		return "article/aboutMe.jsp";
 	}
 
-	private String doActionEditor() {
+	private String actionEditor() {
 
 		return "article/editor.jsp";
 	}
 
-	private String doActionDetail() {
+	private String actionDetail() {
 		if (Util.empty(req, "id")) {
 			return "html:id를 입력해주세요.";
 		}
@@ -351,7 +351,7 @@ public class ArticleController extends Controller {
 		// 다시 한번 설명! 자질구래한 것들을 모아놓는 것이 dto의 extra 변수이다.
 	}
 
-	private String doActionList() {
+	private String actionList() {
 		
 		long startTime = System.nanoTime();   // 최초에 한번 
 

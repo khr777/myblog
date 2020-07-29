@@ -34,38 +34,53 @@ public class MemberController extends Controller {
 	public String doAction()  {
 		switch (actionMethodName) {
 		case "join":
-			return doActionJoin(); // controller req, resp 나중에 뺀다고 하셨음.
+			return actionJoin(); // controller req, resp 나중에 뺀다고 하셨음.
 		case "doJoin":
-			return doActionDoJoin();
+			return actionDoJoin();
 		case "login":
-			return doActionLogin();
+			return actionLogin();
 		case "doLogin":
-			return doActionDoLogin();
+			return actionDoLogin();
 		case "doLogout": // 작업을 하는 jsp, 페이지가 아닌 잠깐 들렀다 이동하는 곳은 do를 붙인다!
-			return doActionDoLogout();
+			return actionDoLogout();
 		case "lookForLoginId":
-			return doActionLookForLoginId();
+			return actionLookForLoginId();
 		case "doLookForLoginId":
-			return doActionDoLookForLoginId();
+			return actionDoLookForLoginId();
 		case "lookForLoginPw":
-			return doActionLookForLoginPw();
+			return actionLookForLoginPw();
 		case "doLookForLoginPw":
-			return doActionDoLookForLoginPw();
+			return actionDoLookForLoginPw();
 		case "myPage":
-			return doActionMyPage();
+			return actionMyPage();
 		case "memberDataModifyConfirm":
-			return doActionMemberDataModifyConfirm();
+			return actionMemberDataModifyConfirm();
 		case "memberDataModify":
-			return doActionMemberDataModify();
+			return actionMemberDataModify();
 		case "doMemberDataModify":
-			return doActionDoMemberDataModify();
+			return actionDoMemberDataModify();
 		case "doAuthMail":
-			return doActionDoAuthMail();
+			return actionDoAuthMail();
+		case "getLoginIdDup":
+			return actionGetLoginIdDup();
 		}
 		return "";
 	}
 
-	private String doActionDoAuthMail() {
+	private String actionGetLoginIdDup() { // 이 메서드가 return 하는 값이 바로 아작스에 (data)안으로 들어간다.
+		String loginId = req.getParameter("loginId");
+		
+		boolean isJoinableLoginId = memberService.isJoinableLoginId(loginId);
+		
+		if ( isJoinableLoginId ) {
+			return "json:{\"msg\":\"사용할 수 있는 아이디 입니다.\", \"resultCode\": \"S-1\", \"loginId\":\"" + loginId + "\"}"; // 필히 \" 을 붙여주어야 한다. ★
+		}
+		else {
+			return "json:{\"msg\":\"이미 사용중인 아이디 입니다.\", \"resultCode\": \"F-1\", \"loginId\":\"" + loginId + "\"}"; // 필히 \" 을 붙여주어야 한다. ★
+		}
+	}
+
+	private String actionDoAuthMail() {
 		String authCode = "";
 
 		if (!Util.empty(req, "code")) { // cateItemId가 없지 않고 숫자가 맞으면
@@ -79,7 +94,7 @@ public class MemberController extends Controller {
 		return "html:<script> alert('이메일 인증이 완료되었습니다. 로그인 후 이용해주세요.'); location.replace('../member/login'); </script>";
 	}
 
-	private String doActionDoMemberDataModify() {
+	private String actionDoMemberDataModify() {
 
 		int loginedMemberId = (int) req.getAttribute("loginedMemberId");
 
@@ -93,17 +108,17 @@ public class MemberController extends Controller {
 		return "html:<script> alert('회원정보가 변경되었습니다.'); location.replace('../home/main'); </script>";
 	}
 
-	private String doActionMemberDataModifyConfirm() {
+	private String actionMemberDataModifyConfirm() {
 
 		return "member/memberDataModifyConfirm.jsp";
 	}
 
-	private String doActionMemberDataModify() {
+	private String actionMemberDataModify() {
 
 		return "member/memberDataModify.jsp";
 	}
 
-	private String doActionMyPage() {
+	private String actionMyPage() {
 		return "member/myPage.jsp";
 	}
 
@@ -120,7 +135,7 @@ public class MemberController extends Controller {
 		return sb.toString();
 	}
 
-	private String doActionDoLookForLoginPw()  {
+	private String actionDoLookForLoginPw()  {
 		String name = req.getParameter("name");
 		String loginId = req.getParameter("loginId");
 		String email = req.getParameter("email");
@@ -162,11 +177,11 @@ public class MemberController extends Controller {
 		return "html:<script> alert('가입하신 이메일로 임시 비밀번호를 발송드렸습니다.'); location.replace('../home/main'); </script>";
 	}
 
-	private String doActionLookForLoginPw() {
+	private String actionLookForLoginPw() {
 		return "member/lookForLoginPw.jsp";
 	}
 
-	private String doActionDoLookForLoginId() {
+	private String actionDoLookForLoginId() {
 
 		String name = req.getParameter("name");
 		String email = req.getParameter("email");
@@ -191,11 +206,11 @@ public class MemberController extends Controller {
 		return "html:<script> alert('가입하신 이메일로 로그인 아이디를 발송드렸습니다.'); location.replace('../home/main'); </script>";
 	}
 
-	private String doActionLookForLoginId() {
+	private String actionLookForLoginId() {
 		return "member/lookForLoginId.jsp";
 	}
 
-	private String doActionDoLogout() {
+	private String actionDoLogout() {
 
 		HttpSession session = req.getSession();
 		int loginedMemberId = 0;
@@ -210,7 +225,7 @@ public class MemberController extends Controller {
 		return String.format("html:<script> alert('로그아웃 되었습니다.'); location.replace('" + redirectUri + "'); </script>");
 	}
 
-	private String doActionDoLogin() {
+	private String actionDoLogin() {
 
 		String loginId = req.getParameter("loginId");
 		String loginPw = req.getParameter("loginPwReal");
@@ -237,7 +252,7 @@ public class MemberController extends Controller {
 		return String.format("html:<script> alert('로그인 되었습니다.'); location.replace('" + redirectUri + "'); </script>");
 	}
 
-	private String doActionDoJoin()  {
+	private String actionDoJoin()  {
 		String loginId = req.getParameter("loginId");
 		String name = req.getParameter("name");
 		String nickName = req.getParameter("nickname");
@@ -294,12 +309,12 @@ public class MemberController extends Controller {
 		return String.format("html:<script> alert('%s님, 환영합니다.'); location.replace('../home/main'); </script>", name);
 	}
 
-	private String doActionLogin() {
+	private String actionLogin() {
 
 		return "member/login.jsp";
 	}
 
-	private String doActionJoin() {
+	private String actionJoin() {
 		return "member/join.jsp";
 	}
 

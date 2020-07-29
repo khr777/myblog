@@ -20,39 +20,39 @@ public class TestController extends Controller {
 	public String doAction() {
 		switch ( actionMethodName ) {
 		case "dbInsert":
-			return doActionDbInsert();
+			return actionDbInsert();
 		case "dbSelect":
-			return doActionDbSelect();
+			return actionDbSelect();
 		case "sendMail":
-			return doActionSendMail();
+			return actionSendMail();
 		case "attr":
-			return doActionAttr();
+			return actionAttr();
 		case "attr2":
-			return doActionAttr2();
+			return actionAttr2();
 		}
 
 		return "";
 	}
 
-	private String doActionAttr() {
-		attrService.setValue("member__1__tempPasswordExpireDate", "2020-07-02 12:12:12");
-		String tempPasswordExpireDate = attrService.getValue("member__1__tempPasswordExpireDate");
-		attrService.remove("member__1__tempPasswordExpireDate");
+	private String actionAttr() {
+		attrService.setValue("member__1__common__tempPasswordExpireDate", "2020-07-02 12:12:12");
+		String tempPasswordExpireDate = attrService.getValue("member__1__common__tempPasswordExpireDate");
+		//attrService.remove("member__1__common__tempPasswordExpireDate");
 		return "html:" + tempPasswordExpireDate;
 	}
-
-	private String doActionAttr2() {
-		attrService.setValue("member__1__tempPasswordExpireDate", "2020-07-02 12:12:12");
-		Attr tempPasswordExpireDateAttr = attrService.get("member__1__tempPasswordExpireDate");
-		attrService.remove("member__1__tempPasswordExpireDate");
+	//extra(member의 부가적인 데이터_회원한테 임시비밀번호를 발송한 날짜를 기억해야 한다_회원이 100년 후에 이 메일을 봤을 때 안된다고 하기 위해)
+	private String actionAttr2() {
+		attrService.setValue("member__1__extra__tempPasswordExpireDate", "2020-07-02 12:12:12");
+		Attr tempPasswordExpireDateAttr = attrService.get("member__1__extra__tempPasswordExpireDate");
+		attrService.remove("member__1__extra__tempPasswordExpireDate");
 		return "html:" + tempPasswordExpireDateAttr.getId();
 	}
 
-	private String doActionSendMail() {
+	private String actionSendMail() {
 		mailService.send("kim5638yw@gmail.com", "안녕하세요.", "반가워요^^");
 		return "html:성공";
 	}
-	private String doActionDbInsert() {
+	private String actionDbInsert() {
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		int id = -1;
@@ -92,7 +92,7 @@ public class TestController extends Controller {
 		return "html:" + id;
 	}
 	//insert와 select 똑같지만 차이점은 insert는 RETURN_GENERATED_KEYS); 들어가지만 select는 들어가지 않는다.
-	private String doActionDbSelect() {
+	private String actionDbSelect() {
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		String title = null;
