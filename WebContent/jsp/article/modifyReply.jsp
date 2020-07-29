@@ -166,11 +166,23 @@
 			editor.focus();
 			return;
 		}
+
+		
+		removeOnBeforeUnload();
 		form.body.value = body;
 		form.submit();
 		submitModifyReplyFormDone = true;
 
 	}
+
+	function WriteForm__init() {
+		  // 폼의 특정 요소를 건드리(?)면, 그 이후 부터 외부로 이동하는 것에 참견하는 녀석을 작동시킨다.
+		  $('.toast-editor').keyup(function() {
+		    applyOnBeforeUnload();
+		  });
+		}
+
+		WriteForm__init();
 </script>
 
 <%@ include file="/jsp/part/foot.jspf"%>

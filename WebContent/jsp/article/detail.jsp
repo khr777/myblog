@@ -61,11 +61,12 @@
 		<div class="writeReply-text">댓글 입력</div>
 		<c:if test="${isLogined == false }">
 			<div class="writeReply-text-login">
-<%-- 				 <c:Uri value="/s/member/login" var="loginUri"> --%>
-<%-- 					<c:param name="afterLoginRedirectUri" --%>
-<%-- 						value="${currentUri}&jsAction=WriteReplyForm__focus" /> --%>
-<%-- 				</c:Uri> --%>
-				<c:set var="loginUri" value="../member/login?afterLoginRedirectUri=${Util.getNewUriAndEncoded(currentUri, 'jsAction', 'WriteReplyForm__focus')}"/>
+				<%-- 				 <c:Uri value="/s/member/login" var="loginUri"> --%>
+				<%-- 					<c:param name="afterLoginRedirectUri" --%>
+				<%-- 						value="${currentUri}&jsAction=WriteReplyForm__focus" /> --%>
+				<%-- 				</c:Uri> --%>
+				<c:set var="loginUri"
+					value="../member/login?afterLoginRedirectUri=${Util.getNewUriAndEncoded(currentUri, 'jsAction', 'WriteReplyForm__focus')}" />
 				<a href="${loginUri}" class="login-link">로그인 </a> 후 이용해주세요.
 			</div>
 		</c:if>
@@ -87,8 +88,8 @@
 						</div>
 					</div>
 					<div class="submit flex">
-						<input type="submit" value="작성" /> <input class="cancel"
-							type="button" value="취소" />
+						<input class="cancel" type="button" value="취소" />
+						<input type="submit" value="작성" />
 					</div>
 				</div>
 				<input type="hidden" name="body" /> <input type="hidden"
@@ -327,6 +328,7 @@
 				editor.focus();
 				return;
 			}
+			removeOnBeforeUnload();
 			replyForm.body.value = body;
 			replyForm.submit();
 			writeReplyForm__submitDone = true;
@@ -344,6 +346,16 @@
 		$(function() {
 			writeReplyForm__init();
 		});
+
+		//댓글 입력 중 페이지 이동하면 나타나는 경고창
+		function WriteForm__init() {
+			// 폼의 특정 요소를 건드리(?)면, 그 이후 부터 외부로 이동하는 것에 참견하는 녀석을 작동시킨다.
+			$('.toast-editor').keyup(function() {
+				applyOnBeforeUnload();
+			});
+		}
+
+		WriteForm__init();
 	</script>
 </c:if>
 <%@ include file="/jsp/part/foot.jspf"%>

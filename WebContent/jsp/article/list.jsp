@@ -119,7 +119,10 @@
 
 	<div class="paging-box">
 		<c:forEach var="i" begin="1" end="${totalPage}" step="1">
-			<!-- 현재 페이지current 이면 빨강. 삼항연산자?? -->
+<%-- 			<c:if test="${totalPage != 0 }"> --%>
+<!-- 				<input type="button" value="다음"/> -->
+<%-- 			</c:if> --%>
+<!-- 			<!-- 현재 페이지current 이면 빨강. 삼항연산자?? --> -->
 			<div class="paging-num-box ${i == cPage ? 'current' : ''}">
 				<a
 					href="?cateItemId=${param.cateItemId}&searchKeywordType=${param.searchKeywordType}&searchKeywordTypeBody=${param.searchKeywordTypeBody}&searchKeyword=${param.searchKeyword}&page=${i}">${i}</a>

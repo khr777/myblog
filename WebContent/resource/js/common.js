@@ -268,4 +268,22 @@ function getBodyFromXTemplate(selector) {
 
 
 
+/* 여기서 부터 게시물 작성, 수정, 댓글 작성, 수정 중에 페이지 이동 경고창 시작 */
+var onBeforeUnloadSetted = false;
+var onBeforeUnload = function(e) {
+	return '떠나시겠습니까?'; // 요새 브라우저는 이 메시지가 아닌 자체의 메세지가 나옵니다.
+};
+
+function applyOnBeforeUnload() {
+	if (onBeforeUnloadSetted)
+		return;
+	$(window).bind('beforeunload', onBeforeUnload); // 떠날 때 실행되는 함수를 등록
+	onBeforeUnloadSetted = true;
+}
+
+function removeOnBeforeUnload() {
+	$(window).unbind('beforeunload', onBeforeUnload); // 떠날 때 실행되는 함수를 해제
+	onBeforeUnloadSetted = false;
+}
+/* 여기까지는 라이브러리 */
 

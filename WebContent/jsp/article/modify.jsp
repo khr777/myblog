@@ -1,4 +1,4 @@
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <c:set var="pageTitle" value="게시물 수정"></c:set>
 <%@ include file="/jsp/part/head.jspf"%>
 <%@ include file="/jsp/part/toastUIEditor.jspf"%>
@@ -7,12 +7,9 @@
 	pageEncoding="UTF-8"%>
 
 <style>
-
 .page-title {
-	top:0;
-	
+	top: 0;
 }
-
 
 /* lib   (나중에 다른 곳으로 옮길 예정이라셨음) */
 .form1 {
@@ -27,10 +24,51 @@
 	display: flex;
 }
 
-.form1 .form-row:not(:first-child) {
-	margin-top: 10px;
-}
+.form1
 
+
+ 
+
+
+.form-row
+
+
+
+
+:not
+
+
+ 
+
+
+(
+:first-child
+
+
+ 
+
+
+)
+{
+margin-top
+
+
+
+
+:
+
+
+ 
+
+
+10
+px
+
+
+
+
+;
+}
 .form1 .form-row>.label {
 	width: 100px;
 }
@@ -124,7 +162,8 @@
 			<div class="input">
 				<select name="cateItemId">
 					<c:forEach items="${cateItems}" var="cateItem">
-						<option	${article.cateItemId == cateItem.id ? 'selected' : '' }	value="${cateItem.id}">${cateItem.name}</option>
+						<option ${article.cateItemId == cateItem.id ? 'selected' : '' }
+							value="${cateItem.id}">${cateItem.name}</option>
 					</c:forEach>
 				</select>
 			</div>
@@ -132,8 +171,7 @@
 		<div class="form-row">
 			<div class="label">번호</div>
 			<div class="input">
-				<input type="text" name="id" readonly="id"
-					value="${article.id}" />
+				<input type="text" name="id" readonly="id" value="${article.id}" />
 			</div>
 		</div>
 		<div class="form-row">
@@ -162,6 +200,7 @@
 	</form>
 </div>
 <script>
+	
 	var submitModifyFormDone = false;
 	function submitModifyForm(form) {
 		if (submitModifyFormDone) {
@@ -182,11 +221,22 @@
 			editor.focus();
 			return;
 		}
+
+		removeOnBeforeUnload();
 		form.body.value = body;
 		form.submit();
 		submitModifyFormDone = true;
 
 	}
+
+	function WriteForm__init() {
+		// 폼의 특정 요소를 건드리(?)면, 그 이후 부터 외부로 이동하는 것에 참견하는 녀석을 작동시킨다.
+		$('.toast-editor').keyup(function() {
+			applyOnBeforeUnload();
+		});
+	}
+
+	WriteForm__init();
 </script>
 
 <%@ include file="/jsp/part/foot.jspf"%>
