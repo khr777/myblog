@@ -38,7 +38,8 @@
 					<th>Email</th>
 					<td>${loginedMember.email}</td>
 				</tr>
-				<input type="button" onclick="location.href='memberDataModifyConfirm'" value="회원정보 변경"  />
+				<input type="button" onclick="location.href='passwordForPrivate'" value="비밀번호 변경"  />
+				<input type="button" onclick="location.href='memberDataForPrivate'" value="회원정보 변경"  />
 			</tbody>
 		</table>
 		
@@ -90,6 +91,19 @@
 	font-size:1.2rem;
 	font-weight:bold;
 }
+
+
+.memberData-box input:nth-child(2) {
+	position:absolute;
+	bottom:10%;
+	left:10%;
+	right:10%;
+	width:80%;
+	height:10%;
+	font-size:1.2rem;
+	font-weight:bold;
+}
+
 
 </style>
 

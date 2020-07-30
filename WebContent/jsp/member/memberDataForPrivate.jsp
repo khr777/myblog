@@ -1,5 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<c:set var="pageTitle" value="비밀번호(개인정보) 수정"></c:set>
+<c:set var="pageTitle" value="로그인 비밀번호 확인"></c:set>
 <%@ include file="/jsp/part/head.jspf"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
@@ -9,10 +9,11 @@
 .form1 {
 	position:absolute;
 	display: block;
-	width: 600px;
+	width: 400px;
 	top:30%;
 	left:50%;
 	transform:translateX(-50%) translateY(-50%);
+	
 }
 
 .form1 .form-row {
@@ -22,15 +23,18 @@
 	text-align:center;
 	
 	
+	
 }
 
 .form1 .form-row>.label {
-	width:40%;
+	width:30%;
+	
 	
 }
 
 .form1 .form-row>.input {
 	flex-grow:1;
+	
 }
 
 .form1 .form-row .input > input {   /* 맨 위에 hidden으로 input을 1개 넣어서 자식 순서가 1씩 밀려버림... */
@@ -44,7 +48,7 @@
 }
 
 .form1 .form-row:nth-child(5) .input {
-	width:100%;
+	width:90px;
 	flex-grow:0;
 	
 	
@@ -78,13 +82,13 @@
 
 
 /* cus */
-.modify-private-form-box {
+.password-form-box {
 	position:absolute;
-	top:55%;
+	top:50%;
 	left:50%;
 	transform:translateX(-50%) translateY(-50%);
 	height:600px;
-	width:800px;
+	width:500px;
 	border:2px solid gold;
 }
 
@@ -99,7 +103,7 @@
 }
 
 
-.modify-private-form-box .blank-box {
+.password-form-box .blank-box {
 	position:absolute;
 	top:200px;
 	right:5%;
@@ -124,7 +128,7 @@
 		transform:translateX(-50%);
 		letter-spacing:10px;
 	}
-	.modify-private-form-box {
+	.password-form-box {
 		border:none;
 		width:20%;
 		top:250px;
@@ -132,7 +136,7 @@
 		
 		
 	}
-	.modify-private-form-box .blank-box {
+	.password-form-box .blank-box {
 	top:240px;
 	right:-8%;
 	
@@ -161,25 +165,18 @@
 }
 </style>
 
-<div class="modify-private-form-box">
-	<form name="form" action="doModifyPrivate" method="POST" class="form1" onsubmit="ModifyPrivateForm__submit(this); return false;">	
+<div class="password-form-box">
+	<form name="form" action="doMemberDataForPrivate" method="POST" class="password-form form1" onsubmit="submitLoginForm(this); return false;">	
 		<input type="hidden" name="loginPwReal" />
-		<input type="hidden" name="authCode"  value="${param.authCode}"/>
 		<div class="form-row">
-			<div class="label">새 로그인 비밀번호</div>
+			<div class="label">로그인 비밀번호</div>
 			<div class="input">
-				<input name="loginPw" type="password" placeholder="새 로그인 비밀번호를 입력해주세요." />
+				<input name="loginPw" type="password" placeholder="로그인 비밀번호를 입력해주세요." />
 			</div>
 		</div>
 		<div class="form-row">
-			<div class="label">새 로그인 비밀번호 확인</div>
 			<div class="input">
-				<input name="loginPwConfirm" type="password" placeholder="새 로그인 비밀번호 확인을 입력해주세요." />
-			</div>
-		</div>
-		<div class="form-row">
-			<div class="input"> 
-				<input type="submit" value="전송" />
+				<input type="submit" value="확인" />
 			</div>
 		</div>
 		<div class="form-row">
@@ -187,13 +184,13 @@
 				<input type="button" value="취소" onclick="history.back();" />
 			</div>
 		</div>
+		<input type="hidden" name="redirectUri" value="${param.afterLoginRedirectUri}"/>
 	</form>
 	<div class="blog-name">harry.my.iu.gy</div>
 </div>
 
 <script>
-function ModifyPrivateForm__submit(form) {
-
+function submitLoginForm(form) {
 	form.loginPw.value = form.loginPw.value.trim();
 	if ( form.loginPw.value.length == 0 ) {
 		alert('비밀번호를 입력해주세요.');
@@ -201,27 +198,9 @@ function ModifyPrivateForm__submit(form) {
 		return;
 	}
 
-	form.loginPwConfirm.value = form.loginPwConfirm.value.trim();
-	if ( form.loginPwConfirm.value.length == 0 ) {
-		alert('비밀번호 확인을 입력해주세요.');
-		form.loginPwConfirm.focus();
-		return;
-	}
-	if ( form.loginPw.value != form.loginPwConfirm.value ) {
-		alert('비밀번호가 일치하지 않습니다. 다시 입력해주세요.');
-		form.loginPw.value = "";
-		form.loginPwConfirm.value = "";
-		form.loginPw.focus();
-		return;
-	}
-
-
-
-
-	
 	form.loginPwReal.value = sha256(form.loginPw.value);  /* 암호화된 텍스트를 넘겨준다.*/
 	form.loginPw.value = "";
-	form.loginPwConfirm.value =""; // 로그인 비밀번호 확인도 함께 날려준다.
+	
 	form.submit();
 }
 </script>

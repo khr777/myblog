@@ -1116,7 +1116,7 @@ html {
 }
 
 .page-title > div {
-	width:18%;
+	width:19%;
 	text-align:left;
 	margin-right:0;
 	margin-left:auto;
@@ -1127,7 +1127,7 @@ html {
 	padding:20px 0 20px 10px;
 	background-color:#dfdfdf;
 	border-radius:6px;
-	
+	white-space:nowrap;
 }
 
 

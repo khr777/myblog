@@ -20,7 +20,7 @@ public class MemberService extends Service {
 	}
 
 	public int join(String loginId, String name, String nickName, String loginPw, String email, String authCode,
-			String emailTitle, String emailBody) {
+		String emailTitle, String emailBody) {
 		int id = memberDao.join(loginId, name, nickName, loginPw, email, authCode);
 
 		mailService.send(email, emailTitle, emailBody);
@@ -96,7 +96,9 @@ public class MemberService extends Service {
 	public int setAuthCodeForJoin(String authCode) {
 		return memberDao.setAuthCodeForJoin(authCode);
 	}
-
+	
+	
+	// 비밀번호만 변경하는 attr, 메서드, sql
 	public String genModifyPrivateAuthCode(int actorId) {
 		// java random 문자 생성 객체
 		String authCode = UUID.randomUUID().toString();
@@ -114,8 +116,20 @@ public class MemberService extends Service {
 
 	public void modify(int actorId, String loginPw) {
 		
-		int id = memberDao.modify(actorId, loginPw);
+		memberDao.modify(actorId, loginPw);
 		
 		
 	}
+	
+	// 비밀번호 말고 나머지 개인정보 변경하는 attr, 메서드, sql
+	/*
+	 * public String genMemberDataModifyPrivateAuthCode(int actorId) {
+	 * 
+	 * String authCode = UUID.randomUUID().toString();
+	 * 
+	 * attrService.setValue("member__" + actorId +
+	 * "__extra__modifyDataPrivateAuthCode", authCode);
+	 * 
+	 * return authCode; }
+	 */
 }

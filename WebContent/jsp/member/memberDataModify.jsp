@@ -9,6 +9,7 @@
 <div class="write-form-box">
 	<form name="form" action="doMemberDataModify" method="POST" class="write-form form1" onsubmit="submitMemberModifyForm(this); return false;">
 		<input type="hidden" name="loginPwReal"/>	
+		<input type="hidden" name="authCode"  value="${param.authCode}"/>
 		<div class="form-row">
 			<div class="label">로그인 아이디</div>
 			<div class="input">

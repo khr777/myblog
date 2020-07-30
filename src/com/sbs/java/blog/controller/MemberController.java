@@ -12,14 +12,14 @@ import com.sbs.java.blog.dto.Member;
 import com.sbs.java.blog.util.Util;
 
 public class MemberController extends Controller {
-	//private String gmailId;
-	//private String gmailPw;
+	// private String gmailId;
+	// private String gmailPw;
 
 	public MemberController(Connection dbConn, String actionMethodName, HttpServletRequest req,
 			HttpServletResponse resp) {
 		super(dbConn, actionMethodName, req, resp);
-		//this.gmailId = gmailId;
-		//this.gmailPw = gmailPw;
+		// this.gmailId = gmailId;
+		// this.gmailPw = gmailPw;
 
 	}
 
@@ -30,7 +30,7 @@ public class MemberController extends Controller {
 	}
 
 	@Override
-	public String doAction()  {
+	public String doAction() {
 		switch (actionMethodName) {
 		case "join":
 			return actionJoin(); // controller req, resp 나중에 뺀다고 하셨음.
@@ -53,7 +53,7 @@ public class MemberController extends Controller {
 		case "myPage":
 			return actionMyPage();
 		case "passwordForPrivate":
-		return actionPasswordForPrivate();
+			return actionPasswordForPrivate();
 		case "memberDataModifyConfirm":
 			return actionMemberDataModifyConfirm();
 		case "memberDataModify":
@@ -66,6 +66,10 @@ public class MemberController extends Controller {
 			return actionGetLoginIdDup();
 		case "doPasswordForPrivate":
 			return actionDoPasswordForPrivate();
+		case "memberDataForPrivate":  // myPrivate 메뉴에서 회원정보 변경 페이지로 이동하는 uri (비밀번호 빼고)
+			return actionMemberDataForPrivate();
+		case "doMemberDataForPrivate":
+			return actionDoMemberDataForPrivate();
 		case "modifyPrivate":
 			return actionModifyPrivate();
 		case "doModifyPrivate":
@@ -73,58 +77,78 @@ public class MemberController extends Controller {
 		}
 		return "";
 	}
-
-
-	//페이지를 보여주는데서만 처리하는게 아니라 정보를 받아서 저장하는 곳에서도 authCode 확인을 해준다. 
-	// 이렇게 하지 않으면 해커가 페이지 이동 단계를 건너뛰고 해킹할 수도 있다. 
-	private String actionDoModifyPrivate() {
-		int loginedMemberId = (int)req.getAttribute("loginedMemberId");
-		String authCode = req.getParameter("authCode");
+	private String actionMemberDataForPrivate() {
+	
+		return "member/memberDataForPrivate.jsp";
 		
-		if ( memberService.isValidModifyPrivateAuthCode(loginedMemberId, authCode) == false ) {
-			return String.format("html:<script> alert('비밀번호를 다시 체크해주세요.'); location.replace('../member/passwordForPrivate') </script>");
-		}
-		
+	}
+
+	// 회원 정보변경(비밀번호 말고) , 필요한 다른 메서드 모두 새로 만들어야 할 듯 ㅠㅠ.... 
+	private String actionDoMemberDataForPrivate() {
 		String loginPw = req.getParameter("loginPwReal");
-		
+
+		Member loginedMember = (Member) req.getAttribute("loginedMember");
+		int loginedMemberId = (int) req.getAttribute("loginedMemberId");
+
+		if (loginedMember.getLoginPw().equals(loginPw)) {
+			// 감히 controller가 직접 authCode를 만들 수 없다. 데이터를 구워달라고 service한테 부탁해야 한다.
+			String authCode = memberService.genModifyPrivateAuthCode(loginedMemberId);
+
+			return String
+					.format("html:<script> location.replace('memberDataModify?authCode=" + authCode + "'); </script>");
+		}
+
+		return String.format("html:<script> alert('비밀번호를 다시 입력해주세요.'); history.back(); </script>");
+	}
+
+	// 페이지를 보여주는데서만 처리하는게 아니라 정보를 받아서 저장하는 곳에서도 authCode 확인을 해준다.
+	// 이렇게 하지 않으면 해커가 페이지 이동 단계를 건너뛰고 해킹할 수도 있다.
+	private String actionDoModifyPrivate() {
+		int loginedMemberId = (int) req.getAttribute("loginedMemberId");
+		String authCode = req.getParameter("authCode");
+
+		if (memberService.isValidModifyPrivateAuthCode(loginedMemberId, authCode) == false) {
+			return String.format(
+					"html:<script> alert('비밀번호를 다시 체크해주세요.'); location.replace('../member/passwordForPrivate') </script>");
+		}
+
+		String loginPw = req.getParameter("loginPwReal");
+
 		memberService.modify(loginedMemberId, loginPw);
-		
-		
-		
-		return "";
+		Member loginedMember = (Member) req.getAttribute("loginedMember");
+		loginedMember.setLoginPw(loginPw); // 크게 의미는 없지만, 의미론적인 면에서 해야 하는
+		// modify를 통해서 변경된 비밀번호를 db 저장은 하지만 현재 로그인 중인 회원의 비밀번호는 변경 전 비밀번호로 로그인 한 것이므로
+		// 현재 로그인 중인 회원의 비밀번호를 setLoginPw를 통해서 셋팅해주는 것이다. 로그아웃 후 로그인하면 의미없어지는 것이지만.
+
+		return String.format("html:<script> alert('비밀번호가 수정되었습니다.'); location.replace('../home/main') </script>");
 	}
 
 	private String actionModifyPrivate() {
-		int loginedMemberId = (int)req.getAttribute("loginedMemberId");
-		
+		int loginedMemberId = (int) req.getAttribute("loginedMemberId");
+
 		String authCode = req.getParameter("authCode");
-		if ( memberService.isValidModifyPrivateAuthCode(loginedMemberId, authCode) == false ) {
-			return String.format("html:<script> alert('비밀번호를 다시 체크해주세요.'); location.replace('../member/passwordForPrivate') </script>");
+		if (memberService.isValidModifyPrivateAuthCode(loginedMemberId, authCode) == false) {
+			return String.format(
+					"html:<script> alert('비밀번호를 다시 체크해주세요.'); location.replace('../member/passwordForPrivate') </script>");
 		}
-		
-		
+
 		return "member/modifyPrivate.jsp";
 	}
 
 	private String actionDoPasswordForPrivate() {
 		String loginPw = req.getParameter("loginPwReal");
-		
-		Member loginedMember = (Member)req.getAttribute("loginedMember");
-		int loginedMemberId = (int)req.getAttribute("loginedMemberId");
-		
-		
-		
-		if ( loginedMember.getLoginPw().equals(loginPw)) {
-			//감히 controller가 직접 authCode를 만들 수 없다. 데이터를 구워달라고 service한테 부탁해야 한다.
-			String authCode = memberService.genModifyPrivateAuthCode(loginedMemberId);
-			
-			return String.format("html:<script> location.replace('modifyPrivate?authCode=" + authCode + "'); </script>");
-		}
-		
-		
-		
 
-		
+		Member loginedMember = (Member) req.getAttribute("loginedMember");
+		int loginedMemberId = (int) req.getAttribute("loginedMemberId");
+
+		if (loginedMember.getLoginPw().equals(loginPw)) {
+			// 감히 controller가 직접 authCode를 만들 수 없다. 데이터를 구워달라고 service한테 부탁해야 한다.
+			String authCode = memberService.genModifyPrivateAuthCode(loginedMemberId);
+
+			return String
+					.format("html:<script> location.replace('modifyPrivate?authCode=" + authCode + "'); </script>");
+		}
+
 		return String.format("html:<script> alert('비밀번호를 다시 입력해주세요.'); history.back(); </script>");
 	}
 
@@ -134,14 +158,23 @@ public class MemberController extends Controller {
 
 	private String actionGetLoginIdDup() { // 이 메서드가 return 하는 값이 바로 아작스에 (data)안으로 들어간다.
 		String loginId = req.getParameter("loginId");
-		
+
 		boolean isJoinableLoginId = memberService.isJoinableLoginId(loginId);
-		
-		if ( isJoinableLoginId ) {
-			return "json:{\"msg\":\"사용할 수 있는 아이디 입니다.\", \"resultCode\": \"S-1\", \"loginId\":\"" + loginId + "\"}"; // 필히 \" 을 붙여주어야 한다. ★
-		}
-		else {
-			return "json:{\"msg\":\"이미 사용중인 아이디 입니다.\", \"resultCode\": \"F-1\", \"loginId\":\"" + loginId + "\"}"; // 필히 \" 을 붙여주어야 한다. ★
+
+		if (isJoinableLoginId) {
+			return "json:{\"msg\":\"사용할 수 있는 아이디 입니다.\", \"resultCode\": \"S-1\", \"loginId\":\"" + loginId + "\"}"; // 필히
+																														// \"
+																														// 을
+																														// 붙여주어야
+																														// 한다.
+																														// ★
+		} else {
+			return "json:{\"msg\":\"이미 사용중인 아이디 입니다.\", \"resultCode\": \"F-1\", \"loginId\":\"" + loginId + "\"}"; // 필히
+																													// \"
+																													// 을
+																													// 붙여주어야
+																													// 한다.
+																													// ★
 		}
 	}
 
@@ -160,8 +193,15 @@ public class MemberController extends Controller {
 	}
 
 	private String actionDoMemberDataModify() {
-
+		
+		
 		int loginedMemberId = (int) req.getAttribute("loginedMemberId");
+		String authCode = req.getParameter("authCode");
+
+		if (memberService.isValidModifyPrivateAuthCode(loginedMemberId, authCode) == false) {
+			return String.format(
+					"html:<script> alert('비밀번호를 다시 체크해주세요.'); location.replace('../member/memberDataForPrivate') </script>");
+		}
 
 		String name = req.getParameter("name");
 		String nickname = req.getParameter("nickname");
@@ -179,7 +219,16 @@ public class MemberController extends Controller {
 	}
 
 	private String actionMemberDataModify() {
+		
+		int loginedMemberId = (int) req.getAttribute("loginedMemberId");
 
+		String authCode = req.getParameter("authCode");
+		if (memberService.isValidModifyPrivateAuthCode(loginedMemberId, authCode) == false) {
+			return String.format(
+					"html:<script> alert('비밀번호를 다시 체크해주세요.'); location.replace('../member/memberDataForPrivate') </script>");
+		}
+		
+		
 		return "member/memberDataModify.jsp";
 	}
 
@@ -200,7 +249,7 @@ public class MemberController extends Controller {
 		return sb.toString();
 	}
 
-	private String actionDoLookForLoginPw()  {
+	private String actionDoLookForLoginPw() {
 		String name = req.getParameter("name");
 		String loginId = req.getParameter("loginId");
 		String email = req.getParameter("email");
@@ -224,13 +273,13 @@ public class MemberController extends Controller {
 
 		String randomPw = generate(DATA_FOR_RANDOM_STRING, random_string_length);
 
-
 		String emailTitle = "harry's life 임시 비밀번호를 확인바랍니다.";
 		String emailBody = "<h3>발송드린 암호는 임시 비밀번호 입니다.</h3><br>";
-		emailBody +=  "<h3>로그인 후 비밀번호 변경하여 사용바랍니다.</h3><br><br>";
+		emailBody += "<h3>로그인 후 비밀번호 변경하여 사용바랍니다.</h3><br><br>";
 		emailBody += "<h1>임시 비밀번호 : " + randomPw + "</h1>";
-		emailBody += "<html><body><h4><a href=" + "http://localhost:8081/blog/s/member/login>📣로그인 바로 가기 </a></h4></body></html>";
-		memberService.updateRandomPw(email, memberId, randomPw, emailTitle, emailBody);		
+		emailBody += "<html><body><h4><a href="
+				+ "http://localhost:8081/blog/s/member/login>📣로그인 바로 가기 </a></h4></body></html>";
+		memberService.updateRandomPw(email, memberId, randomPw, emailTitle, emailBody);
 		/*
 		 * MailService mailService = new MailService(gmailId, gmailPw, gmailId, "관리자");
 		 * boolean sendMailDone = mailService.send(email, "임시 비밀번호를 확인바랍니다.",
@@ -258,15 +307,18 @@ public class MemberController extends Controller {
 		String emailTitle = "요청하신 harry's life 회원가입 아이디를 발송해드립니다.";
 		String emailBody = "";
 		emailBody += "<h3>harry's life에 가입하신 로그인 아이디는</h3><br>";
-		emailBody += "<h1>" + loginId +  "</h1><br>입니다. <br><br>"; 
-		emailBody += "<html><body><h4><a href=" + "http://localhost:8081/blog/s/member/login\">📣로그인 바로 가기 </a></h4></body></html>";
+		emailBody += "<h1>" + loginId + "</h1><br>입니다. <br><br>";
+		emailBody += "<html><body><h4><a href="
+				+ "http://localhost:8081/blog/s/member/login\">📣로그인 바로 가기 </a></h4></body></html>";
 		memberService.getLookForLoginId(name, email, emailTitle, emailBody);
-		
-		
-		/* boolean sendMailDone = mailService.send(email, "가입하신 로그인 아이디를 확인바랍니다.", "harry's life에 가입하신 로그인 아이디는 " + loginId
-				+ " 입니다. \n\n" + "로그인 바로 가기 https://harry.my.iu.gy/blog/s/member/login") == 1; */
 
-		//resp.getWriter().append(String.format("발송성공 : %b", sendMailDone));
+		/*
+		 * boolean sendMailDone = mailService.send(email, "가입하신 로그인 아이디를 확인바랍니다.",
+		 * "harry's life에 가입하신 로그인 아이디는 " + loginId + " 입니다. \n\n" +
+		 * "로그인 바로 가기 https://harry.my.iu.gy/blog/s/member/login") == 1;
+		 */
+
+		// resp.getWriter().append(String.format("발송성공 : %b", sendMailDone));
 
 		return "html:<script> alert('가입하신 이메일로 로그인 아이디를 발송드렸습니다.'); location.replace('../home/main'); </script>";
 	}
@@ -296,20 +348,17 @@ public class MemberController extends Controller {
 		String loginPw = req.getParameter("loginPwReal");
 
 		int loginedMemberId = memberService.getMemberIdByLoginIdAndLoginPw(loginId, loginPw);
-		
+
 		if (loginedMemberId == -1) {
 			return "html:<script> alert('일치하는 정보가 없습니다.'); history.back(); </script>";
 		}
 
-		
-
 		Member member = memberService.getMemberById(loginedMemberId);
-		
+
 		if (member.getMailAuthStatus() == 0) {
 			return "html:<script> alert('이메일 미인증 회원으로 인증 후 이용해주세요.'); history.back(); </script>";
 		}
 
-		
 		session.setAttribute("loginedMemberId", loginedMemberId); // 최초 키값을 설정하는 코드(개별 저장소 생성)
 
 		String redirectUri = Util.getString(req, "redirectUri", "../home/main");
@@ -317,7 +366,7 @@ public class MemberController extends Controller {
 		return String.format("html:<script> alert('로그인 되었습니다.'); location.replace('" + redirectUri + "'); </script>");
 	}
 
-	private String actionDoJoin()  {
+	private String actionDoJoin() {
 		String loginId = req.getParameter("loginId");
 		String name = req.getParameter("name");
 		String nickName = req.getParameter("nickname");
@@ -354,8 +403,6 @@ public class MemberController extends Controller {
 
 		String authCode = generate(DATA_FOR_RANDOM_STRING, random_string_length);
 
-		
-
 		// MailService mailService = new MailService(gmailId, gmailPw, gmailId, "관리자");
 		String emailTitle = "harry's life 회원가입을 축하드립니다. 이메일 인증 후 활동해주세요.";
 		String emailBody = "";
@@ -365,12 +412,13 @@ public class MemberController extends Controller {
 		emailBody += "<html><body><h4><a href=" + "http://localhost:8081/blog/s/member/doAuthMail?code=" + authCode
 				+ ">📣인증하기</a></h4></body></html>";
 
-		//boolean sendMailDone = mailService.send("kim5638yw@gmail.com", emailTitle, emailBody) == 1;
+		// boolean sendMailDone = mailService.send("kim5638yw@gmail.com", emailTitle,
+		// emailBody) == 1;
 
-		//resp.getWriter().append(String.format("발송성공 : %b", sendMailDone));
-		
+		// resp.getWriter().append(String.format("발송성공 : %b", sendMailDone));
+
 		int id = memberService.join(loginId, name, nickName, loginPw, email, authCode, emailTitle, emailBody);
-		
+
 		return String.format("html:<script> alert('%s님, 환영합니다.'); location.replace('../home/main'); </script>", name);
 	}
 
