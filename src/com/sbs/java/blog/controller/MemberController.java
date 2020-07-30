@@ -2,7 +2,6 @@ package com.sbs.java.blog.controller;
 
 import java.security.SecureRandom;
 import java.sql.Connection;
-import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -14,6 +13,7 @@ import com.sbs.java.blog.util.Util;
 public class MemberController extends Controller {
 	// private String gmailId;
 	// private String gmailPw;
+
 
 	public MemberController(Connection dbConn, String actionMethodName, HttpServletRequest req,
 			HttpServletResponse resp) {
@@ -60,13 +60,13 @@ public class MemberController extends Controller {
 			return actionMemberDataModify();
 		case "doMemberDataModify":
 			return actionDoMemberDataModify();
-		case "doAuthMail":
-			return actionDoAuthMail();
+		case "doAuthEmail":
+			return actionDoAuthEmail();
 		case "getLoginIdDup":
 			return actionGetLoginIdDup();
 		case "doPasswordForPrivate":
 			return actionDoPasswordForPrivate();
-		case "memberDataForPrivate":  // myPrivate 메뉴에서 회원정보 변경 페이지로 이동하는 uri (비밀번호 빼고)
+		case "memberDataForPrivate": // myPrivate 메뉴에서 회원정보 변경 페이지로 이동하는 uri (비밀번호 빼고)
 			return actionMemberDataForPrivate();
 		case "doMemberDataForPrivate":
 			return actionDoMemberDataForPrivate();
@@ -74,16 +74,41 @@ public class MemberController extends Controller {
 			return actionModifyPrivate();
 		case "doModifyPrivate":
 			return actionDoModifyPrivate();
+		case "emailAuthed":
+			return actionEmailAuthed(); // 이메일 인증코드 재발송
+		/*
+		 * case "beforeToEmailAuthed": return actionBeforeToEmailAuthed();
+		 */
 		}
 		return "";
 	}
-	private String actionMemberDataForPrivate() {
-	
-		return "member/memberDataForPrivate.jsp";
-		
+
+	/*
+	 * private String actionBeforeToEmailAuthed() {
+	 * 
+	 * }
+	 */
+	private String actionEmailAuthed() {
+		int memberId = 0;
+		Member member = (Member)req.getAttribute("member");
+		System.out.println(member);
+		if (!Util.empty(req, "memberId") && Util.isNum(req, "memberId")) {
+
+			memberId = Util.getInt(req, "memberId");
+		}
+
+		req.setAttribute("member", member);
+
+		return "member/emailAuthed.jsp";
 	}
 
-	// 회원 정보변경(비밀번호 말고) , 필요한 다른 메서드 모두 새로 만들어야 할 듯 ㅠㅠ.... 
+	private String actionMemberDataForPrivate() {
+
+		return "member/memberDataForPrivate.jsp";
+
+	}
+
+	// 회원 정보변경(비밀번호 말고) , 필요한 다른 메서드 모두 새로 만들어야 할 듯 ㅠㅠ....
 	private String actionDoMemberDataForPrivate() {
 		String loginPw = req.getParameter("loginPwReal");
 
@@ -178,23 +203,34 @@ public class MemberController extends Controller {
 		}
 	}
 
-	private String actionDoAuthMail() {
+	private String actionDoAuthEmail() {
 		String authCode = "";
 
-		if (!Util.empty(req, "code")) { // cateItemId가 없지 않고 숫자가 맞으면
-
-			authCode = Util.getString(req, "code");
-
+		if (!Util.empty(req, "authCode")) { // cateItemId가 없지 않고 숫자가 맞으면
+			authCode = Util.getString(req, "authCode");
 		}
 
-		memberService.setAuthCodeForJoin(authCode);
+		String email = "";
+		if (!Util.empty(req, "email")) { // cateItemId가 없지 않고 숫자가 맞으면
+			email = Util.getString(req, "email");
+		}
+
+		int memberId = 0;
+
+		if (!Util.empty(req, "memberId") && Util.isNum(req, "memberId")) { // 게시물 번호
+			memberId = Util.getInt(req, "memberId");
+		}
+
+		attrService.setValue("member__" + memberId + "__extra__emailAuthed", email);
+
+		// memberService.setAuthCodeForJoin(authCode); 이메일 인증코드와 일치하는 발송했던 인증코드를 찾아서 인증
+		// 여부를 1:true로 만드는 메서드.
 
 		return "html:<script> alert('이메일 인증이 완료되었습니다. 로그인 후 이용해주세요.'); location.replace('../member/login'); </script>";
 	}
 
 	private String actionDoMemberDataModify() {
-		
-		
+
 		int loginedMemberId = (int) req.getAttribute("loginedMemberId");
 		String authCode = req.getParameter("authCode");
 
@@ -219,7 +255,7 @@ public class MemberController extends Controller {
 	}
 
 	private String actionMemberDataModify() {
-		
+
 		int loginedMemberId = (int) req.getAttribute("loginedMemberId");
 
 		String authCode = req.getParameter("authCode");
@@ -227,8 +263,7 @@ public class MemberController extends Controller {
 			return String.format(
 					"html:<script> alert('비밀번호를 다시 체크해주세요.'); location.replace('../member/memberDataForPrivate') </script>");
 		}
-		
-		
+
 		return "member/memberDataModify.jsp";
 	}
 
@@ -355,9 +390,19 @@ public class MemberController extends Controller {
 
 		Member member = memberService.getMemberById(loginedMemberId);
 
-		if (member.getMailAuthStatus() == 0) {
-			return "html:<script> alert('이메일 미인증 회원으로 인증 후 이용해주세요.'); history.back(); </script>";
+		String emailAuthed = attrService.getValue("member__" + loginedMemberId + "__extra__emailAuthed");
+
+		if (loginedMemberId != -1 && emailAuthed.length() == 0) {
+			emailAuthed = member.getEmail();
+			req.setAttribute("member", member);
+			return "html:<script> alert('이메일 미인증 회원으로 인증 후 이용해주세요.'); location.replace('../member/emailAuthed'); </script>";
 		}
+
+		/*
+		 * if (member.getMailAuthStatus() == 0) { return
+		 * "html:<script> alert('이메일 미인증 회원으로 인증 후 이용해주세요.'); history.back(); </script>"
+		 * ; }
+		 */
 
 		session.setAttribute("loginedMemberId", loginedMemberId); // 최초 키값을 설정하는 코드(개별 저장소 생성)
 
@@ -403,21 +448,7 @@ public class MemberController extends Controller {
 
 		String authCode = generate(DATA_FOR_RANDOM_STRING, random_string_length);
 
-		// MailService mailService = new MailService(gmailId, gmailPw, gmailId, "관리자");
-		String emailTitle = "harry's life 회원가입을 축하드립니다. 이메일 인증 후 활동해주세요.";
-		String emailBody = "";
-		emailBody += "<h1>🙌환영합니다. 회원님 ^^</h1><br>";
-		emailBody += "<h2>테스트 중입니다. 회원님????</h2><br>";
-		emailBody += "<h3>아래 '인증하기' 버튼을 클릭한 후 회원활동을 하실 수 있습니다.</h3><br>";
-		emailBody += "<html><body><h4><a href=" + "http://localhost:8081/blog/s/member/doAuthMail?code=" + authCode
-				+ ">📣인증하기</a></h4></body></html>";
-
-		// boolean sendMailDone = mailService.send("kim5638yw@gmail.com", emailTitle,
-		// emailBody) == 1;
-
-		// resp.getWriter().append(String.format("발송성공 : %b", sendMailDone));
-
-		int id = memberService.join(loginId, name, nickName, loginPw, email, authCode, emailTitle, emailBody);
+		int id = memberService.join(loginId, name, nickName, loginPw, email, authCode);
 
 		return String.format("html:<script> alert('%s님, 환영합니다.'); location.replace('../home/main'); </script>", name);
 	}

@@ -19,10 +19,25 @@ public class MemberService extends Service {
 		this.attrService = new AttrService(dbConn);
 	}
 
-	public int join(String loginId, String name, String nickName, String loginPw, String email, String authCode,
-		String emailTitle, String emailBody) {
+	public int join(String loginId, String name, String nickName, String loginPw, String email, String authCode) {
 		int id = memberDao.join(loginId, name, nickName, loginPw, email, authCode);
+		
 
+		// MailService mailService = new MailService(gmailId, gmailPw, gmailId, "관리자");
+		String emailTitle = "harry's life 회원가입을 축하드립니다. 이메일 인증 후 활동해주세요.";
+		String emailBody = "";
+		emailBody += "<h1>🙌환영합니다. 회원님 ^^</h1><br>";
+		emailBody += "<h2>테스트 중입니다. 회원님????</h2><br>";
+		emailBody += "<h3>아래 '인증하기' 버튼을 클릭한 후 회원활동을 하실 수 있습니다.</h3><br>";
+		emailBody += "<html><body><h4><a href=" + "http://localhost:8081/blog/s/member/";
+		emailBody += "doAuthEmail?email=" + email + "&authCode=" + authCode + "&memberId=" + id + ">📣인증하기</a></h4></body></html>";
+		
+		
+		attrService.setValue("member__" + id + "__extra__emailAuthCode", authCode);
+		
+		
+		
+		
 		mailService.send(email, emailTitle, emailBody);
 
 		return id;

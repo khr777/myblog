@@ -9,18 +9,24 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.sbs.java.blog.app.App;
+import com.sbs.java.blog.service.MailService;
 
 @WebServlet("/s/*")
 public class DispatcherServlet extends HttpServlet {
 
+	
+	private MailService mailService;
+
+
+
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		req.setCharacterEncoding("UTF-8");
 		
-		
 		new App(req, resp).start();
-
-
+		
+		
 	}
+	
 
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		doGet(req, resp);

@@ -1,5 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<c:set var="pageTitle" value="로그인"></c:set>
+<c:set var="pageTitle" value="이메일 인증 재발송"></c:set>
 <%@ include file="/jsp/part/head.jspf"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
@@ -42,12 +42,12 @@
 }
 
 .form1 .form-row:nth-child(5) .input {
-	width: 90px;
+	width: 100%;
 	flex-grow: 0;
 }
 
-.form1 .form-row:nth-child(5) .input:nth-child(2) {
-	width: 60%;
+.form1 .form-row:nth-child(6) .input {
+	width: 100%;
 	flex-grow: 0;
 	margin-left: 0;
 }
@@ -142,64 +142,52 @@
 </style>
 
 <div class="write-form-box">
-	<form name="form" action="doLogin" method="POST"
+	<form name="form" action="doLookForLoginPw" method="POST"
 		class="write-form form1"
-		onsubmit="submitLoginForm(this); return false;">
+		onsubmit="submitLoginIdForm(this); return false;">
 		<input type="hidden" name="loginPwReal" />
-			<div class="form-row">
-				<div class="label">로그인 아이디</div>
-				<div class="input">
-					<input name="loginId" type="text" placeholder="로그인 아이디를 입력해주세요." />
-				</div>
+		
+		<div class="title">이메일 주소 인증하기</div>
+		<div class="body">
+			<p>안녕하세요.</p>
+			<p>Harry's life 회원가입에 감사드립니다.</p>
+			<p>${member.email}고객님.</p>
+			<p>아래 버튼을 클릭하여 이메일 인증을 완료해주세요.</p>
+		</div>
+		<div class="form-row">
+			<div class="input">
+				<input type="submit" value="이메일 인증하기" />
 			</div>
-			<div class="form-row">
-				<div class="label">로그인 비밀번호</div>
-				<div class="input">
-					<input name="loginPw" type="password"
-						placeholder="로그인 비밀번호를 입력해주세요." />
-				</div>
+		</div>
+		<div class="form-row">
+			<div class="input">
+				<input type="button" value="취소" onclick="history.back();" />
 			</div>
-			<div class="form-row">
-				<div class="input">
-					<input type="submit" value="로그인" />
-				</div>
-			</div>
-			<div class="form-row">
-				<div class="input">
-					<input type="button" value="취소" onclick="history.back();" />
-				</div>
-				<div class="input">
-					<input type="button" value="회원가입" onclick="location.href='join'" />
-				</div>
-			</div>
-			<input type="hidden" name="redirectUri"
-				value="${param.afterLoginRedirectUri}" />
-			<input type="button" value="아이디 찾기"
-				onclick="location.href='lookForLoginId'">
-			<input type="button" value="비밀번호 찾기"
-				onclick="location.href='lookForLoginPw'">
+		</div>
 	</form>
 	<div class="blog-name">harry.my.iu.gy</div>
 </div>
 
 <script>
-	function submitLoginForm(form) {
+	function submitLoginIdForm(form) {
+		form.name.value = form.name.value.trim();
+		if (form.name.value.length == 0) {
+			alert('가입하신 성명을 입력해주세요.');
+			form.name.focus();
+			return;
+		}
 		form.loginId.value = form.loginId.value.trim();
 		if (form.loginId.value.length == 0) {
-			alert('아이디를 입력해주세요.');
+			alert('가입하신 아이디를 입력해주세요.');
 			form.loginId.focus();
 			return;
 		}
-
-		form.loginPw.value = form.loginPw.value.trim();
-		if (form.loginPw.value.length == 0) {
-			alert('비밀번호를 입력해주세요.');
-			form.loginPw.focus();
+		form.email.value = form.email.value.trim();
+		if (form.email.value.length == 0) {
+			alert('가입하신 이메일을 입력해주세요.');
+			form.email.focus();
 			return;
 		}
-
-		form.loginPwReal.value = sha256(form.loginPw.value); /* 암호화된 텍스트를 넘겨준다.*/
-		form.loginPw.value = "";
 
 		form.submit();
 	}
