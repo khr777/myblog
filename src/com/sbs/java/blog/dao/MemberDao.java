@@ -169,6 +169,16 @@ public class MemberDao {
 		return DBUtil.update(dbConn, sql);
 	}
 
+	public void modify(int actorId, String loginPw) {
+		
+		SecSql sql = SecSql.from("UPDATE `member`");
+		sql.append("SET updateDate = NOW()");
+		sql.append(", loginPw = ?", loginPw);
+		sql.append("WHERE id = ? ", actorId);
+		
+		DBUtil.update(dbConn, sql);
+	}
+
 	
 	
 }

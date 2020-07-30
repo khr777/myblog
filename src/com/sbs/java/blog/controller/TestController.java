@@ -41,6 +41,9 @@ public class TestController extends Controller {
 	
 	// 혜련 테스트 중...
 	private String actionAttr11() {
+		
+		// attr 변수 만들 데이터 합쳐서 DB 저장하기  <template 여기서부터 시작> 
+		
 		int memberId = 2;
 		
 		String relTypeCode = "member";
@@ -52,6 +55,13 @@ public class TestController extends Controller {
 		String name = relTypeCode + "__" + relId + "__" + typeCode + "__" +type2Code;
 		
 		attrService.setValue(name, value);
+		
+		// attr 변수 만들 데이터 합쳐서 DB 저장하기  <template 여기서부터 끝>
+		
+		
+		// attr 변수명으로 DB 데이터에서 attr 불러오기 ( type2Code 명 )
+		// 불러온 attr에 저장된 정보들을 get으로 받아서 활용할 수 있음 
+		// 사용할 수 있는 것들 (member/article 관련_id_typeCode_활용 용도 그리고 regDate, updateDate)
 		Attr tempPasswordExpireDate = attrService.get(name);
 
 		return "html:" + tempPasswordExpireDate.getRegDate() + tempPasswordExpireDate.getId();

@@ -2,17 +2,21 @@ package com.sbs.java.blog.service;
 
 import java.sql.Connection;
 import java.util.List;
+import java.util.UUID;
 
 import com.sbs.java.blog.dao.MemberDao;
+import com.sbs.java.blog.dto.Attr;
 import com.sbs.java.blog.dto.Member;
 
 public class MemberService extends Service {
 	private MailService mailService;
 	private MemberDao memberDao;
+	private AttrService attrService;
 
-	public MemberService(Connection dbConn, MailService mailService) { // 생성자에 꼭 public을 붙여준다.
+	public MemberService(Connection dbConn, MailService mailService, AttrService attrService) { // 생성자에 꼭 public을 붙여준다.
 		this.mailService = mailService;
 		memberDao = new MemberDao(dbConn);
+		this.attrService = new AttrService(dbConn);
 	}
 
 	public int join(String loginId, String name, String nickName, String loginPw, String email, String authCode,
@@ -91,5 +95,27 @@ public class MemberService extends Service {
 
 	public int setAuthCodeForJoin(String authCode) {
 		return memberDao.setAuthCodeForJoin(authCode);
+	}
+
+	public String genModifyPrivateAuthCode(int actorId) {
+		// java random 문자 생성 객체
+		String authCode = UUID.randomUUID().toString();
+				
+		attrService.setValue("member__" + actorId + "__extra__modifyPrivateAuthCode", authCode);
+		
+		return authCode;
+		
+	}
+
+	public boolean isValidModifyPrivateAuthCode(int actorId, String authCode) {
+		String authCodeOnDB = attrService.getValue("member__" + actorId + "__extra__modifyPrivateAuthCode"); // DB에 있던 데이터를 가져온다는 의미 (변수명)
+		return authCodeOnDB.equals(authCode);   // 입력받은 authCode와 db에서 가져온 데이터가 일치한다. true. 맞다.
+	}
+
+	public void modify(int actorId, String loginPw) {
+		
+		int id = memberDao.modify(actorId, loginPw);
+		
+		
 	}
 }

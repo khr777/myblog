@@ -1,15 +1,14 @@
 package com.sbs.java.blog.controller;
 
-import java.io.IOException;
 import java.security.SecureRandom;
 import java.sql.Connection;
+import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.sbs.java.blog.dto.Member;
-import com.sbs.java.blog.service.MailService;
 import com.sbs.java.blog.util.Util;
 
 public class MemberController extends Controller {
@@ -53,6 +52,8 @@ public class MemberController extends Controller {
 			return actionDoLookForLoginPw();
 		case "myPage":
 			return actionMyPage();
+		case "passwordForPrivate":
+		return actionPasswordForPrivate();
 		case "memberDataModifyConfirm":
 			return actionMemberDataModifyConfirm();
 		case "memberDataModify":
@@ -63,8 +64,72 @@ public class MemberController extends Controller {
 			return actionDoAuthMail();
 		case "getLoginIdDup":
 			return actionGetLoginIdDup();
+		case "doPasswordForPrivate":
+			return actionDoPasswordForPrivate();
+		case "modifyPrivate":
+			return actionModifyPrivate();
+		case "doModifyPrivate":
+			return actionDoModifyPrivate();
 		}
 		return "";
+	}
+
+
+	//페이지를 보여주는데서만 처리하는게 아니라 정보를 받아서 저장하는 곳에서도 authCode 확인을 해준다. 
+	// 이렇게 하지 않으면 해커가 페이지 이동 단계를 건너뛰고 해킹할 수도 있다. 
+	private String actionDoModifyPrivate() {
+		int loginedMemberId = (int)req.getAttribute("loginedMemberId");
+		String authCode = req.getParameter("authCode");
+		
+		if ( memberService.isValidModifyPrivateAuthCode(loginedMemberId, authCode) == false ) {
+			return String.format("html:<script> alert('비밀번호를 다시 체크해주세요.'); location.replace('../member/passwordForPrivate') </script>");
+		}
+		
+		String loginPw = req.getParameter("loginPwReal");
+		
+		memberService.modify(loginedMemberId, loginPw);
+		
+		
+		
+		return "";
+	}
+
+	private String actionModifyPrivate() {
+		int loginedMemberId = (int)req.getAttribute("loginedMemberId");
+		
+		String authCode = req.getParameter("authCode");
+		if ( memberService.isValidModifyPrivateAuthCode(loginedMemberId, authCode) == false ) {
+			return String.format("html:<script> alert('비밀번호를 다시 체크해주세요.'); location.replace('../member/passwordForPrivate') </script>");
+		}
+		
+		
+		return "member/modifyPrivate.jsp";
+	}
+
+	private String actionDoPasswordForPrivate() {
+		String loginPw = req.getParameter("loginPwReal");
+		
+		Member loginedMember = (Member)req.getAttribute("loginedMember");
+		int loginedMemberId = (int)req.getAttribute("loginedMemberId");
+		
+		
+		
+		if ( loginedMember.getLoginPw().equals(loginPw)) {
+			//감히 controller가 직접 authCode를 만들 수 없다. 데이터를 구워달라고 service한테 부탁해야 한다.
+			String authCode = memberService.genModifyPrivateAuthCode(loginedMemberId);
+			
+			return String.format("html:<script> location.replace('modifyPrivate?authCode=" + authCode + "'); </script>");
+		}
+		
+		
+		
+
+		
+		return String.format("html:<script> alert('비밀번호를 다시 입력해주세요.'); history.back(); </script>");
+	}
+
+	private String actionPasswordForPrivate() {
+		return "member/passwordForPrivate.jsp";
 	}
 
 	private String actionGetLoginIdDup() { // 이 메서드가 return 하는 값이 바로 아작스에 (data)안으로 들어간다.

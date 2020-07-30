@@ -43,7 +43,7 @@ public class AttrService extends Service  {
 		
 		return attrDao.getValue(relTypeCode, relId, typeCode, type2Code);
 	}
-	
+		
 	public int remove(String name) {
 		String[] nameBits = name.split("__");
 		String relTypeCode = nameBits[0];

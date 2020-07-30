@@ -39,8 +39,9 @@ public abstract class Controller {
 		this.resp = resp;
 		articleService = new ArticleService(dbConn);
 		mailService = new MailService(Config.gmailId, Config.gmailPw, Config.mailFrom, Config.mailFromName);
-		memberService = new MemberService(dbConn, mailService);
-		attrService = new AttrService(dbConn);	
+		attrService = new AttrService(dbConn);
+		memberService = new MemberService(dbConn, mailService, attrService);
+			
 
 	}
 	// abstract 추상이니까 자식들은 구현할 수 밖에 없다. 
