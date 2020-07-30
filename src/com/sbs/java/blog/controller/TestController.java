@@ -29,11 +29,49 @@ public class TestController extends Controller {
 			return actionAttr();
 		case "attr2":
 			return actionAttr2();
-		}
+		case "attr91":
+			return actionAttr11();
+		case "attr1234":
+			return actionAttr12();
 
+		}
+		
 		return "";
 	}
+	
+	// 혜련 테스트 중...
+	private String actionAttr11() {
+		int memberId = 2;
+		
+		String relTypeCode = "member";
+		int relId = memberId;
+		String typeCode = "extra";
+		String type2Code = "tempPasswordExpireDate";
+		String value = "2020-07-01 12:12:12";
+		
+		String name = relTypeCode + "__" + relId + "__" + typeCode + "__" +type2Code;
+		
+		attrService.setValue(name, value);
+		Attr tempPasswordExpireDate = attrService.get(name);
 
+		return "html:" + tempPasswordExpireDate.getRegDate() + tempPasswordExpireDate.getId();
+	}
+	
+	
+	private String actionAttr12() {
+		
+		
+		// 샘 코드
+		attrService.setValue("member__1__extra__tempPasswordExpireDate", "2020-07-02 12:12:12");
+		Attr tempPasswordExpireDateAttr = attrService.get("member__1__extra__tempPasswordExpireDate");
+		//attrService.remove("member__1__extra__tempPasswordExpireDate");
+		return "html:" + tempPasswordExpireDateAttr.getRegDate() + tempPasswordExpireDateAttr.getId();
+	}
+	
+
+
+	
+	
 	private String actionAttr() {
 		attrService.setValue("member__1__common__tempPasswordExpireDate", "2020-07-02 12:12:12");
 		String tempPasswordExpireDate = attrService.getValue("member__1__common__tempPasswordExpireDate");
@@ -47,6 +85,16 @@ public class TestController extends Controller {
 		attrService.remove("member__1__extra__tempPasswordExpireDate");
 		return "html:" + tempPasswordExpireDateAttr.getId();
 	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
 	private String actionSendMail() {
 		mailService.send("kim5638yw@gmail.com", "안녕하세요.", "반가워요^^");

@@ -383,6 +383,12 @@ html {
 	font-size:1.6rem;
 	transition:font-size 0.7s;
   }
+  
+  .top-bar .menu-box-1 > ul > li .myPrivate {
+	  	font-size:1.3rem;
+  }
+  
+  
   .top-bar .menu-box-1 > ul > li:hover > a {
 /*       background-color:white; */
       color:black;
@@ -391,6 +397,21 @@ html {
       font-size:2rem;
       
   }
+  
+  .top-bar .menu-box-1 > ul > li:hover .myPrivate {
+/*       background-color:white; */
+      color:black;
+      font-weight:bold;
+      text-decoration:underline;
+      font-size:1.6rem;
+      
+  }
+  
+  
+  
+  
+  
+  
   .top-bar .menu-box-1 > ul > li:hover > ul {
       display:block;
       border:6px solid black;

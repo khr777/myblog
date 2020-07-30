@@ -13,7 +13,7 @@ public class HomeController extends Controller {
 		super(dbConn, actionMethodName, req, resp);
 	}
 	@Override //는 붙여주는게 좋다. 
-	public String action() {
+	public String doAction() {
 		switch ( actionMethodName ) {
 		case "main":
 			return actionMain();
