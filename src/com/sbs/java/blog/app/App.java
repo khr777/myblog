@@ -68,9 +68,6 @@ public class App { //loadDriver()를 접고 다음 메서드를 보면 편하다
 		}
 		
 		
-		
-		
-		
 		// [ DB드라이버 로딩 ]
 		loadDriver(req, resp);
 		

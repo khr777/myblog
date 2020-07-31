@@ -8,8 +8,8 @@ public class Member extends Dto {
 	private String nickname;
 	private String loginPw;
 	private String email;
-	private String mailAuthCode;
-	private int mailAuthStatus;
+	//private String mailAuthCode;
+	//private int mailAuthStatus;
 	
 	public Member() {
 		
@@ -24,22 +24,36 @@ public class Member extends Dto {
 		this.nickname = (String)row.get("nickname");
 		this.loginPw = (String)row.get("loginPw");
 		this.email = (String)row.get("email");
-		this.mailAuthCode = (String)row.get("mailAuthCode");
-		this.mailAuthStatus = (int)row.get("mailAuthStatus");
+		//this.mailAuthCode = (String)row.get("mailAuthCode");
+		//this.mailAuthStatus = (int)row.get("mailAuthStatus");
 		
 	}
 
+	/*
+	 * @Override public String toString() { return "Member [loginId=" + loginId +
+	 * ", name=" + name + ", nickname=" + nickname + ", loginPw=" + loginPw +
+	 * ", email=" + email + ", mailAuthCode=" + mailAuthCode + ", mailAuthStatus=" +
+	 * mailAuthStatus + ", getId()=" + getId() + ", getRegDate()=" + getRegDate() +
+	 * ", getExtra()=" + getExtra() + ", getUpdateDate()=" + getUpdateDate() + "]";
+	 * }
+	 */
+	
+	
+	
 	@Override
 	public String toString() {
 		return "Member [loginId=" + loginId + ", name=" + name + ", nickname=" + nickname + ", loginPw=" + loginPw
-				+ ", email=" + email + ", mailAuthCode=" + mailAuthCode + ", mailAuthStatus=" + mailAuthStatus
-				+ ", getId()=" + getId() + ", getRegDate()=" + getRegDate() + ", getExtra()=" + getExtra()
-				+ ", getUpdateDate()=" + getUpdateDate() + "]";
+				+ ", email=" + email + ", getId()=" + getId() + ", getRegDate()=" + getRegDate() + ", getExtra()="
+				+ getExtra() + ", getUpdateDate()=" + getUpdateDate() + "]";
 	}
+	
+	
 
 	public String getLoginId() {
 		return loginId;
 	}
+
+	
 
 	public void setLoginId(String loginId) {
 		this.loginId = loginId;
@@ -77,20 +91,16 @@ public class Member extends Dto {
 		this.email = email;
 	}
 
-	public String getMailAuthCode() {
-		return mailAuthCode;
-	}
-
-	public void setMailAuthCode(String mailAuthCode) {
-		this.mailAuthCode = mailAuthCode;
-	}
-
-	public int getMailAuthStatus() {
-		return mailAuthStatus;
-	}
-
-	public void setMailAuthStatus(int mailAuthStatus) {
-		this.mailAuthStatus = mailAuthStatus;
-	}
+	/*
+	 * public String getMailAuthCode() { return mailAuthCode; }
+	 * 
+	 * public void setMailAuthCode(String mailAuthCode) { this.mailAuthCode =
+	 * mailAuthCode; }
+	 * 
+	 * public int getMailAuthStatus() { return mailAuthStatus; }
+	 * 
+	 * public void setMailAuthStatus(int mailAuthStatus) { this.mailAuthStatus =
+	 * mailAuthStatus; }
+	 */
 
 }

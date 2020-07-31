@@ -11,7 +11,7 @@
 	position: absolute;
 	display: block;
 	width: 400px;
-	top: 30%;
+	top: 40%;
 	left: 50%;
 	transform: translateX(-50%) translateY(-50%);
 }
@@ -23,34 +23,43 @@
 	text-align: center;
 }
 
+.form1 .title {
+	font-weight:bold;
+	color:DeepSkyBlue;
+	font-size:1.6rem;
+	opacity: 0.8;
+}
+
+.form1 .body .이 strong {
+	font-size:2rem;
+	color:gold;
+	opacity : 0.8;
+}
+
+
+
+
 .form1 .form-row>.label {
 	width: 30%;
 }
 
-.form1 .form-row>.input {
+.form1 .form-row .input  {
 	flex-grow: 1;
 }
+
+.form1 .form-row .input > input{
+	font-size:1.3rem;
+	font-weight:bold;	
+}
+
+
+
 
 .form1 .form-row .input>input {
 	/* 맨 위에 hidden으로 input을 1개 넣어서 자식 순서가 1씩 밀려버림... */
 	border-radius: 5px;
 }
 
-.form1 .form-row:nth-child(5) {
-	display: flex;
-	justify-content: space-between;
-}
-
-.form1 .form-row:nth-child(5) .input {
-	width: 100%;
-	flex-grow: 0;
-}
-
-.form1 .form-row:nth-child(6) .input {
-	width: 100%;
-	flex-grow: 0;
-	margin-left: 0;
-}
 
 .form1 .form-row>.input>input, .form1 .form-row>.input>textarea {
 	display: block;
@@ -59,16 +68,12 @@
 	padding: 10px;
 }
 
-.form1 .form-row>.input>select {
-	padding: 10px;
-}
-
 .form1 .form-row>.input>textarea {
 	height: 500px;
 }
 
 /* cus */
-.write-form-box {
+.emailAuth-form-box {
 	position: absolute;
 	top: 50%;
 	left: 50%;
@@ -81,13 +86,13 @@
 .blog-name {
 	position: absolute;
 	font-size: 2.4rem;
-	top: 70%;
+	top: 80%;
 	left: 50%;
 	transform: translateX(-50%);
 	letter-spacing: 10px;
 }
 
-.write-form-box .blank-box {
+.emailAuth-form-box .blank-box {
 	position: absolute;
 	top: 200px;
 	right: 5%;
@@ -112,13 +117,13 @@
 		transform: translateX(-50%);
 		letter-spacing: 10px;
 	}
-	.write-form-box {
+	.emailAuth-form-box {
 		border: none;
 		width: 20%;
 		top: 250px;
 		left: 42%;
 	}
-	.write-form-box .blank-box {
+	.emailAuth-form-box .blank-box {
 		top: 240px;
 		right: -8%;
 	}
@@ -141,29 +146,26 @@
 }
 </style>
 
-<div class="write-form-box">
-	<form name="form" action="doLookForLoginPw" method="POST"
-		class="write-form form1"
+<div class="emailAuth-form-box">
+	<form name="form" action="sendEmailAuthedAgain" method="POST"
+		class="emailAuth-form form1"
 		onsubmit="submitLoginIdForm(this); return false;">
-		<input type="hidden" name="loginPwReal" />
-		
+		<input type="hidden" value="${member.id}" name="id"/>
 		<div class="title">이메일 주소 인증하기</div>
 		<div class="body">
-			<p>안녕하세요.</p>
-			<p>Harry's life 회원가입에 감사드립니다.</p>
-			<p>${member.email}고객님.</p>
-			<p>아래 버튼을 클릭하여 이메일 인증을 완료해주세요.</p>
+			<p class="일">안녕하세요.</p>
+			<p class="이"><strong>Harry's life</strong> 회원가입을 감사드립니다.</p>
+			<p class="삼"><strong>${member.email}</strong>고객님.</p>
+			<p class="사">현재 <strong>이메일 미인증</strong> 회원님으로</p>
+			<p class="오">아래 버튼을 클릭하여 이메일 인증을 완료해주세요.</p>
+		 	<p class="육">감사합니다.</p>
 		</div>
 		<div class="form-row">
 			<div class="input">
 				<input type="submit" value="이메일 인증하기" />
 			</div>
 		</div>
-		<div class="form-row">
-			<div class="input">
-				<input type="button" value="취소" onclick="history.back();" />
-			</div>
-		</div>
+		<p><strong>이메일을 확인해주세요.</strong></p>
 	</form>
 	<div class="blog-name">harry.my.iu.gy</div>
 </div>
@@ -192,6 +194,11 @@
 		form.submit();
 	}
 </script>
+
+
+
+
+
 
 
 

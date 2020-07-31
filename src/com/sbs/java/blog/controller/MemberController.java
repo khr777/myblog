@@ -14,7 +14,6 @@ public class MemberController extends Controller {
 	// private String gmailId;
 	// private String gmailPw;
 
-
 	public MemberController(Connection dbConn, String actionMethodName, HttpServletRequest req,
 			HttpServletResponse resp) {
 		super(dbConn, actionMethodName, req, resp);
@@ -76,27 +75,51 @@ public class MemberController extends Controller {
 			return actionDoModifyPrivate();
 		case "emailAuthed":
 			return actionEmailAuthed(); // 이메일 인증코드 재발송
-		/*
-		 * case "beforeToEmailAuthed": return actionBeforeToEmailAuthed();
-		 */
+		case "sendEmailAuthedAgain":
+			return actionSendEmailAuthedAgain();
 		}
 		return "";
 	}
+	private String actionSendEmailAuthedAgain() {
+		int id = 0;
+		
+		if (!Util.empty(req, "id") && Util.isNum(req, "id")) {
 
-	/*
-	 * private String actionBeforeToEmailAuthed() {
-	 * 
-	 * }
-	 */
-	private String actionEmailAuthed() {
-		int memberId = 0;
-		Member member = (Member)req.getAttribute("member");
-		System.out.println(member);
-		if (!Util.empty(req, "memberId") && Util.isNum(req, "memberId")) {
-
-			memberId = Util.getInt(req, "memberId");
+			id = Util.getInt(req, "id");
 		}
+		
+		
+		String ENGLISH_LOWER = "abcdefghijklmnopqrstuvwxyz";
+		String ENGLISH_UPPER = ENGLISH_LOWER.toUpperCase();
+		String NUMBER = "0123456789";
 
+		// 랜덤을 생성할 대상 문자열
+		String DATA_FOR_RANDOM_STRING = ENGLISH_LOWER + ENGLISH_UPPER + NUMBER;
+
+		// 랜덤 문자열 길이
+		int random_string_length = 10;
+
+		String authCode = generate(DATA_FOR_RANDOM_STRING, random_string_length);
+		
+		
+		memberService.sendEmailAuthedAgain(id, authCode );
+		
+		
+		return String.format("html:<script> alert('이메일 인증 후 로그인해주세요.'); location.replace('../home/main') </script>");
+	}
+
+	private String actionEmailAuthed() {
+		
+		int id = 0;
+
+		if (!Util.empty(req, "id") && Util.isNum(req, "id")) {
+
+			id = Util.getInt(req, "id");
+		}
+		
+		
+		Member member = memberService.getMemberById(id);
+		
 		req.setAttribute("member", member);
 
 		return "member/emailAuthed.jsp";
@@ -347,14 +370,6 @@ public class MemberController extends Controller {
 				+ "http://localhost:8081/blog/s/member/login\">📣로그인 바로 가기 </a></h4></body></html>";
 		memberService.getLookForLoginId(name, email, emailTitle, emailBody);
 
-		/*
-		 * boolean sendMailDone = mailService.send(email, "가입하신 로그인 아이디를 확인바랍니다.",
-		 * "harry's life에 가입하신 로그인 아이디는 " + loginId + " 입니다. \n\n" +
-		 * "로그인 바로 가기 https://harry.my.iu.gy/blog/s/member/login") == 1;
-		 */
-
-		// resp.getWriter().append(String.format("발송성공 : %b", sendMailDone));
-
 		return "html:<script> alert('가입하신 이메일로 로그인 아이디를 발송드렸습니다.'); location.replace('../home/main'); </script>";
 	}
 
@@ -394,18 +409,19 @@ public class MemberController extends Controller {
 
 		if (loginedMemberId != -1 && emailAuthed.length() == 0) {
 			emailAuthed = member.getEmail();
-			req.setAttribute("member", member);
-			return "html:<script> alert('이메일 미인증 회원으로 인증 후 이용해주세요.'); location.replace('../member/emailAuthed'); </script>";
+			return "html:<script> alert('이메일 미인증 회원으로 인증 후 이용해주세요.'); location.replace('../member/emailAuthed?id=" + loginedMemberId + "'); </script>";
 		}
 
-		/*
-		 * if (member.getMailAuthStatus() == 0) { return
-		 * "html:<script> alert('이메일 미인증 회원으로 인증 후 이용해주세요.'); history.back(); </script>"
-		 * ; }
-		 */
-
+		String useTempPassword = attrService.getValue("member__" + loginedMemberId + "__extra__useTempPassword");
+		if ( useTempPassword.equals("1")) {
+			session.setAttribute("loginedMemberId", loginedMemberId); // 최초 키값을 설정하는 코드(개별 저장소 생성)
+			return "html:<script> alert('현재 임시패스워드를 사용중 입니다.'); location.replace('../home/main'); </script>";
+		}
+		
+		
+		
+		
 		session.setAttribute("loginedMemberId", loginedMemberId); // 최초 키값을 설정하는 코드(개별 저장소 생성)
-
 		String redirectUri = Util.getString(req, "redirectUri", "../home/main");
 
 		return String.format("html:<script> alert('로그인 되었습니다.'); location.replace('" + redirectUri + "'); </script>");
