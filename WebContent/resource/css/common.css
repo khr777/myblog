@@ -368,6 +368,11 @@ html {
       margin-left:-28px;
   }
   
+  .top-bar .use-temp-password {
+  	margin-top:20px;
+  	margin-left:70px;
+  }
+  
   
   .top-bar .menu-box-1 ul > li {
     position:relative;

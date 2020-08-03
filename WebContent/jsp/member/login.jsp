@@ -149,7 +149,7 @@
 			<div class="form-row">
 				<div class="label">로그인 아이디</div>
 				<div class="input">
-					<input name="loginId" type="text" placeholder="로그인 아이디를 입력해주세요." />
+					<input name="loginId" autofocus type="text" placeholder="로그인 아이디를 입력해주세요." />
 				</div>
 			</div>
 			<div class="form-row">
@@ -175,7 +175,7 @@
 			<input type="hidden" name="redirectUri"
 				value="${param.afterLoginRedirectUri}" />
 			<input type="button" value="아이디 찾기"
-				onclick="location.href='lookForLoginId'">
+				onclick="location.href='findAccount'">
 			<input type="button" value="비밀번호 찾기"
 				onclick="location.href='lookForLoginPw'">
 	</form>

@@ -41,10 +41,6 @@ public class MemberController extends Controller {
 			return actionDoLogin();
 		case "doLogout": // 작업을 하는 jsp, 페이지가 아닌 잠깐 들렀다 이동하는 곳은 do를 붙인다!
 			return actionDoLogout();
-		case "lookForLoginId":
-			return actionLookForLoginId();
-		case "doLookForLoginId":
-			return actionDoLookForLoginId();
 		case "lookForLoginPw":
 			return actionLookForLoginPw();
 		case "doLookForLoginPw":
@@ -53,8 +49,9 @@ public class MemberController extends Controller {
 			return actionMyPage();
 		case "passwordForPrivate":
 			return actionPasswordForPrivate();
-		case "memberDataModifyConfirm":
-			return actionMemberDataModifyConfirm();
+		/*     ★ 혜련이 만들었던 회원정보 변경 전 비밀번호 확인 페이지_ 삭제하기. memberDataModifyConfirm.jsp 도 삭제하기.
+		 * case "memberDataModifyConfirm": return actionMemberDataModifyConfirm();
+		 */
 		case "memberDataModify":
 			return actionMemberDataModify();
 		case "doMemberDataModify":
@@ -77,9 +74,79 @@ public class MemberController extends Controller {
 			return actionEmailAuthed(); // 이메일 인증코드 재발송
 		case "sendEmailAuthedAgain":
 			return actionSendEmailAuthedAgain();
+		case "findAccount":
+			return actionFindAccount();
+		case "doFindLoginId":
+			return actionDoFindLoginId();
+		case "doFindLoginPw":
+			return actionDoFindLoginPw();
 		}
 		return "";
 	}
+	
+	private String actionDoFindLoginId() {
+		
+		String name = Util.getString(req, "name");
+		String email = Util.getString(req, "email");
+
+		//String loginId = memberService.getLookForLoginId(name, email); // 혜련 만들었던 것. 정리해서 삭제 하기 
+		
+		Member member = memberService.getMemberByNameAndEmail(name, email);  // 샘
+		
+		if ( member == null ) {  // 샘 
+			req.setAttribute("jsAlertMsg", "일치하는 회원이 없습니다.");
+			req.setAttribute("jsHistoryBack", true);
+			return "common/data.jsp";
+		}
+		
+		
+		req.setAttribute("jsAlertMsg", "일치하는 회원을 찾았습니다.\\n아이디 : " + member.getLoginId());
+		req.setAttribute("jsHistoryBack", true);  // 아이디 찾기 창이 아닌 로그인 아이디 페이지로 이동시켜야함 
+		return "common/data.jsp";
+		
+		/*   혜련 구현.    // 샘 : loginId는 굳이 메일로 보내지 않고 alert으로 알려주는. 그리고 common/data.jsp 생성, 활용
+		 * if (loginId.length() == 0) { return
+		 * "html:<script> alert('일치하는 회원정보가 존재하지 않습니다.'); history.back(); </script>"; }
+		 * String emailTitle = "요청하신 harry's life 회원가입 아이디를 발송해드립니다."; String emailBody
+		 * = ""; emailBody += "<h3>harry's life에 가입하신 로그인 아이디는</h3><br>"; emailBody +=
+		 * "<h1>" + loginId + "</h1><br>입니다. <br><br>"; emailBody +=
+		 * "<html><body><h4><a href=" +
+		 * "http://localhost:8081/blog/s/member/login\">📣로그인 바로 가기 </a></h4></body></html>"
+		 * ; memberService.getLookForLoginId(name, email, emailTitle, emailBody);
+		 * 
+		 * return
+		 * "html:<script> alert('가입하신 이메일로 로그인 아이디를 발송드렸습니다.'); location.replace('../home/main'); </script>"
+		 * ;
+		 */
+	}
+	private String actionDoFindLoginPw() {
+
+		String name = Util.getString(req, "name");
+		String loginId = Util.getString(req, "loginId");
+		String email = Util.getString(req, "email");
+
+		//String loginId = memberService.getLookForLoginId(name, email); // 혜련 만들었던 것. 정리해서 삭제 하기 
+		
+		Member member = memberService.getMemberByLoginId(loginId);  // 샘
+		
+		if ( member == null || member.getEmail().equals(email) == false ) {  // 샘 
+			req.setAttribute("jsAlertMsg", "일치하는 회원이 없습니다.");
+			req.setAttribute("jsHistoryBack", true);
+			return "common/data.jsp";
+		}
+		
+		
+		memberService.notifyTempLoginPw(member);
+		
+		req.setAttribute("jsAlertMsg", "메일로 임시패스워드가 발송되었습니다.");
+		req.setAttribute("redirectUri", "../member/login");  // 아이디 찾기 창이 아닌 로그인 아이디 페이지로 이동시켜야함 
+		return "common/data.jsp";
+	}
+
+	private String actionFindAccount() {
+		return "member/findAccount.jsp";
+	}
+
 	private String actionSendEmailAuthedAgain() {
 		int id = 0;
 		
@@ -353,25 +420,7 @@ public class MemberController extends Controller {
 		return "member/lookForLoginPw.jsp";
 	}
 
-	private String actionDoLookForLoginId() {
-
-		String name = req.getParameter("name");
-		String email = req.getParameter("email");
-
-		String loginId = memberService.getLookForLoginId(name, email);
-		if (loginId.length() == 0) {
-			return "html:<script> alert('일치하는 회원정보가 존재하지 않습니다.'); history.back(); </script>";
-		}
-		String emailTitle = "요청하신 harry's life 회원가입 아이디를 발송해드립니다.";
-		String emailBody = "";
-		emailBody += "<h3>harry's life에 가입하신 로그인 아이디는</h3><br>";
-		emailBody += "<h1>" + loginId + "</h1><br>입니다. <br><br>";
-		emailBody += "<html><body><h4><a href="
-				+ "http://localhost:8081/blog/s/member/login\">📣로그인 바로 가기 </a></h4></body></html>";
-		memberService.getLookForLoginId(name, email, emailTitle, emailBody);
-
-		return "html:<script> alert('가입하신 이메일로 로그인 아이디를 발송드렸습니다.'); location.replace('../home/main'); </script>";
-	}
+	
 
 	private String actionLookForLoginId() {
 		return "member/lookForLoginId.jsp";
@@ -412,19 +461,33 @@ public class MemberController extends Controller {
 			return "html:<script> alert('이메일 미인증 회원으로 인증 후 이용해주세요.'); location.replace('../member/emailAuthed?id=" + loginedMemberId + "'); </script>";
 		}
 
-		String useTempPassword = attrService.getValue("member__" + loginedMemberId + "__extra__useTempPassword");
-		if ( useTempPassword.equals("1")) {
-			session.setAttribute("loginedMemberId", loginedMemberId); // 최초 키값을 설정하는 코드(개별 저장소 생성)
-			return "html:<script> alert('현재 임시패스워드를 사용중 입니다.'); location.replace('../home/main'); </script>";
-		}
-		
-		
-		
 		
 		session.setAttribute("loginedMemberId", loginedMemberId); // 최초 키값을 설정하는 코드(개별 저장소 생성)
+		
+		
+		boolean isNeedToChangePasswordForTemp = memberService.isNeedToChangePasswordForTemp(loginedMemberId);
+		
+		
+		// memberService에서 attrService를 호출하는거보다 memberService에서 호출하는게 맞는것이라고 하셨음. 
+		/*
+		 * String useTempPassword = attrService.getValue("member__" + loginedMemberId +
+		 * "__extra__useTempPassword"); // 혜련 구현 if ( useTempPassword.equals("1")) {
+		 * session.setAttribute("loginedMemberId", loginedMemberId); // 최초 키값을 설정하는
+		 * 코드(개별 저장소 생성) return
+		 * "html:<script> alert('현재 임시패스워드를 사용중 입니다.'); location.replace('../home/main'); </script>"
+		 * ; }
+		 */
 		String redirectUri = Util.getString(req, "redirectUri", "../home/main");
+		
+		req.setAttribute("jsAlertMsg", "로그인 되었습니다.");
+		
+		if ( isNeedToChangePasswordForTemp ) {
+			req.setAttribute("jsAlertMsg2", "현재 임시패스워드를 사용중입니다. 비밀번호를 변경해주세요.");
+		}
+		
+		req.setAttribute("redirectUri", redirectUri);
 
-		return String.format("html:<script> alert('로그인 되었습니다.'); location.replace('" + redirectUri + "'); </script>");
+		return "common/data.jsp";
 	}
 
 	private String actionDoJoin() {

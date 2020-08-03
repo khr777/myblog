@@ -6,4 +6,9 @@ public class Config {
 	public static String mailFromName = "관리자";
 	public static String gmailId = "kim5638yw@gmail.com";
 	public static String gmailPw;  // web.xml에 자료가 있으면 config 의 loginId, pw는 순위에서 밀린다. (우선순위 : web.xml)
+	
+	public static String getSiteName() {
+		
+		return "harry.my.iu.gy";
+	}
 }

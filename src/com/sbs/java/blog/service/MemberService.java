@@ -4,9 +4,10 @@ import java.sql.Connection;
 import java.util.List;
 import java.util.UUID;
 
+import com.sbs.java.blog.config.Config;
 import com.sbs.java.blog.dao.MemberDao;
-import com.sbs.java.blog.dto.Attr;
 import com.sbs.java.blog.dto.Member;
+import com.sbs.java.blog.util.Util;
 
 public class MemberService extends Service {
 	private MailService mailService;
@@ -132,14 +133,18 @@ public class MemberService extends Service {
 	}
 
 	public void modify(int actorId, String loginPw) {
-		
-		String useTempPassword = attrService.getValue("member__" + actorId + "__extra__useTempPassword");
-		
-		if ( useTempPassword != null ) {
-			attrService.remove("member__" + actorId + "__extra__useTempPassword");
-		}
-		
+		// 혜련 구현 코드 
+		/*
+		 * String useTempPassword = attrService.getValue("member__" + actorId +
+		 * "__extra__useTempPassword");
+		 * 
+		 * if ( useTempPassword != null ) { attrService.remove("member__" + actorId +
+		 * "__extra__useTempPassword"); }
+		 */
 		memberDao.modify(actorId, loginPw);
+		
+		// 샘 코드 
+		attrService.remove("member", actorId, "extra", "useTempPassword");
 		
 	}
 
@@ -161,15 +166,38 @@ public class MemberService extends Service {
 		mailService.send(member.getEmail(), emailTitle, emailBody);
 	}
 
-	// 비밀번호 말고 나머지 개인정보 변경하는 attr, 메서드, sql
-	/*
-	 * public String genMemberDataModifyPrivateAuthCode(int actorId) {
-	 * 
-	 * String authCode = UUID.randomUUID().toString();
-	 * 
-	 * attrService.setValue("member__" + actorId +
-	 * "__extra__modifyDataPrivateAuthCode", authCode);
-	 * 
-	 * return authCode; }
-	 */
+	public Member getMemberByNameAndEmail(String name, String email) {
+		return memberDao.getMemberByNameAndEmail(name, email);
+	}
+
+	public Member getMemberByLoginId(String loginId) {
+		return memberDao.getMemberByLoginId(loginId);
+	}
+
+	public void notifyTempLoginPw(Member member) {
+		
+		String to = member.getEmail();
+		String tempPasswordOrigin = Util.getTempPassword(6);
+		String tempPassword = Util.sha256(tempPasswordOrigin);
+		
+		memberDao.modify(member.getId(), tempPassword);
+		attrService.setValue("member", member.getId(), "extra", "useTempPassword", "1");
+		
+		String title = String.format("[%s] 임시패스워드 발송", Config.getSiteName());
+		String body = String.format("<div>임시 패스워드 : %s</div>\n", tempPasswordOrigin);
+		mailService.send(to, title, body);
+	}
+
+	public boolean isNeedToChangePasswordForTemp(int actorId) {
+		return attrService.getValue("member", actorId, "extra", "useTempPassword").equals("1");
+	}
+
+	public Member getMemberByIdForSession(int actorId) {
+		Member member = getMemberById(actorId);
+		
+		boolean isNeedToChangePasswordForTemp = isNeedToChangePasswordForTemp(member.getId());
+		member.getExtra().put("isNeedToChangePasswordForTemp", isNeedToChangePasswordForTemp);
+		
+		return member;
+	}
 }

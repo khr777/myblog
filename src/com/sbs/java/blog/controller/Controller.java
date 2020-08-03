@@ -77,7 +77,7 @@ public abstract class Controller {
 		if (session.getAttribute("loginedMemberId") != null) {
 			loginedMemberId = (int) session.getAttribute("loginedMemberId");
 			isLogined = true;
-			loginedMember = memberService.getMemberById(loginedMemberId);
+			loginedMember = memberService.getMemberByIdForSession(loginedMemberId); // 그냥 member가 아닌 session에 저장하는 용도.현재 로그인한 회원(메서드?가 살짝 달라야 한다._코드가)
 		}
 		req.setAttribute("loginedMember", loginedMember);
 		req.setAttribute("isLogined", isLogined);
@@ -206,6 +206,9 @@ public abstract class Controller {
 			switch(actionMethodName) {
 			case "login":
 			case "join":
+			case "doFindLoginId":
+			case "doFindLoginPw":
+			case "findAccount":
 				needToLogout = true;
 				break;
 			}

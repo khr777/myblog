@@ -2,6 +2,10 @@ package com.sbs.java.blog.dto;
 
 import java.util.Map;
 
+import lombok.Data;
+
+
+@Data
 public class Member extends Dto {
 	private String loginId;
 	private String name;
@@ -29,78 +33,5 @@ public class Member extends Dto {
 		
 	}
 
-	/*
-	 * @Override public String toString() { return "Member [loginId=" + loginId +
-	 * ", name=" + name + ", nickname=" + nickname + ", loginPw=" + loginPw +
-	 * ", email=" + email + ", mailAuthCode=" + mailAuthCode + ", mailAuthStatus=" +
-	 * mailAuthStatus + ", getId()=" + getId() + ", getRegDate()=" + getRegDate() +
-	 * ", getExtra()=" + getExtra() + ", getUpdateDate()=" + getUpdateDate() + "]";
-	 * }
-	 */
 	
-	
-	
-	@Override
-	public String toString() {
-		return "Member [loginId=" + loginId + ", name=" + name + ", nickname=" + nickname + ", loginPw=" + loginPw
-				+ ", email=" + email + ", getId()=" + getId() + ", getRegDate()=" + getRegDate() + ", getExtra()="
-				+ getExtra() + ", getUpdateDate()=" + getUpdateDate() + "]";
-	}
-	
-	
-
-	public String getLoginId() {
-		return loginId;
-	}
-
-	
-
-	public void setLoginId(String loginId) {
-		this.loginId = loginId;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public String getNickname() {
-		return nickname;
-	}
-
-	public void setNickname(String nickname) {
-		this.nickname = nickname;
-	}
-
-	public String getLoginPw() {
-		return loginPw;
-	}
-
-	public void setLoginPw(String loginPw) {
-		this.loginPw = loginPw;
-	}
-
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-	/*
-	 * public String getMailAuthCode() { return mailAuthCode; }
-	 * 
-	 * public void setMailAuthCode(String mailAuthCode) { this.mailAuthCode =
-	 * mailAuthCode; }
-	 * 
-	 * public int getMailAuthStatus() { return mailAuthStatus; }
-	 * 
-	 * public void setMailAuthStatus(int mailAuthStatus) { this.mailAuthStatus =
-	 * mailAuthStatus; }
-	 */
-
 }

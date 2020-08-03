@@ -110,7 +110,15 @@ public class MemberDao {
 		sql.append("FROM `member`");
 		sql.append("WHERE id = ?", id);
 		
-		return new Member(DBUtil.selectRow(dbConn, sql));
+		
+		Map<String, Object> row = DBUtil.selectRow(dbConn, sql);
+		
+		if ( row.isEmpty()) {
+			return null;
+		}
+		
+		
+		return new Member(row);   // 기존에는 if ( row.isEmpty 없이 무조건 member객체를 return 했었음. 그러면 안된다. 비어있다면 null 반환
 	}
 
 	public String getLookForLoginId(String name, String email) {
@@ -177,6 +185,35 @@ public class MemberDao {
 		sql.append("WHERE id = ? ", actorId);
 		
 		DBUtil.update(dbConn, sql);
+	}
+
+	public Member getMemberByNameAndEmail(String name, String email) {
+		SecSql sql = SecSql.from("SELECT *");
+		sql.append("FROM `member`");
+		sql.append("WHERE name = ? ",name);
+		sql.append("AND email = ?", email);
+		
+		Map<String, Object> row = DBUtil.selectRow(dbConn, sql);
+		
+		if ( row.isEmpty()) {
+			return null;
+		}
+		
+		return new Member(row);
+	}
+
+	public Member getMemberByLoginId(String loginId) {
+		SecSql sql = SecSql.from("SELECT *");
+		sql.append("FROM `member`");
+		sql.append("WHERE loginId = ? ", loginId);
+		
+		Map<String, Object> row = DBUtil.selectRow(dbConn, sql);
+		
+		if ( row.isEmpty()) {
+			return null;
+		}
+		
+		return new Member(row);
 	}
 
 	
