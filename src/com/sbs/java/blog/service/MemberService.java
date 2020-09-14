@@ -29,7 +29,7 @@ public class MemberService extends Service {
 		emailBody += "<h1>🙌환영합니다. 회원님 ^^</h1><br>";
 		emailBody += "<h2>테스트 중입니다. 회원님????</h2><br>";
 		emailBody += "<h3>아래 '인증하기' 버튼을 클릭한 후 회원활동을 하실 수 있습니다.</h3><br>";
-		emailBody += "<html><body><h4><a href=" + "http://localhost:8081/blog/s/member/";
+		emailBody += "<html><body><h4><a href=" + "https://harry.ouo.nz/blog/s/member/";
 		emailBody += "doAuthEmail?email=" + email + "&authCode=" + authCode + "&memberId=" + id
 				+ ">📣인증하기</a></h4></body></html>";
 

@@ -100,7 +100,7 @@ find-loginId-box .form1 .form-row {
 	top:50%;
 	left:50%;
 	transform:translateX(-50%) translateY(-50%);
-	height:600px;
+	height:650px;
 	width:500px;
 	border:2px solid gold;
 }
@@ -232,7 +232,7 @@ find-loginId-box .form1 .form-row {
 			</div>
 		</div>
 	</form>
-	<div class="blog-name">harry.my.iu.gy</div>
+	<div class="blog-name">harry.ouo.nz</div>
 </div>
 
 

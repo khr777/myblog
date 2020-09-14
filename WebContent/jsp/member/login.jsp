@@ -179,7 +179,7 @@
 			<input type="button" value="비밀번호 찾기"
 				onclick="location.href='lookForLoginPw'">
 	</form>
-	<div class="blog-name">harry.my.iu.gy</div>
+	<div class="blog-name">harry.ouo.nz</div>
 </div>
 
 <script>

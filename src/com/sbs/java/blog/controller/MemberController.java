@@ -403,7 +403,7 @@ public class MemberController extends Controller {
 		emailBody += "<h3>로그인 후 비밀번호 변경하여 사용바랍니다.</h3><br><br>";
 		emailBody += "<h1>임시 비밀번호 : " + randomPw + "</h1>";
 		emailBody += "<html><body><h4><a href="
-				+ "http://localhost:8081/blog/s/member/login>📣로그인 바로 가기 </a></h4></body></html>";
+				+ "https://harry.ouo.nz/blog/s/member/login>📣로그인 바로 가기 </a></h4></body></html>";
 		memberService.updateRandomPw(email, memberId, randomPw, emailTitle, emailBody);
 		/*
 		 * MailService mailService = new MailService(gmailId, gmailPw, gmailId, "관리자");

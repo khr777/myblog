@@ -21,10 +21,17 @@ import com.sbs.java.blog.util.Util;
 public class App { //loadDriver()를 접고 다음 메서드를 보면 편하다.
 	private HttpServletRequest req; 
 	private HttpServletResponse resp;
+	private boolean isDevelServer = true;
 	
 	public App(HttpServletRequest req, HttpServletResponse resp) {
 		this.req = req;
 		this.resp = resp;
+		
+		String profilesActive = System.getProperty("spring.profiles.active");
+		
+		if ( profilesActive != null && profilesActive.equals(("production"))) {
+			isDevelServer = false;
+		}
 	}
 	private void loadDriver(HttpServletRequest req, HttpServletResponse resp) throws IOException  {
 
@@ -43,15 +50,29 @@ public class App { //loadDriver()를 접고 다음 메서드를 보면 편하다
 		// DB 커넥터 로딩 성공
 	}
 	private String getDbUri() {  //이렇게 하는 이유 : 나중에 개발, 운영하는 sql정보를 달리해야 한다. 개발할 때는 다른 접속 정보로 로그인해서 테스트하면 된다. 데이터를 지우고 삭제하고 등등을 반복하기 때문인 듯
-		return "jdbc:mysql://site24.iu.gy:3306/site24?serverTimezone=Asia/Seoul&useOldAliasMetadataBehavior=true&zeroDateTimeBehavior=convertToNull";
+		
+		
+		if ( isDevelServer ) {
+			return "jdbc:mysql://localhost:3306/harry.blog?serverTimezone=Asia/Seoul&useOldAliasMetadataBehavior=true&zeroDateTimeBehavior=convertToNull";
+		}
+		return "jdbc:mysql://localhost:3306/harry?serverTimezone=Asia/Seoul&useOldAliasMetadataBehavior=true&zeroDateTimeBehavior=convertToNull";
 		//&zeroDateTimeBehavior=convertToNull (String Uri 에 추가해준 이 코드가 입력되지 않은 쿼리 값을 오류 발생시키지 않고 null 값으로 처리해준다.
 	}
 	
 	private String getId() {
-		return "site24";
+		
+		if ( isDevelServer ) {
+			return "sbsst";
+		}
+		
+		return "ouonzLocal";
 	}
 	
 	private String getDbPassword() {
+		
+		if ( isDevelServer ) {
+			return "sbs123414";
+		}
 		return "sbs123414";
 	}
 	
